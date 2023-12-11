@@ -42,7 +42,7 @@ class ArquitecteController extends Controller
         try {
             $arquitecte->save();
             return response()->json([
-                'missatge' => 'Arquitecte creat amb èxit',
+                'missatge' => 'Arquitecte afegit amb èxit',
                 'codi' => 0,
                 'arquitecte' => $arquitecte
             ]);

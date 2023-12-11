@@ -13,8 +13,8 @@ return new class extends Migration {
         Schema::create('audios', function (Blueprint $table) {
             $table->id();
             $table->string("url");
-            $table->integer("ordre");
-            $table->string("transcripcio");
+            $table->integer("ordre")->default(1);
+            $table->string("transcripcio")->nullable();
                   $table->timestamps();
         });
     }
