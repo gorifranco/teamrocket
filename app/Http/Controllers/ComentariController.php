@@ -43,12 +43,12 @@ class ComentariController extends Controller
                 'missatge' => 'Comentari afegit amb èxit',
                 'codi' => 0,
                 'comentari' => $comentari
-            ]);
+            ],200);
         } catch (Exception $e) {
             return response()->json([
                 'missatge' => $e->getMessage(),
                 'codi' => $e->getCode()
-            ]);
+            ],400);
         }
     }
 
@@ -87,12 +87,12 @@ class ComentariController extends Controller
                 'missatge' => 'Comentari actualitzat amb èxit',
                 'codi' => 0,
                 'comentari' => $comentari
-            ]);
+            ],200);
         } catch (Exception $e) {
             return response()->json([
                 'missatge' => $e->getMessage(),
                 'codi' => $e->getCode()
-            ]);
+            ],400);
         }
     }
 
@@ -109,13 +109,13 @@ class ComentariController extends Controller
                 'missatge' => 'Comentari eliminat amb èxit',
                 'codi' => 0,
                 'comentari' => $comentari
-            ]);
+            ],200);
         } catch (\Exception $e) {
             return response()->json([
                 'missatge' => $e->getMessage(),
                 'codi' => $e->getCode(),
                 'comentari' => $comentari
-            ]);
+            ],400);
         }
     }
     public function validar(Comentari $comentari)

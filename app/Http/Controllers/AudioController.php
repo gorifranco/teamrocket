@@ -45,12 +45,12 @@ class AudioController extends Controller
                 'missatge' => 'Audio afegit amb èxit',
                 'codi' => 0,
                 'audio' => $audio
-            ]);
+            ],200);
         } catch (Exception $e) {
             return response()->json([
                 'missatge' => $e->getMessage(),
                 'codi' => $e->getCode()
-            ]);
+            ],400);
         }
 
     }
@@ -90,12 +90,12 @@ class AudioController extends Controller
                 'missatge' => 'Audio afegit amb èxit',
                 'codi' => 0,
                 'audio' => $audio
-            ]);
+            ],200);
         } catch (Exception $e) {
             return response()->json([
                 'missatge' => $e->getMessage(),
                 'codi' => $e->getCode()
-            ]);
+            ],400);
         }
     }
 
@@ -112,13 +112,13 @@ class AudioController extends Controller
                 'missatge' => 'Audio borrat amb èxit',
                 'codi' => 0,
                 'audio' => $audio
-            ]);
+            ],200);
         }catch (\Exception $e){
             return response()->json([
                 'message' => $e->getMessage(),
                 'code' => $e->getCode(),
                 'audio' => $audio
-            ]);
+            ],400);
         }
     }
 }

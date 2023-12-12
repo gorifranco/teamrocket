@@ -12,7 +12,9 @@ class TipusEspaiController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'tipus_espais' => TipusEspai::all()
+        ]);
     }
 
     /**
@@ -28,7 +30,23 @@ class TipusEspaiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $tipusEspai = new TipusEspai();
+
+        // Lógica para guardar los datos del tipo de espacio (adaptar según tus campos)
+
+        try {
+            $tipusEspai->save();
+            return response()->json([
+                'missatge' => 'Tipus d\'espai afegit amb èxit',
+                'codi' => 0,
+                'tipus_espai' => $tipusEspai
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'missatge' => $e->getMessage(),
+                'codi' => $e->getCode()
+            ], 400);
+        }
     }
 
     /**
@@ -36,7 +54,9 @@ class TipusEspaiController extends Controller
      */
     public function show(TipusEspai $tipusEspai)
     {
-        //
+        return response()->json([
+            'tipus_espai' => TipusEspai::find($tipusEspai)
+        ]);
     }
 
     /**
@@ -52,7 +72,23 @@ class TipusEspaiController extends Controller
      */
     public function update(Request $request, TipusEspai $tipusEspai)
     {
-        //
+        $tipusEspai = TipusEspai::find($tipusEspai);
+
+        // Lógica para actualizar los datos del tipo de espacio (adaptar según tus campos)
+
+        try {
+            $tipusEspai->save();
+            return response()->json([
+                'missatge' => 'Tipus d\'espai actualitzat amb èxit',
+                'codi' => 0,
+                'tipus_espai' => $tipusEspai
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'missatge' => $e->getMessage(),
+                'codi' => $e->getCode()
+            ], 400);
+        }
     }
 
     /**
@@ -60,6 +96,21 @@ class TipusEspaiController extends Controller
      */
     public function destroy(TipusEspai $tipusEspai)
     {
-        //
+        $tipusEspai = TipusEspai::find($tipusEspai);
+
+        try {
+            $tipusEspai->delete();
+            return response()->json([
+                'missatge' => 'Tipus d\'espai eliminat amb èxit',
+                'codi' => 0,
+                'tipus_espai' => $tipusEspai
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'missatge' => $e->getMessage(),
+                'codi' => $e->getCode(),
+                'tipus_espai' => $tipusEspai
+            ], 400);
+        }
     }
 }

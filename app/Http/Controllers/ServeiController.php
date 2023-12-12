@@ -12,7 +12,9 @@ class ServeiController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'serveis' => Servei::all()
+        ]);
     }
 
     /**
@@ -28,7 +30,23 @@ class ServeiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $servei = new Servei();
+
+        // Lógica para guardar los datos del servicio (adaptar según tus campos)
+
+        try {
+            $servei->save();
+            return response()->json([
+                'missatge' => 'Servei afegit amb èxit',
+                'codi' => 0,
+                'servei' => $servei
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'missatge' => $e->getMessage(),
+                'codi' => $e->getCode()
+            ], 400);
+        }
     }
 
     /**
@@ -44,7 +62,9 @@ class ServeiController extends Controller
      */
     public function edit(Servei $servei)
     {
-        //
+        return response()->json([
+            'servei' => Servei::find($servei)
+        ]);
     }
 
     /**
@@ -52,7 +72,23 @@ class ServeiController extends Controller
      */
     public function update(Request $request, Servei $servei)
     {
-        //
+        $servei = Servei::find($servei);
+
+        // Lógica para actualizar los datos del servicio (adaptar según tus campos)
+
+        try {
+            $servei->save();
+            return response()->json([
+                'missatge' => 'Servei actualitzat amb èxit',
+                'codi' => 0,
+                'servei' => $servei
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'missatge' => $e->getMessage(),
+                'codi' => $e->getCode()
+            ], 400);
+        }
     }
 
     /**
@@ -60,6 +96,21 @@ class ServeiController extends Controller
      */
     public function destroy(Servei $servei)
     {
-        //
+        $servei = Servei::find($servei);
+
+        try {
+            $servei->delete();
+            return response()->json([
+                'missatge' => 'Servei eliminat amb èxit',
+                'codi' => 0,
+                'servei' => $servei
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'missatge' => $e->getMessage(),
+                'codi' => $e->getCode(),
+                'servei' => $servei
+            ], 400);
+        }
     }
 }

@@ -12,7 +12,9 @@ class PuntInteresController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'puntsInteres' => PuntInteres::all()
+        ]);
     }
 
     /**
@@ -28,7 +30,23 @@ class PuntInteresController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $puntInteres = new PuntInteres();
+
+        // Lógica para guardar los datos del punto de interés (adaptar según tus campos)
+
+        try {
+            $puntInteres->save();
+            return response()->json([
+                'missatge' => 'Punt d\'interès afegit amb èxit',
+                'codi' => 0,
+                'punt_interes' => $puntInteres
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'missatge' => $e->getMessage(),
+                'codi' => $e->getCode()
+            ], 400);
+        }
     }
 
     /**
@@ -36,7 +54,9 @@ class PuntInteresController extends Controller
      */
     public function show(PuntInteres $puntInteres)
     {
-        //
+        return response()->json([
+            'punt_interes' => PuntInteres::find($puntInteres)
+        ]);
     }
 
     /**
@@ -52,7 +72,23 @@ class PuntInteresController extends Controller
      */
     public function update(Request $request, PuntInteres $puntInteres)
     {
-        //
+        $puntInteres = PuntInteres::find($puntInteres);
+
+        // Lógica para actualizar los datos del punto de interés (adaptar según tus campos)
+
+        try {
+            $puntInteres->save();
+            return response()->json([
+                'missatge' => 'Punt d\'interès actualitzat amb èxit',
+                'codi' => 0,
+                'punt_interes' => $puntInteres
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'missatge' => $e->getMessage(),
+                'codi' => $e->getCode()
+            ], 400);
+        }
     }
 
     /**
@@ -60,6 +96,21 @@ class PuntInteresController extends Controller
      */
     public function destroy(PuntInteres $puntInteres)
     {
-        //
+        $puntInteres = PuntInteres::find($puntInteres);
+
+        try {
+            $puntInteres->delete();
+            return response()->json([
+                'missatge' => 'Punt d\'interès eliminat amb èxit',
+                'codi' => 0,
+                'punt_interes' => $puntInteres
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'missatge' => $e->getMessage(),
+                'codi' => $e->getCode(),
+                'punt_interes' => $puntInteres
+            ], 400);
+        }
     }
 }

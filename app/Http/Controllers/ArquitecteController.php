@@ -45,12 +45,12 @@ class ArquitecteController extends Controller
                 'missatge' => 'Arquitecte afegit amb èxit',
                 'codi' => 0,
                 'arquitecte' => $arquitecte
-            ]);
+            ],200);
         } catch (Exception $e) {
             return response()->json([
                 'missatge' => $e->getMessage(),
                 'codi' => $e->getCode()
-            ]);
+            ],400);
         }
     }
 
@@ -90,12 +90,12 @@ class ArquitecteController extends Controller
                 'missatge' => 'Arquitecte editat amb èxit',
                 'codi' => 0,
                 'arquitecte' => $arquitecte
-            ]);
+            ],200);
         } catch (Exception $e) {
             return response()->json([
                 'missatge' => $e->getMessage(),
                 'codi' => $e->getCode()
-            ]);
+            ],400);
         }
     }
 
@@ -112,13 +112,13 @@ class ArquitecteController extends Controller
                 'message' => 'Arquitecte borrat amb èxit',
                 'code' => 0,
                 'arquitecte' => $arquitecte
-            ]);
+            ],200);
         }catch (\Exception $e){
             return response()->json([
                 'message' => $e->getMessage(),
                 'code' => $e->getCode(),
                 'arquitecte' => $arquitecte
-            ]);
+            ],400);
         }
     }
 }

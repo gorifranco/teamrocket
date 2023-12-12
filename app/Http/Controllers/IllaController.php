@@ -12,7 +12,9 @@ class IllaController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'illes' => Illa::all()
+        ]);
     }
 
     /**
@@ -28,7 +30,23 @@ class IllaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $illa = new Illa();
+
+        // Lógica para guardar los datos de la isla (adaptar según tus campos)
+
+        try {
+            $illa->save();
+            return response()->json([
+                'missatge' => 'Illa afegida amb èxit',
+                'codi' => 0,
+                'illa' => $illa
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'missatge' => $e->getMessage(),
+                'codi' => $e->getCode()
+            ], 400);
+        }
     }
 
     /**
@@ -36,7 +54,9 @@ class IllaController extends Controller
      */
     public function show(Illa $illa)
     {
-        //
+        return response()->json([
+            'illa' => Illa::find($illa)
+        ]);
     }
 
     /**
@@ -44,7 +64,7 @@ class IllaController extends Controller
      */
     public function edit(Illa $illa)
     {
-        //
+
     }
 
     /**
@@ -52,7 +72,23 @@ class IllaController extends Controller
      */
     public function update(Request $request, Illa $illa)
     {
-        //
+                $illa = Illa::find($illa);
+
+                // Lógica para actualizar los datos de la isla (adaptar según tus campos)
+
+                try {
+                    $illa->save();
+                    return response()->json([
+                        'missatge' => 'Illa actualitzada amb èxit',
+                        'codi' => 0,
+                        'illa' => $illa
+                    ], 200);
+                } catch (Exception $e) {
+                    return response()->json([
+                        'missatge' => $e->getMessage(),
+                        'codi' => $e->getCode()
+                    ], 400);
+                }
     }
 
     /**
@@ -60,6 +96,21 @@ class IllaController extends Controller
      */
     public function destroy(Illa $illa)
     {
-        //
+        $illa = Illa::find($illa);
+
+        try {
+            $illa->delete();
+            return response()->json([
+                'missatge' => 'Illa eliminada amb èxit',
+                'codi' => 0,
+                'illa' => $illa
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'missatge' => $e->getMessage(),
+                'codi' => $e->getCode(),
+                'illa' => $illa
+            ], 400);
+        }
     }
 }

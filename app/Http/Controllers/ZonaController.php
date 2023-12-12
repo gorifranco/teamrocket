@@ -12,7 +12,9 @@ class ZonaController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'zones' => Zona::all()
+        ]);
     }
 
     /**
@@ -28,7 +30,23 @@ class ZonaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $zona = new Zona();
+
+        // Lógica para guardar los datos de la zona (adaptar según tus campos)
+
+        try {
+            $zona->save();
+            return response()->json([
+                'missatge' => 'Zona afegida amb èxit',
+                'codi' => 0,
+                'zona' => $zona
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'missatge' => $e->getMessage(),
+                'codi' => $e->getCode()
+            ], 400);
+        }
     }
 
     /**
@@ -36,7 +54,9 @@ class ZonaController extends Controller
      */
     public function show(Zona $zona)
     {
-        //
+        return response()->json([
+            'zona' => Zona::find($zona)
+        ]);
     }
 
     /**
@@ -52,7 +72,23 @@ class ZonaController extends Controller
      */
     public function update(Request $request, Zona $zona)
     {
-        //
+        $zona = Zona::find($zona);
+
+        // Lógica para actualizar los datos de la zona (adaptar según tus campos)
+
+        try {
+            $zona->save();
+            return response()->json([
+                'missatge' => 'Zona actualitzada amb èxit',
+                'codi' => 0,
+                'zona' => $zona
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'missatge' => $e->getMessage(),
+                'codi' => $e->getCode()
+            ], 400);
+        }
     }
 
     /**
@@ -60,6 +96,21 @@ class ZonaController extends Controller
      */
     public function destroy(Zona $zona)
     {
-        //
+        $zona = Zona::find($zona);
+
+        try {
+            $zona->delete();
+            return response()->json([
+                'missatge' => 'Zona eliminada amb èxit',
+                'codi' => 0,
+                'zona' => $zona
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'missatge' => $e->getMessage(),
+                'codi' => $e->getCode(),
+                'zona' => $zona
+            ], 400);
+        }
     }
 }

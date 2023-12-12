@@ -12,7 +12,9 @@ class VisitaController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'visites' => Visita::all()
+        ]);
     }
 
     /**
@@ -28,7 +30,23 @@ class VisitaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $visita = new Visita();
+
+        // Lógica para guardar los datos de la visita (adaptar según tus campos)
+
+        try {
+            $visita->save();
+            return response()->json([
+                'missatge' => 'Visita afegida amb èxit',
+                'codi' => 0,
+                'visita' => $visita
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'missatge' => $e->getMessage(),
+                'codi' => $e->getCode()
+            ], 400);
+        }
     }
 
     /**
@@ -36,7 +54,9 @@ class VisitaController extends Controller
      */
     public function show(Visita $visita)
     {
-        //
+        return response()->json([
+            'visita' => Visita::find($visita)
+        ]);
     }
 
     /**
@@ -52,7 +72,23 @@ class VisitaController extends Controller
      */
     public function update(Request $request, Visita $visita)
     {
-        //
+        $visita = Visita::find($visita);
+
+        // Lógica para actualizar los datos de la visita (adaptar según tus campos)
+
+        try {
+            $visita->save();
+            return response()->json([
+                'missatge' => 'Visita actualitzada amb èxit',
+                'codi' => 0,
+                'visita' => $visita
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'missatge' => $e->getMessage(),
+                'codi' => $e->getCode()
+            ], 400);
+        }
     }
 
     /**
@@ -60,6 +96,21 @@ class VisitaController extends Controller
      */
     public function destroy(Visita $visita)
     {
-        //
+        $visita = Visita::find($visita);
+
+        try {
+            $visita->delete();
+            return response()->json([
+                'missatge' => 'Visita eliminada amb èxit',
+                'codi' => 0,
+                'visita' => $visita
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'missatge' => $e->getMessage(),
+                'codi' => $e->getCode(),
+                'visita' => $visita
+            ], 400);
+        }
     }
 }
