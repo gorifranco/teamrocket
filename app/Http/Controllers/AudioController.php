@@ -6,7 +6,6 @@ use App\Models\Arquitecte;
 use App\Models\Audio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Mockery\Exception;
 
 class AudioController extends Controller
 {
@@ -33,26 +32,13 @@ class AudioController extends Controller
      */
     public function store(Request $request)
     {
-     $audio = new Audio();
+        $audio = new Audio();
 
         $audio->url = $request->input('nom');
         $audio->ordre = $request->input('ordre');
         $audio->transcripcio = $request->input('transcripcio');
 
-        try {
-            $audio->save();
-            return response()->json([
-                'missatge' => 'Audio afegit amb èxit',
-                'codi' => 0,
-                'audio' => $audio
-            ],200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ],400);
-        }
-
+        return $this->dbAction($audio, "save");
     }
 
     /**
@@ -84,19 +70,7 @@ class AudioController extends Controller
         $audio->ordre = $request->input('ordre');
         $audio->transcripcio = $request->input('transcripcio');
 
-        try {
-            $audio->save();
-            return response()->json([
-                'missatge' => 'Audio afegit amb èxit',
-                'codi' => 0,
-                'audio' => $audio
-            ],200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ],400);
-        }
+        return $this->dbAction($audio, "save");
     }
 
     /**
@@ -106,19 +80,6 @@ class AudioController extends Controller
     {
         $audio = Arquitecte::find($audio);
 
-        try{
-            $audio->delete();
-            return response()->json([
-                'missatge' => 'Audio borrat amb èxit',
-                'codi' => 0,
-                'audio' => $audio
-            ],200);
-        }catch (\Exception $e){
-            return response()->json([
-                'message' => $e->getMessage(),
-                'code' => $e->getCode(),
-                'audio' => $audio
-            ],400);
-        }
+        return $this->dbAction($audio, "delete");
     }
 }

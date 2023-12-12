@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Imatge;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ImatgeController extends Controller
@@ -10,7 +11,7 @@ class ImatgeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
         return response()->json([
             'imatges' => Imatge::all()
@@ -28,31 +29,19 @@ class ImatgeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $imatge = new Imatge();
 
         // Lógica para guardar los datos de la imagen (adaptar según tus campos)
 
-        try {
-            $imatge->save();
-            return response()->json([
-                'missatge' => 'Imatge afegida amb èxit',
-                'codi' => 0,
-                'imatge' => $imatge
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        }
+        return $this->dbAction($imatge, "save");
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Imatge $imatge)
+    public function show(Imatge $imatge): JsonResponse
     {
         return response()->json([
             'imatge' => Imatge::find($imatge)
@@ -70,46 +59,22 @@ class ImatgeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Imatge $imatge)
+    public function update(Request $request, Imatge $imatge): JsonResponse
     {
+        $imatge = new Imatge();
 
         // Lógica para actualizar los datos de la imagen (adaptar según tus campos)
 
-        try {
-            $imatge->save();
-            return response()->json([
-                'missatge' => 'Imatge actualitzada amb èxit',
-                'codi' => 0,
-                'imatge' => $imatge
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        }
+        return $this->dbAction($imatge, "save");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Imatge $imatge)
+    public function destroy(Imatge $imatge): JsonResponse
     {
         $imatge = Imatge::find($imatge);
 
-        try {
-            $imatge->delete();
-            return response()->json([
-                'missatge' => 'Imatge eliminada amb èxit',
-                'codi' => 0,
-                'imatge' => $imatge
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode(),
-                'imatge' => $imatge
-            ], 400);
-        }
+        return $this->dbAction($imatge, "delete");
     }
 }

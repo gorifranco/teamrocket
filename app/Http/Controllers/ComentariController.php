@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comentari;
-use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ComentariController extends Controller
@@ -11,7 +11,7 @@ class ComentariController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
         return response()->json([
             'comentaris' => Comentari::all()
@@ -29,7 +29,7 @@ class ComentariController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $comentari = new Comentari();
 
@@ -37,25 +37,13 @@ class ComentariController extends Controller
         //fk_usuari
         //fk_espai
 
-        try {
-            $comentari->save();
-            return response()->json([
-                'missatge' => 'Comentari afegit amb èxit',
-                'codi' => 0,
-                'comentari' => $comentari
-            ],200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ],400);
-        }
+        return $this->dbAction($comentari, "save");
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Comentari $comentari)
+    public function show(Comentari $comentari): JsonResponse
     {
         return response()->json([
             'comentari' => Comentari::find($comentari)
@@ -73,7 +61,7 @@ class ComentariController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Comentari $comentari)
+    public function update(Request $request, Comentari $comentari): JsonResponse
     {
         $comentari = Comentari::find($comentari);
 
@@ -81,63 +69,25 @@ class ComentariController extends Controller
         //fk_usuari
         //fk_espai
 
-        try {
-            $comentari->save();
-            return response()->json([
-                'missatge' => 'Comentari actualitzat amb èxit',
-                'codi' => 0,
-                'comentari' => $comentari
-            ],200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ],400);
-        }
+        return $this->dbAction($comentari, "save");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Comentari $comentari)
+    public function destroy(Comentari $comentari): JsonResponse
     {
         $comentari = Comentari::find($comentari);
 
-        try {
-            $comentari->delete();
-            return response()->json([
-                'missatge' => 'Comentari eliminat amb èxit',
-                'codi' => 0,
-                'comentari' => $comentari
-            ],200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode(),
-                'comentari' => $comentari
-            ],400);
-        }
+        return $this->dbAction($comentari, "delete");
     }
-    public function validar(Comentari $comentari)
+
+    public function validar(Comentari $comentari): JsonResponse
     {
         $comentari = Comentari::find($comentari);
 
         $comentari->validat = true;
 
-        try{
-            $comentari->save();
-            return response()->json([
-                'missatge' => 'Comentari validat amb èxit',
-                'codi' => 0,
-                'comentari' => $comentari
-            ], 200);
-        }catch (Exception $e){
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode(),
-                'comentari' => $comentari
-            ], 400);
-        }
-
+        return $this->dbAction($comentari, "save");
     }
 }

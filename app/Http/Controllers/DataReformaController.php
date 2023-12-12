@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\DataReforma;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -38,19 +37,7 @@ class DataReformaController extends Controller
         //fk_usuari
         //fk_espai
 
-        try {
-            $dataReforma->save();
-            return response()->json([
-                'missatge' => 'Data de reforma afegida amb èxit',
-                'codi' => 0,
-                'data_reforma' => $dataReforma
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        }
+        return $this->dbAction($dataReforma, "save");
     }
 
     /**
@@ -82,19 +69,7 @@ class DataReformaController extends Controller
         //fk_usuari
         //fk_espai
 
-        try {
-            $dataReforma->save();
-            return response()->json([
-                'missatge' => 'Data de reforma actualitzada amb èxit',
-                'codi' => 0,
-                'data_reforma' => $dataReforma
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        }
+        return $this->dbAction($dataReforma, "save");
     }
 
     /**
@@ -104,19 +79,6 @@ class DataReformaController extends Controller
     {
         $dataReforma = DataReforma::find($dataReforma);
 
-        try {
-            $dataReforma->delete();
-            return response()->json([
-                'missatge' => 'Data de reforma eliminada amb èxit',
-                'codi' => 0,
-                'data_reforma' => $dataReforma
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode(),
-                'data_reforma' => $dataReforma
-            ], 400);
-        }
+        return $this->dbAction($dataReforma, "delete");
     }
 }

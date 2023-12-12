@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Municipi;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class MunicipiController extends Controller
@@ -10,7 +11,7 @@ class MunicipiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
         return response()->json([
             'municipis' => Municipi::all()
@@ -30,29 +31,13 @@ class MunicipiController extends Controller
      */
     public function store(Request $request)
     {
-        $municipi = new Municipi();
-
-        // Lógica para guardar los datos del municipio (adaptar según tus campos)
-
-        try {
-            $municipi->save();
-            return response()->json([
-                'missatge' => 'Municipi afegit amb èxit',
-                'codi' => 0,
-                'municipi' => $municipi
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        }
+        //No es creen
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Municipi $municipi)
+    public function show(Municipi $municipi): JsonResponse
     {
         return response()->json([
             'municipi' => Municipi::find($municipi)
@@ -72,23 +57,7 @@ class MunicipiController extends Controller
      */
     public function update(Request $request, Municipi $municipi)
     {
-        $municipi = Municipi::find($municipi);
-
-        // Lógica para actualizar los datos del municipio (adaptar según tus campos)
-
-        try {
-            $municipi->save();
-            return response()->json([
-                'missatge' => 'Municipi actualitzat amb èxit',
-                'codi' => 0,
-                'municipi' => $municipi
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        }
+        //No canvien
     }
 
     /**
@@ -96,21 +65,6 @@ class MunicipiController extends Controller
      */
     public function destroy(Municipi $municipi)
     {
-        $municipi = Municipi::find($municipi);
-
-        try {
-            $municipi->delete();
-            return response()->json([
-                'missatge' => 'Municipi eliminat amb èxit',
-                'codi' => 0,
-                'municipi' => $municipi
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode(),
-                'municipi' => $municipi
-            ], 400);
-        }
+        //No es destrueixen
     }
 }

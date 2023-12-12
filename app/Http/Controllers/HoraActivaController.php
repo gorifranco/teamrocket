@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\HoraActiva;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -36,19 +35,7 @@ class HoraActivaController extends Controller
 
         // Lógica para guardar los datos de la hora activa (adaptar según tus campos)
 
-        try {
-            $horaActiva->save();
-            return response()->json([
-                'missatge' => 'Hora activa afegida amb èxit',
-                'codi' => 0,
-                'hora_activa' => $horaActiva
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        }
+        return $this->dbAction($horaActiva, "save");
     }
 
     /**
@@ -78,19 +65,7 @@ class HoraActivaController extends Controller
 
         // Lógica para actualizar los datos de la hora activa (adaptar según tus campos)
 
-        try {
-            $horaActiva->save();
-            return response()->json([
-                'missatge' => 'Hora activa actualitzada amb èxit',
-                'codi' => 0,
-                'hora_activa' => $horaActiva
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        }
+        return $this->dbAction($horaActiva, "save");
     }
 
     /**
@@ -100,19 +75,6 @@ class HoraActivaController extends Controller
     {
         $horaActiva = HoraActiva::find($horaActiva);
 
-        try {
-            $horaActiva->delete();
-            return response()->json([
-                'missatge' => 'Hora activa eliminada amb èxit',
-                'codi' => 0,
-                'hora_activa' => $horaActiva
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode(),
-                'hora_activa' => $horaActiva
-            ], 400);
-        }
+        return $this->dbAction($horaActiva, "delete");
     }
 }

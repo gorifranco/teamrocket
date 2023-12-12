@@ -6,7 +6,6 @@ use app\Models\Arquitecte;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Mockery\Exception;
 
 class ArquitecteController extends Controller
 {
@@ -23,7 +22,7 @@ class ArquitecteController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create():View
+    public function create(): View
     {
         return view('arquitectes.crear');
     }
@@ -39,19 +38,7 @@ class ArquitecteController extends Controller
         $arquitecte->data_naix = $request->input('data_naix');
         $arquitecte->descripcio = $request->input('descripcio');
 
-        try {
-            $arquitecte->save();
-            return response()->json([
-                'missatge' => 'Arquitecte afegit amb èxit',
-                'codi' => 0,
-                'arquitecte' => $arquitecte
-            ],200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ],400);
-        }
+        return $this->dbAction($arquitecte, "save");
     }
 
     /**
@@ -84,19 +71,7 @@ class ArquitecteController extends Controller
         $arquitecte->data_naix = $request->input('data_naix');
         $arquitecte->descripcio = $request->input('descripcio');
 
-        try {
-            $arquitecte->save();
-            return response()->json([
-                'missatge' => 'Arquitecte editat amb èxit',
-                'codi' => 0,
-                'arquitecte' => $arquitecte
-            ],200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ],400);
-        }
+        return $this->dbAction($arquitecte, "save");
     }
 
     /**
@@ -106,19 +81,6 @@ class ArquitecteController extends Controller
     {
         $arquitecte = Arquitecte::find($id);
 
-        try{
-            $arquitecte->delete();
-            return response()->json([
-                'message' => 'Arquitecte borrat amb èxit',
-                'code' => 0,
-                'arquitecte' => $arquitecte
-            ],200);
-        }catch (\Exception $e){
-            return response()->json([
-                'message' => $e->getMessage(),
-                'code' => $e->getCode(),
-                'arquitecte' => $arquitecte
-            ],400);
-        }
+        return $this->dbAction($arquitecte, "save");
     }
 }

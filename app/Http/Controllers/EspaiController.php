@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Espai;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -36,19 +35,7 @@ class EspaiController extends Controller
 
         // Lógica para guardar los datos del espacio (adaptar según tus campos)
 
-        try {
-            $espai->save();
-            return response()->json([
-                'missatge' => 'Espai afegit amb èxit',
-                'codi' => 0,
-                'espai' => $espai
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        }
+        return $this->dbAction($espai, "save");
     }
 
     /**
@@ -78,19 +65,7 @@ class EspaiController extends Controller
 
         // Lógica para actualizar los datos del espacio (adaptar según tus campos)
 
-        try {
-            $espai->save();
-            return response()->json([
-                'missatge' => 'Espai actualitzat amb èxit',
-                'codi' => 0,
-                'espai' => $espai
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        }
+        return $this->dbAction($espai, "save");
     }
 
     /**
@@ -100,19 +75,6 @@ class EspaiController extends Controller
     {
         $espai = Espai::find($espai);
 
-        try {
-            $espai->delete();
-            return response()->json([
-                'missatge' => 'Espai eliminat amb èxit',
-                'codi' => 0,
-                'espai' => $espai
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode(),
-                'espai' => $espai
-            ], 400);
-        }
+        return $this->dbAction($espai, "delete");
     }
 }

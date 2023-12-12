@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Modalitat;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ModalitatController extends Controller
@@ -10,7 +11,7 @@ class ModalitatController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
         return response()->json([
             'modalitats' => Modalitat::all()
@@ -28,31 +29,19 @@ class ModalitatController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $modalitat = new Modalitat();
 
         // Lógica para guardar los datos de la modalidad (adaptar según tus campos)
 
-        try {
-            $modalitat->save();
-            return response()->json([
-                'missatge' => 'Modalitat afegida amb èxit',
-                'codi' => 0,
-                'modalitat' => $modalitat
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        }
+        return $this->dbAction($modalitat, "save");
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Modalitat $modalitat)
+    public function show(Modalitat $modalitat): JsonResponse
     {
         return response()->json([
             'modalitat' => Modalitat::find($modalitat)
@@ -70,47 +59,22 @@ class ModalitatController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Modalitat $modalitat)
+    public function update(Request $request, Modalitat $modalitat): JsonResponse
     {
         $modalitat = Modalitat::find($modalitat);
 
         // Lógica para actualizar los datos de la modalidad (adaptar según tus campos)
 
-        try {
-            $modalitat->save();
-            return response()->json([
-                'missatge' => 'Modalitat actualitzada amb èxit',
-                'codi' => 0,
-                'modalitat' => $modalitat
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        }
+        return $this->dbAction($modalitat, "save");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Modalitat $modalitat)
+    public function destroy(Modalitat $modalitat): JsonResponse
     {
         $modalitat = Modalitat::find($modalitat);
 
-        try {
-            $modalitat->delete();
-            return response()->json([
-                'missatge' => 'Modalitat eliminada amb èxit',
-                'codi' => 0,
-                'modalitat' => $modalitat
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode(),
-                'modalitat' => $modalitat
-            ], 400);
-        }
+        return $this->dbAction($modalitat, "delete");
     }
 }

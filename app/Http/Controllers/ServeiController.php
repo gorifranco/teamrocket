@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Servei;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ServeiController extends Controller
@@ -10,7 +11,7 @@ class ServeiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
         return response()->json([
             'serveis' => Servei::all()
@@ -28,25 +29,13 @@ class ServeiController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $servei = new Servei();
 
         // Lógica para guardar los datos del servicio (adaptar según tus campos)
 
-        try {
-            $servei->save();
-            return response()->json([
-                'missatge' => 'Servei afegit amb èxit',
-                'codi' => 0,
-                'servei' => $servei
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        }
+        return $this->dbAction($servei, "save");
     }
 
     /**
@@ -60,7 +49,7 @@ class ServeiController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Servei $servei)
+    public function edit(Servei $servei): JsonResponse
     {
         return response()->json([
             'servei' => Servei::find($servei)
@@ -70,47 +59,21 @@ class ServeiController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Servei $servei)
+    public function update(Request $request, Servei $servei): JsonResponse
     {
         $servei = Servei::find($servei);
 
-        // Lógica para actualizar los datos del servicio (adaptar según tus campos)
 
-        try {
-            $servei->save();
-            return response()->json([
-                'missatge' => 'Servei actualitzat amb èxit',
-                'codi' => 0,
-                'servei' => $servei
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        }
+        return $this->dbAction($servei, "save");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Servei $servei)
+    public function destroy(Servei $servei): JsonResponse
     {
         $servei = Servei::find($servei);
 
-        try {
-            $servei->delete();
-            return response()->json([
-                'missatge' => 'Servei eliminat amb èxit',
-                'codi' => 0,
-                'servei' => $servei
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode(),
-                'servei' => $servei
-            ], 400);
-        }
+        return $this->dbAction($servei, "delete");
     }
 }

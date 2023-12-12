@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TipusEspai;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class TipusEspaiController extends Controller
@@ -10,7 +11,7 @@ class TipusEspaiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
         return response()->json([
             'tipus_espais' => TipusEspai::all()
@@ -28,31 +29,19 @@ class TipusEspaiController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $tipusEspai = new TipusEspai();
 
-        // Lógica para guardar los datos del tipo de espacio (adaptar según tus campos)
+        $tipusEspai->nom = $request->get("nom");
 
-        try {
-            $tipusEspai->save();
-            return response()->json([
-                'missatge' => 'Tipus d\'espai afegit amb èxit',
-                'codi' => 0,
-                'tipus_espai' => $tipusEspai
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        }
+        return $this->dbAction($tipusEspai, "save");
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(TipusEspai $tipusEspai)
+    public function show(TipusEspai $tipusEspai): JsonResponse
     {
         return response()->json([
             'tipus_espai' => TipusEspai::find($tipusEspai)
@@ -70,47 +59,22 @@ class TipusEspaiController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TipusEspai $tipusEspai)
+    public function update(Request $request, TipusEspai $tipusEspai): JsonResponse
     {
         $tipusEspai = TipusEspai::find($tipusEspai);
 
-        // Lógica para actualizar los datos del tipo de espacio (adaptar según tus campos)
+        $tipusEspai->nom = $request->get("nom");
 
-        try {
-            $tipusEspai->save();
-            return response()->json([
-                'missatge' => 'Tipus d\'espai actualitzat amb èxit',
-                'codi' => 0,
-                'tipus_espai' => $tipusEspai
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        }
+        return $this->dbAction($tipusEspai, "save");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TipusEspai $tipusEspai)
+    public function destroy(TipusEspai $tipusEspai): JsonResponse
     {
         $tipusEspai = TipusEspai::find($tipusEspai);
 
-        try {
-            $tipusEspai->delete();
-            return response()->json([
-                'missatge' => 'Tipus d\'espai eliminat amb èxit',
-                'codi' => 0,
-                'tipus_espai' => $tipusEspai
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode(),
-                'tipus_espai' => $tipusEspai
-            ], 400);
-        }
+        return $this->dbAction($tipusEspai, "delete");
     }
 }

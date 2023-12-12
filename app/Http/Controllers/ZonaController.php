@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Zona;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ZonaController extends Controller
@@ -10,7 +11,7 @@ class ZonaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
         return response()->json([
             'zones' => Zona::all()
@@ -30,29 +31,13 @@ class ZonaController extends Controller
      */
     public function store(Request $request)
     {
-        $zona = new Zona();
-
-        // Lógica para guardar los datos de la zona (adaptar según tus campos)
-
-        try {
-            $zona->save();
-            return response()->json([
-                'missatge' => 'Zona afegida amb èxit',
-                'codi' => 0,
-                'zona' => $zona
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        }
+        //No es crearan més zones
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Zona $zona)
+    public function show(Zona $zona): JsonResponse
     {
         return response()->json([
             'zona' => Zona::find($zona)
@@ -72,23 +57,7 @@ class ZonaController extends Controller
      */
     public function update(Request $request, Zona $zona)
     {
-        $zona = Zona::find($zona);
-
-        // Lógica para actualizar los datos de la zona (adaptar según tus campos)
-
-        try {
-            $zona->save();
-            return response()->json([
-                'missatge' => 'Zona actualitzada amb èxit',
-                'codi' => 0,
-                'zona' => $zona
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        }
+        //No canviaran
     }
 
     /**
@@ -96,21 +65,6 @@ class ZonaController extends Controller
      */
     public function destroy(Zona $zona)
     {
-        $zona = Zona::find($zona);
-
-        try {
-            $zona->delete();
-            return response()->json([
-                'missatge' => 'Zona eliminada amb èxit',
-                'codi' => 0,
-                'zona' => $zona
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode(),
-                'zona' => $zona
-            ], 400);
-        }
+        //No es borraran
     }
 }
