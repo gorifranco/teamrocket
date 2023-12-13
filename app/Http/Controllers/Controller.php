@@ -7,13 +7,14 @@ use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    protected function dbAction(Model $objecte, string $accio): JsonResponse
+    protected function dbActionBasic(Model $objecte, string $accio): JsonResponse
     {
         try {
 
@@ -41,5 +42,15 @@ class Controller extends BaseController
                 'codi' => $e->getCode()
             ], 400);
         }
+    }
+
+    protected function autoAssignar(Model $objecte, Response $response)
+    {
+        $atributs = $objecte->getAttributes();
+        foreach ($atributs as $atribut)
+        {
+
+        }
+
     }
 }

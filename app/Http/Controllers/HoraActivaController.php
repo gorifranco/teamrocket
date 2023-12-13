@@ -35,7 +35,7 @@ class HoraActivaController extends Controller
 
         // Lógica para guardar los datos de la hora activa (adaptar según tus campos)
 
-        return $this->dbAction($horaActiva, "save");
+        return $this->dbActionBasic($horaActiva, "save");
     }
 
     /**
@@ -65,7 +65,7 @@ class HoraActivaController extends Controller
 
         // Lógica para actualizar los datos de la hora activa (adaptar según tus campos)
 
-        return $this->dbAction($horaActiva, "save");
+        return $this->dbActionBasic($horaActiva, "save");
     }
 
     /**
@@ -75,6 +75,6 @@ class HoraActivaController extends Controller
     {
         $horaActiva = HoraActiva::find($horaActiva);
 
-        return $this->dbAction($horaActiva, "delete");
+        return $this->dbActionBasic($horaActiva, "delete");
     }
 }

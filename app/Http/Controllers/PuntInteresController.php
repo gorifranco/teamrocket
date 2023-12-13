@@ -35,7 +35,7 @@ class PuntInteresController extends Controller
 
         // Lógica para guardar los datos del punto de interés (adaptar según tus campos)
 
-        return $this->dbAction($puntInteres, "save");
+        return $this->dbActionBasic($puntInteres, "save");
     }
 
     /**
@@ -65,7 +65,7 @@ class PuntInteresController extends Controller
 
         // Lógica para actualizar los datos del punto de interés (adaptar según tus campos)
 
-        return $this->dbAction($puntInteres, "save");
+        return $this->dbActionBasic($puntInteres, "save");
     }
 
     /**
@@ -75,6 +75,6 @@ class PuntInteresController extends Controller
     {
         $puntInteres = PuntInteres::find($puntInteres);
 
-        return $this->dbAction($puntInteres, "delete");
+        return $this->dbActionBasic($puntInteres, "delete");
     }
 }

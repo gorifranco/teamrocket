@@ -40,7 +40,7 @@ class VisitaController extends Controller
         $visita->reqInscripcio = $request->input("reqInscripcio");
         $visita->places = $request->input("places");
 
-        return $this->dbAction($visita, "save");
+        return $this->dbActionBasic($visita, "save");
     }
 
     /**
@@ -75,7 +75,7 @@ class VisitaController extends Controller
         $visita->reqInscripcio = $request->input("reqInscripcio");
         $visita->places = $request->input("places");
 
-        return $this->dbAction($visita, "save");
+        return $this->dbActionBasic($visita, "save");
     }
 
     /**
@@ -85,6 +85,6 @@ class VisitaController extends Controller
     {
         $visita = Visita::find($visita);
 
-        return $this->dbAction($visita, "delete");
+        return $this->dbActionBasic($visita, "delete");
     }
 }

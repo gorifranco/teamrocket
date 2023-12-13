@@ -35,7 +35,7 @@ class ServeiController extends Controller
 
         // Lógica para guardar los datos del servicio (adaptar según tus campos)
 
-        return $this->dbAction($servei, "save");
+        return $this->dbActionBasic($servei, "save");
     }
 
     /**
@@ -64,7 +64,7 @@ class ServeiController extends Controller
         $servei = Servei::find($servei);
 
 
-        return $this->dbAction($servei, "save");
+        return $this->dbActionBasic($servei, "save");
     }
 
     /**
@@ -74,6 +74,6 @@ class ServeiController extends Controller
     {
         $servei = Servei::find($servei);
 
-        return $this->dbAction($servei, "delete");
+        return $this->dbActionBasic($servei, "delete");
     }
 }

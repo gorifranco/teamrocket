@@ -37,7 +37,7 @@ class DataReformaController extends Controller
         //fk_usuari
         //fk_espai
 
-        return $this->dbAction($dataReforma, "save");
+        return $this->dbActionBasic($dataReforma, "save");
     }
 
     /**
@@ -69,7 +69,7 @@ class DataReformaController extends Controller
         //fk_usuari
         //fk_espai
 
-        return $this->dbAction($dataReforma, "save");
+        return $this->dbActionBasic($dataReforma, "save");
     }
 
     /**
@@ -79,6 +79,6 @@ class DataReformaController extends Controller
     {
         $dataReforma = DataReforma::find($dataReforma);
 
-        return $this->dbAction($dataReforma, "delete");
+        return $this->dbActionBasic($dataReforma, "delete");
     }
 }

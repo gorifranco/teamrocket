@@ -35,7 +35,7 @@ class TipusEspaiController extends Controller
 
         $tipusEspai->nom = $request->get("nom");
 
-        return $this->dbAction($tipusEspai, "save");
+        return $this->dbActionBasic($tipusEspai, "save");
     }
 
     /**
@@ -65,7 +65,7 @@ class TipusEspaiController extends Controller
 
         $tipusEspai->nom = $request->get("nom");
 
-        return $this->dbAction($tipusEspai, "save");
+        return $this->dbActionBasic($tipusEspai, "save");
     }
 
     /**
@@ -75,6 +75,6 @@ class TipusEspaiController extends Controller
     {
         $tipusEspai = TipusEspai::find($tipusEspai);
 
-        return $this->dbAction($tipusEspai, "delete");
+        return $this->dbActionBasic($tipusEspai, "delete");
     }
 }

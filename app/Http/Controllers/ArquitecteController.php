@@ -38,7 +38,7 @@ class ArquitecteController extends Controller
         $arquitecte->data_naix = $request->input('data_naix');
         $arquitecte->descripcio = $request->input('descripcio');
 
-        return $this->dbAction($arquitecte, "save");
+        return $this->dbActionBasic($arquitecte, "save");
     }
 
     /**
@@ -71,7 +71,7 @@ class ArquitecteController extends Controller
         $arquitecte->data_naix = $request->input('data_naix');
         $arquitecte->descripcio = $request->input('descripcio');
 
-        return $this->dbAction($arquitecte, "save");
+        return $this->dbActionBasic($arquitecte, "save");
     }
 
     /**
@@ -81,6 +81,6 @@ class ArquitecteController extends Controller
     {
         $arquitecte = Arquitecte::find($id);
 
-        return $this->dbAction($arquitecte, "save");
+        return $this->dbActionBasic($arquitecte, "save");
     }
 }

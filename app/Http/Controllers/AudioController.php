@@ -38,7 +38,7 @@ class AudioController extends Controller
         $audio->ordre = $request->input('ordre');
         $audio->transcripcio = $request->input('transcripcio');
 
-        return $this->dbAction($audio, "save");
+        return $this->dbActionBasic($audio, "save");
     }
 
     /**
@@ -70,7 +70,7 @@ class AudioController extends Controller
         $audio->ordre = $request->input('ordre');
         $audio->transcripcio = $request->input('transcripcio');
 
-        return $this->dbAction($audio, "save");
+        return $this->dbActionBasic($audio, "save");
     }
 
     /**
@@ -80,6 +80,6 @@ class AudioController extends Controller
     {
         $audio = Arquitecte::find($audio);
 
-        return $this->dbAction($audio, "delete");
+        return $this->dbActionBasic($audio, "delete");
     }
 }

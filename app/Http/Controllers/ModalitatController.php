@@ -35,7 +35,7 @@ class ModalitatController extends Controller
 
         // Lógica para guardar los datos de la modalidad (adaptar según tus campos)
 
-        return $this->dbAction($modalitat, "save");
+        return $this->dbActionBasic($modalitat, "save");
     }
 
     /**
@@ -65,7 +65,7 @@ class ModalitatController extends Controller
 
         // Lógica para actualizar los datos de la modalidad (adaptar según tus campos)
 
-        return $this->dbAction($modalitat, "save");
+        return $this->dbActionBasic($modalitat, "save");
     }
 
     /**
@@ -75,6 +75,6 @@ class ModalitatController extends Controller
     {
         $modalitat = Modalitat::find($modalitat);
 
-        return $this->dbAction($modalitat, "delete");
+        return $this->dbActionBasic($modalitat, "delete");
     }
 }

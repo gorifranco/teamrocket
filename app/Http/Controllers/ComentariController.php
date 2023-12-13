@@ -37,7 +37,7 @@ class ComentariController extends Controller
         //fk_usuari
         //fk_espai
 
-        return $this->dbAction($comentari, "save");
+        return $this->dbActionBasic($comentari, "save");
     }
 
     /**
@@ -69,7 +69,7 @@ class ComentariController extends Controller
         //fk_usuari
         //fk_espai
 
-        return $this->dbAction($comentari, "save");
+        return $this->dbActionBasic($comentari, "save");
     }
 
     /**
@@ -79,7 +79,7 @@ class ComentariController extends Controller
     {
         $comentari = Comentari::find($comentari);
 
-        return $this->dbAction($comentari, "delete");
+        return $this->dbActionBasic($comentari, "delete");
     }
 
     public function validar(Comentari $comentari): JsonResponse
@@ -88,6 +88,6 @@ class ComentariController extends Controller
 
         $comentari->validat = true;
 
-        return $this->dbAction($comentari, "save");
+        return $this->dbActionBasic($comentari, "save");
     }
 }

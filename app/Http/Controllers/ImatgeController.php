@@ -35,7 +35,7 @@ class ImatgeController extends Controller
 
         // Lógica para guardar los datos de la imagen (adaptar según tus campos)
 
-        return $this->dbAction($imatge, "save");
+        return $this->dbActionBasic($imatge, "save");
     }
 
     /**
@@ -65,7 +65,7 @@ class ImatgeController extends Controller
 
         // Lógica para actualizar los datos de la imagen (adaptar según tus campos)
 
-        return $this->dbAction($imatge, "save");
+        return $this->dbActionBasic($imatge, "save");
     }
 
     /**
@@ -75,6 +75,6 @@ class ImatgeController extends Controller
     {
         $imatge = Imatge::find($imatge);
 
-        return $this->dbAction($imatge, "delete");
+        return $this->dbActionBasic($imatge, "delete");
     }
 }
