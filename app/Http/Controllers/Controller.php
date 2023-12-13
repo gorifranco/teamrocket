@@ -49,7 +49,7 @@ class Controller extends BaseController
         $atributs = $objecte->getAttributes();
         foreach ($atributs as $atribut)
         {
-
+        $objecte->setAttribute($atribut, $response->input($atribut));
         }
 
     }

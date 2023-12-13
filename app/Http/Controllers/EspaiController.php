@@ -59,6 +59,9 @@ class EspaiController extends Controller
 
             $espaiJSONResponse = $this->dbActionBasic($espai, "save");
 
+            //Si Hi ha hagut error durant el guardat de l'espai break i retorna el JSON de l'error
+            if($espaiJSONResponse->status() !== 400) return $espaiJSONResponse;
+
             //modalitats
             $espai->modalitats()->attach($request->input("modalitats"));
 
