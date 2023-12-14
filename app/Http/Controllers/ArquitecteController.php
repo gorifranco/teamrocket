@@ -32,11 +32,15 @@ class ArquitecteController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+
+
         $arquitecte = new Arquitecte();
 
         $arquitecte->nom = $request->input('nom');
         $arquitecte->data_naix = $request->input('data_naix');
         $arquitecte->descripcio = $request->input('descripcio');
+
+
 
         return $this->dbActionBasic($arquitecte, "save");
     }
