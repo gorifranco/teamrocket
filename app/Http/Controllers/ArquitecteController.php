@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use app\Models\Arquitecte;
+use http\Client\Response;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class ArquitecteController extends Controller
     public function index(): JsonResponse
     {
         return response()->json([
-            'arquitectes' => Arquitecte::all()
+            'arquitecte' => Arquitecte::all()
         ]);
     }
 
@@ -32,17 +33,12 @@ class ArquitecteController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        $arquitecte = Arquitecte::create($request->all());
 
-
-        $arquitecte = new Arquitecte();
-
-        $arquitecte->nom = $request->input('nom');
-        $arquitecte->data_naix = $request->input('data_naix');
-        $arquitecte->descripcio = $request->input('descripcio');
-
-
-
-        return $this->dbActionBasic($arquitecte, "save");
+        return response()->json([
+            "message" => "success",
+            "arquitecte" => $arquitecte
+        ]);
     }
 
     /**
@@ -50,8 +46,10 @@ class ArquitecteController extends Controller
      */
     public function show(string $id): JsonResponse
     {
+        $arquitecte = Arquitecte::findOrFail($id);
+
         return response()->json([
-            'arquitecte' => Arquitecte::find($id)
+            'arquitecte' => $arquitecte
         ]);
     }
 
@@ -61,6 +59,7 @@ class ArquitecteController extends Controller
     public function edit(string $id): View
     {
         $arquitecte = Arquitecte::find($id);
+
         return view('arquitectes.editar', ['arquitecte' => $arquitecte]);
     }
 
@@ -84,7 +83,10 @@ class ArquitecteController extends Controller
     public function destroy(string $id): JsonResponse
     {
         $arquitecte = Arquitecte::find($id);
+        Arquitecte::destroy($arquitecte);
 
-        return $this->dbActionBasic($arquitecte, "save");
+        return response()->json([
+            'arquitecte' => $arquitecte
+        ]);
     }
 }

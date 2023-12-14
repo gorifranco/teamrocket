@@ -11,7 +11,7 @@ class Arquitecte extends Model
     use HasFactory;
 
     protected $table = "arquitectes";
-    protected $fillable = ["nom","data_naix", "descripcio"];
+    protected $fillable = ["nom", "data_naix", "descripcio"];
 
     public function espais(): BelongsTo
     {

@@ -20,7 +20,7 @@ class EspaiController extends Controller
     {
         return response()->json([
             'espais' => Espai::all()
-        ],200);
+        ], 200);
     }
 
     /**
@@ -64,15 +64,14 @@ class EspaiController extends Controller
             $espaiJSONResponse = $this->dbActionBasic($espai, "save");
 
             //Si Hi ha hagut error durant el guardat de l'espai break i retorna el JSON de l'error
-            if($espaiJSONResponse->status() !== 200) return $espaiJSONResponse;
+            if ($espaiJSONResponse->status() !== 200) return $espaiJSONResponse;
 
             //modalitats
             $espai->modalitats()->attach($request->input("modalitats"));
 
             //horesActiva
             $hores = [];
-            foreach ($request->input("horesActives") as $horaActiva)
-            {
+            foreach ($request->input("horesActives") as $horaActiva) {
                 $ha = new HoraActiva();
 
                 $ha->dia = $horaActiva->dia;
@@ -95,7 +94,7 @@ class EspaiController extends Controller
 
             return $espaiJSONResponse;
 
-        }catch (QueryException $e){
+        } catch (QueryException $e) {
             return response()->json([
                 'missatge' => $e->getMessage(),
                 'codi' => $e->getCode()

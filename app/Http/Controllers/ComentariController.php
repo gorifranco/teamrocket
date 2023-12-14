@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comentari;
+use Exception;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -14,7 +16,7 @@ class ComentariController extends Controller
     public function index(): JsonResponse
     {
         return response()->json([
-            'comentaris' => Comentari::all()
+            'data' => Comentari::all()
         ]);
     }
 
@@ -31,13 +33,29 @@ class ComentariController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $comentari = new Comentari();
+        $regles = [
+            'valoracio' => ["required", "integer", "min:0", "max:5"],
+            'fk_usuari' => ["required", "integer", "min:0"],
+            'fk_espai' => ["required", "integer", "min:0"]
+        ];
 
-        $comentari->valoracio = $request->input('valoracio');
-        //fk_usuari
-        //fk_espai
-
-        return $this->dbActionBasic($comentari, "save");
+        $validacio = Validator::make($request->all(), $regles);
+        try {
+            if (!$validacio->fails()) {
+                $comentari = Comentari::createorfail($request->all());
+                return response()->json([
+                    'data' => $comentari
+                ]);
+            } else {
+                return response()->json([
+                    'error' => $validacio->errors()
+                ], 400);
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 400);
+        }
     }
 
     /**
@@ -45,9 +63,16 @@ class ComentariController extends Controller
      */
     public function show(Comentari $comentari): JsonResponse
     {
-        return response()->json([
-            'comentari' => Comentari::find($comentari)
-        ]);
+        try {
+            $com = Comentari::findOrFail($comentari);
+            return response()->json([
+                'comentari' => $com
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 400);
+        }
     }
 
     /**
@@ -63,13 +88,13 @@ class ComentariController extends Controller
      */
     public function update(Request $request, Comentari $comentari): JsonResponse
     {
-        $comentari = Comentari::find($comentari);
+        $regles = [
+            'valoracio' => ["required", "integer", "min:0", "max:5"],
+            'fk_usuari' => ["required", "integer", "min:0"],
+            'fk_espai' => ["required", "integer", "min:0"]
+        ];
 
-        $comentari->valoracio = $request->input('valoracio');
-        //fk_usuari
-        //fk_espai
-
-        return $this->dbActionBasic($comentari, "save");
+        return $this->dbActionBasic($comentari, $request, "updateorfail", $regles);
     }
 
     /**
@@ -77,17 +102,31 @@ class ComentariController extends Controller
      */
     public function destroy(Comentari $comentari): JsonResponse
     {
-        $comentari = Comentari::find($comentari);
-
-        return $this->dbActionBasic($comentari, "delete");
+        try {
+            $comentari = Comentari::findOrFail($comentari);
+            return response()->json([
+                'data' => $comentari
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 400);
+        }
     }
 
     public function validar(Comentari $comentari): JsonResponse
     {
-        $comentari = Comentari::find($comentari);
-
-        $comentari->validat = true;
-
-        return $this->dbActionBasic($comentari, "save");
+        try {
+            $comentari = Comentari::findOrFail($comentari);
+            $comentari->validat = true;
+            $comentari::updateOrFail();
+            return response()->json([
+                'data' => $comentari
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 400);
+        }
     }
 }
