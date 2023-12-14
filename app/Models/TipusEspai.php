@@ -11,6 +11,7 @@ class TipusEspai extends Model
     use HasFactory;
 
     protected $table = "tipusEspai";
+    protected $fillable = ["nom"];
 
     public function espais(): BelongsTo
     {

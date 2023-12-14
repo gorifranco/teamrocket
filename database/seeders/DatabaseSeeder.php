@@ -23,5 +23,8 @@ class DatabaseSeeder extends Seeder
         $this->call(illes_seeder::class);
         $this->call(zones_seeder::class);
         $this->call(municipis_seeder::class);
+        $this->call(modalitats_seeder::class);
+        $this->call(serveis_seeder::class);
+        $this->call(tipusEspais_seeder::class);
     }
 }

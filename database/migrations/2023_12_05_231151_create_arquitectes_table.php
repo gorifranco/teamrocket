@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('arquitectes', function (Blueprint $table) {
             $table->id();
-            $table->string("nom");
-            $table->date("data_naix");
+            $table->string("nom")->unique();
+            $table->date("data_naix")->nullable();
             $table->string("descripcio")->nullable();
             $table->timestamps();
         });

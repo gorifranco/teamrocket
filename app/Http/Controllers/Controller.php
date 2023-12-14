@@ -7,7 +7,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
@@ -18,9 +18,10 @@ class Controller extends BaseController
     {
         try {
 
-            $objecte->$accio();
+            $objecte::class->$accio($objecte);
 
             $missatge = match ($accio) {
+                "find" => "espai",
                 "save", "update" => 'Guardat amb èxit',
                 "delete" => 'Eliminat amb èxit',
                 default => 'Èxit',
@@ -44,13 +45,23 @@ class Controller extends BaseController
         }
     }
 
-    protected function autoAssignar(Model $objecte, Response $response)
+    /**
+     * Assigna tots els atributs del request a l'objecte, atributs amb el mateix nom,
+     * Es poden introduïr excepcions
+    **/
+     protected function autoAssignar(Model $objecte, Request $request, $excepcions):void
     {
-        $atributs = $objecte->getAttributes();
-        foreach ($atributs as $atribut)
-        {
-        $objecte->setAttribute($atribut, $response->input($atribut));
+        $excep = ["id", "created_at", "updated_at"];
+
+        if(isset($excepcions)){
+            $excep = array_merge($excep, $excepcions);
         }
 
+        $atributs = $objecte->getAttributes();
+
+        foreach ($atributs as $atribut)
+        {
+            if(!in_array($atribut, $excep)) $objecte->setAttribute($atribut, $request->input($atribut));
+        }
     }
 }

@@ -11,6 +11,7 @@ class HoraActiva extends Model
     use HasFactory;
 
     protected $table = "horaActiva";
+    protected $fillable = ["dia", "desde", "fins"];
 
     public function espais(): BelongsToMany
     {

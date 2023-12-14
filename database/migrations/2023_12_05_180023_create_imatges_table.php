@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('imatges', function (Blueprint $table) {
             $table->id();
+            $table->string("url")->unique();
             $table->timestamps();
         });
     }

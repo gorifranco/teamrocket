@@ -18,7 +18,7 @@ return new class extends Migration {
                 ->onDelete('CASCADE')
                 ->onUpdate('SET NULL');
 
-               $table->unsignedBigInteger("fk_municipi")->nullable();
+            $table->unsignedBigInteger("fk_municipi")->nullable();
             $table->foreign("fk_municipi")
                 ->references("id")
                 ->on("municipis")

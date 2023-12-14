@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->date("dataInici");
             $table->date("dataFi");
             $table->boolean("reqInscripcio");
+            $table->double("preu")->default(0.0);
             $table->integer("places");
             //camp calculat: $table->integer("visitants");
             $table->timestamps();

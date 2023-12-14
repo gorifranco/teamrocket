@@ -11,6 +11,8 @@ class Visita extends Model
     use HasFactory;
 
     protected $table = "visites";
+    protected $fillable = ["nom", "descripcio", "dataInici", "dataFi",
+        "reqInscripcio", "places"];
 
     public function puntsInteres(): BelongsToMany
     {

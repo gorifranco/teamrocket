@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Arquitecte;
 use App\Models\Espai;
+use App\Models\HoraActiva;
 use App\Models\Municipi;
 use App\Models\TipusEspai;
 use Illuminate\Database\QueryException;
@@ -19,7 +20,7 @@ class EspaiController extends Controller
     {
         return response()->json([
             'espais' => Espai::all()
-        ]);
+        ],200);
     }
 
     /**
@@ -37,39 +38,54 @@ class EspaiController extends Controller
     {
         $espai = new Espai();
 
-        $espai->nom = $request->input("nom");
-        $espai->descripcio = $request->input("descripcio");
-        $espai->direccio = $request->input("direccio");
-        $espai->any_construccio = $request->input("any_construccio");
-        $espai->grau_accessibilitat = $request->input("grau_accessibilitat");
-        $espai->web = $request->input("web");
-        $espai->email = $request->input("email");
-        $espai->telefon = $request->input("telefon");
+        //Assigna els atributs de l'espai
+        $this->autoAssignar($espai, $request, ["destacada"]);
+
+//        $espai->nom = $request->input("nom");
+//        $espai->descripcio = $request->input("descripcio");
+//        $espai->direccio = $request->input("direccio");
+//        $espai->any_construccio = $request->input("any_construccio");
+//        $espai->grau_accessibilitat = $request->input("grau_accessibilitat");
+//        $espai->web = $request->input("web");
+//        $espai->email = $request->input("email");
+//        $espai->telefon = $request->input("telefon");
         //destacada default = false
 
         try {
             //fk_arquitecte si passen NOM
-            $espai->fk_arquitecte = Arquitecte::findOrFail($request->input("arquitecte"));
+            $espai->fk_arquitecte = Arquitecte::findOrCreate($request->input("arquitecte"))->id;
 
             //fk_municipi
-            $espai->fk_municipi = Municipi::findOrFail($request->input("municipi"));
+            $espai->fk_municipi = $request->input("municipi");
 
             //fk_tipusEspai
-            $espai->fk_tipusEspai = TipusEspai::findOrFail($request->input("tipusEspai"));
+            $espai->fk_tipusEspai = $request->input("tipusEspai");
 
             $espaiJSONResponse = $this->dbActionBasic($espai, "save");
 
             //Si Hi ha hagut error durant el guardat de l'espai break i retorna el JSON de l'error
-            if($espaiJSONResponse->status() !== 400) return $espaiJSONResponse;
+            if($espaiJSONResponse->status() !== 200) return $espaiJSONResponse;
 
             //modalitats
             $espai->modalitats()->attach($request->input("modalitats"));
 
-            //horesActives
-            $espai->horesActives()->attach($request->input("horesActives"));
+            //horesActiva
+            $hores = [];
+            foreach ($request->input("horesActives") as $horaActiva)
+            {
+                $ha = new HoraActiva();
 
-            //puntsInteres
-            $espai->puntsInteres()->createMany($request->input("puntsInteres"));
+                $ha->dia = $horaActiva->dia;
+                $ha->desde = $horaActiva->desde;
+                $ha->fins = $horaActiva->fins;
+
+                $ha->saveOrFail();
+                $hores[] = $ha;
+            }
+
+            $espai->horesActives()->attach($hores);
+
+            //
 
             //serveis
             $espai->serveis()->attach($request->input("serveis"));
@@ -89,6 +105,11 @@ class EspaiController extends Controller
                 'missatge' => $e->getMessage(),
                 'codi' => $e->getCode()
             ], 400);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'missatge' => $e->getMessage(),
+                'codi' => $e->getCode()
+            ], 400);
         }
     }
 
@@ -97,9 +118,7 @@ class EspaiController extends Controller
      */
     public function show(Espai $espai): JsonResponse
     {
-        return response()->json([
-            'espai' => Espai::find($espai)
-        ]);
+        return $this->dbActionBasic($espai, "find");
     }
 
     /**
@@ -117,16 +136,19 @@ class EspaiController extends Controller
     {
         $espai = Espai::find($espai);
 
-        $espai->nom = $request->input("nom");
-        $espai->descripcio = $request->input("descripcio");
-        $espai->direccio = $request->input("direccio");
-        $espai->any_construccio = $request->input("any_construccio");
-        $espai->grau_accessibilitat = $request->input("grau_accessibilitat");
-        $espai->web = $request->input("web");
-        $espai->email = $request->input("email");
-        $espai->telefon = $request->input("telefon");
+        //Assigna tots els atributs del request a l'objecte, atributs amb el mateix nom, Es poden introduïr excepcions
+        $this->autoAssignar($espai, $request, ["destacada"]);
 
-        return $this->dbActionBasic($espai, "save");
+//        $espai->nom = $request->input("nom");
+//        $espai->descripcio = $request->input("descripcio");
+//        $espai->direccio = $request->input("direccio");
+//        $espai->any_construccio = $request->input("any_construccio");
+//        $espai->grau_accessibilitat = $request->input("grau_accessibilitat");
+//        $espai->web = $request->input("web");
+//        $espai->email = $request->input("email");
+//        $espai->telefon = $request->input("telefon");
+
+        return $this->dbActionBasic($espai, "saveOrFail");
 
     }
 

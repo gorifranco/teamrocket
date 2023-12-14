@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('zones', function (Blueprint $table) {
             $table->id();
-            $table->string("nom");
+            $table->string("nom")->unique();
             $table->timestamps();
         });
     }

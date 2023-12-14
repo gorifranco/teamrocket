@@ -14,6 +14,8 @@ class Espai extends Model
     use HasFactory;
 
     protected $table = "espais";
+    protected $fillable = ["nom", "descripcio", "direccio", "any_construccio", "grau_accessibbilitat", "web",
+        "email", "telefon", "fk_arquitecte", "fk_municipi", "fk_tipusEspai"];
 
     public function modalitats(): BelongsToMany
     {

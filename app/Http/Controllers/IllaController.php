@@ -37,7 +37,7 @@ class IllaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Illa $illa): JsonRespons   e
+    public function show(Illa $illa): JsonResponse
     {
         return response()->json([
             'illa' => Illa::find($illa)

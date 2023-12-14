@@ -11,6 +11,7 @@ class Comentari extends Model
     use HasFactory;
 
     protected $table = "comentaris";
+    protected $fillable = ["valoracio", "fk_usuari", "fk_espai"];
 
     public function espai(): HasOne
     {

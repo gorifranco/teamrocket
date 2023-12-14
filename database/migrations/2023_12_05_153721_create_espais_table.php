@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('espais', function (Blueprint $table) {
             $table->id();
-            $table->string("nom");
+            $table->string("nom")->unique();
             $table->string("descripcio");
             $table->string("direccio");
             $table->date("any_construccio");

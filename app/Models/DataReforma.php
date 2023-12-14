@@ -11,6 +11,7 @@ class DataReforma extends Model
     use HasFactory;
 
     protected $table = "dataReforma";
+    protected $fillable = ["data_reforma", "fk_espaiId"];
 
     public function espai(): BelongsTo
     {

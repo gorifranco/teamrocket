@@ -12,7 +12,8 @@ return new class extends Migration {
     {
         Schema::create('visita_puntInteres', function (Blueprint $table) {
             $table->id();
-                    $table->timestamps();
+            $table->integer("ordre");
+            $table->timestamps();
         });
     }
 

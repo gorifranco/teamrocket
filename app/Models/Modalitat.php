@@ -11,6 +11,7 @@ class Modalitat extends Model
     use HasFactory;
 
     protected $table = "modalitats";
+    protected $fillable = ["nom"];
 
     public function espai(): BelongsToMany
     {

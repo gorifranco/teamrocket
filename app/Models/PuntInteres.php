@@ -14,6 +14,7 @@ class PuntInteres extends Model
     use HasFactory;
 
     protected $table = "puntsInteres";
+    protected $fillable = ["nom", "descripcio", "fk_espai"];
 
     public function espai(): HasOne
     {

@@ -13,8 +13,8 @@ return new class extends Migration {
         Schema::create('comentaris', function (Blueprint $table) {
             $table->id();
             $table->integer("valoracio");
-            $table->boolean("validat");
-             $table->timestamps();
+            $table->boolean("validat")->default(false);
+            $table->timestamps();
         });
     }
 

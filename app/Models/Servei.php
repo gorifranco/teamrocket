@@ -11,6 +11,7 @@ class Servei extends Model
     use HasFactory;
 
     protected $table = "serveis";
+    protected $fillable = ["nom"];
 
     public function espais(): BelongsToMany
     {
