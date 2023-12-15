@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TipusEspai;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -31,27 +32,25 @@ class TipusEspaiController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $tipusEspai = new TipusEspai();
+        $regles = [
+            'nom' => 'required|unique:tipusespais.nom'
+        ];
 
-        $tipusEspai->nom = $request->get("nom");
-
-        return $this->dbActionBasic($tipusEspai, "save");
+        return $this->dbActionBasic(null, TipusEspai::class, $request, "createOrFail", $regles);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(TipusEspai $tipusEspai): JsonResponse
+    public function show(string $id): JsonResponse
     {
-        return response()->json([
-            'tipus_espai' => TipusEspai::find($tipusEspai)
-        ]);
+            return $this->dbActionBasic($id, TipusEspai::class, null, "findOrFail", null);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(TipusEspai $tipusEspai)
+    public function edit(string $id)
     {
         //
     }
@@ -59,22 +58,20 @@ class TipusEspaiController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TipusEspai $tipusEspai): JsonResponse
+    public function update(Request $request, string $id): JsonResponse
     {
-        $tipusEspai = TipusEspai::find($tipusEspai);
+        $regles = [
+            'nom' => 'required|unique:tipusespais.nom'
+        ];
 
-        $tipusEspai->nom = $request->get("nom");
-
-        return $this->dbActionBasic($tipusEspai, "save");
+        return $this->dbActionBasic($id, TipusEspai::class, $request, "updateOrFail", $regles);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TipusEspai $tipusEspai): JsonResponse
+    public function destroy(string $id): JsonResponse
     {
-        $tipusEspai = TipusEspai::find($tipusEspai);
-
-        return $this->dbActionBasic($tipusEspai, "delete");
+        return $this->dbActionBasic($id, TipusEspai::class, null, "deleteOrFail", null);
     }
 }

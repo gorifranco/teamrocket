@@ -24,7 +24,7 @@ class ArquitecteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'data_naix' => ''
         ];
     }
 
@@ -36,8 +36,8 @@ class ArquitecteRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => 'A title is required',
-            'body.required' => 'A message is required',
+            'title.required' => ['A title is required'],
+            'body.required' => ['A message is required'],
         ];
     }
 }

@@ -31,21 +31,21 @@ class HoraActivaController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $horaActiva = new HoraActiva();
+        $regles = [
+            'dia' => 'required|integer|min:0|max:7',
+            'desde' => 'required|time',
+            'fins' => 'required|time'
+            ];
 
-        // Lógica para guardar los datos de la hora activa (adaptar según tus campos)
-
-        return $this->dbActionBasic($horaActiva, "save");
+        return $this->dbActionBasic(null, HoraActiva::class, $request, "createOrFail", $regles);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(HoraActiva $horaActiva): JsonResponse
+    public function show(string $id): JsonResponse
     {
-        return response()->json([
-            'hora_activa' => HoraActiva::find($horaActiva)
-        ]);
+        return $this->dbActionBasic($id, HoraActiva::class, null, "findOrFail", null);
     }
 
     /**
@@ -59,22 +59,22 @@ class HoraActivaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, HoraActiva $horaActiva): JsonResponse
+    public function update(Request $request, string $id): JsonResponse
     {
-        $horaActiva = HoraActiva::find($horaActiva);
+        $regles = [
+            'dia' => 'required|integer|min:0|max:7',
+            'desde' => 'required|time',
+            'fins' => 'required|time'
+        ];
 
-        // Lógica para actualizar los datos de la hora activa (adaptar según tus campos)
-
-        return $this->dbActionBasic($horaActiva, "save");
+        return $this->dbActionBasic($id, HoraActiva::class, $request, "updateOrFail", $regles);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(HoraActiva $horaActiva): JsonResponse
+    public function destroy(string $id): JsonResponse
     {
-        $horaActiva = HoraActiva::find($horaActiva);
-
-        return $this->dbActionBasic($horaActiva, "delete");
+        return $this->dbActionBasic($id, HoraActiva::class, null, "deleteOrFail", null);
     }
 }

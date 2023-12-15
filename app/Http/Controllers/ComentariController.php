@@ -39,46 +39,21 @@ class ComentariController extends Controller
             'fk_espai' => ["required", "integer", "min:0"]
         ];
 
-        $validacio = Validator::make($request->all(), $regles);
-        try {
-            if (!$validacio->fails()) {
-                $comentari = Comentari::createorfail($request->all());
-                return response()->json([
-                    'data' => $comentari
-                ]);
-            } else {
-                return response()->json([
-                    'error' => $validacio->errors()
-                ], 400);
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ], 400);
-        }
+        return $this->dbActionBasic(null, Comentari::class, $request, "createOrFail", $regles);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Comentari $comentari): JsonResponse
+    public function show(string $id): JsonResponse
     {
-        try {
-            $com = Comentari::findOrFail($comentari);
-            return response()->json([
-                'comentari' => $com
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ], 400);
-        }
+        return $this->dbActionBasic($id, Comentari::class, null, "findOrFail", null);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Comentari $comentari)
+    public function edit(string $id)
     {
         //
     }
@@ -86,40 +61,32 @@ class ComentariController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Comentari $comentari): JsonResponse
+    public function update(Request $request, string $id): JsonResponse
     {
         $regles = [
-            'valoracio' => ["required", "integer", "min:0", "max:5"],
-            'fk_usuari' => ["required", "integer", "min:0"],
-            'fk_espai' => ["required", "integer", "min:0"]
+            'valoracio' => "required|integer|min:0|max:5",
+            'fk_usuari' => "required|integer|min:0",
+            'fk_espai' => "required|integer|min:0"
         ];
 
-        return $this->dbActionBasic($comentari, $request, "updateorfail", $regles);
+        return $this->dbActionBasic($id, Comentari::class, $request, "updateOrFail", $regles);
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Comentari $comentari): JsonResponse
+    public function destroy(string $id): JsonResponse
     {
-        try {
-            $comentari = Comentari::findOrFail($comentari);
-            return response()->json([
-                'data' => $comentari
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ], 400);
-        }
+        return $this->dbActionBasic($id, Comentari::class, null, "deleteOrFail", null);
     }
 
-    public function validar(Comentari $comentari): JsonResponse
+    public function validar(string $id): JsonResponse
     {
         try {
-            $comentari = Comentari::findOrFail($comentari);
+            $comentari = Comentari::findOrFail($id);
             $comentari->validat = true;
-            $comentari::updateOrFail();
+            $comentari->save();
             return response()->json([
                 'data' => $comentari
             ]);

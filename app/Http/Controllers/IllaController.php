@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Illa;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Mockery\Exception;
 
 class IllaController extends Controller
 {
@@ -37,17 +38,16 @@ class IllaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Illa $illa): JsonResponse
+    public function show(String $id): JsonResponse
     {
-        return response()->json([
-            'illa' => Illa::find($illa)
-        ]);
+        return $this->dbActionBasic($id, Illa::class, null, "findOrFail", null);
+
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Illa $illa)
+    public function edit(String $id)
     {
 
     }
@@ -55,7 +55,7 @@ class IllaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Illa $illa)
+    public function update(Request $request, String $id)
     {
         //No canvien
     }
@@ -63,7 +63,7 @@ class IllaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Illa $illa)
+    public function destroy(String $id)
     {
         //No Canvien
     }

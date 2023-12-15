@@ -31,29 +31,26 @@ class DataReformaController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $dataReforma = new DataReforma();
+        $regles = [
+            'data_reforma' => 'required|date',
+            'fk_espai' => 'required|integer|min:0'
+        ];
+        return $this->dbActionBasic(null, DataReforma::class, $request, "createOrFail", $regles);
 
-        $dataReforma->valoracio = $request->input('valoracio');
-        //fk_usuari
-        //fk_espai
-
-        return $this->dbActionBasic($dataReforma, "save");
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(DataReforma $dataReforma): JsonResponse
+    public function show(string $id): JsonResponse
     {
-        return response()->json([
-            'data_reforma' => DataReforma::find($dataReforma)
-        ]);
+        return $this->dbActionBasic($id, DataReforma::class, null, "findOrFail", null);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(DataReforma $dataReforma)
+    public function edit(string $id)
     {
         //
     }
@@ -61,24 +58,20 @@ class DataReformaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, DataReforma $dataReforma): JsonResponse
+    public function update(Request $request, string $id): JsonResponse
     {
-        $dataReforma = DataReforma::find($dataReforma);
-
-        $dataReforma->valoracio = $request->input('valoracio');
-        //fk_usuari
-        //fk_espai
-
-        return $this->dbActionBasic($dataReforma, "save");
+        $regles = [
+            'data_reforma' => 'required|date',
+            'fk_espai' => 'required|integer|min:0'
+        ];
+        return $this->dbActionBasic($id, DataReforma::class, $request, "updateOrFail", $regles);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DataReforma $dataReforma): JsonResponse
+    public function destroy(string $id): JsonResponse
     {
-        $dataReforma = DataReforma::find($dataReforma);
-
-        return $this->dbActionBasic($dataReforma, "delete");
+        return $this->dbActionBasic($id, DataReforma::class, null, "deleteOrFail", null);
     }
 }

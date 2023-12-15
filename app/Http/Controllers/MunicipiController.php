@@ -37,17 +37,15 @@ class MunicipiController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Municipi $municipi): JsonResponse
+    public function show(string $id): JsonResponse
     {
-        return response()->json([
-            'municipi' => Municipi::find($municipi)
-        ]);
+        return $this->dbActionBasic($id, Municipi::class, null, "findOrFail", null);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Municipi $municipi)
+    public function edit(String $id)
     {
         //
     }
@@ -55,7 +53,7 @@ class MunicipiController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Municipi $municipi)
+    public function update(Request $request, string $id)
     {
         //No canvien
     }
@@ -63,7 +61,7 @@ class MunicipiController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Municipi $municipi)
+    public function destroy(string $id)
     {
         //No es destrueixen
     }

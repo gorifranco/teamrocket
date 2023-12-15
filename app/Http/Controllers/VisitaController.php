@@ -31,32 +31,30 @@ class VisitaController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $visita = new Visita();
+        $regles = [
+            "nom" => 'required',
+            "descripcio" => "required",
+            "dataInici" => 'date|required',
+            'dataFi' => 'date',
+            'reqInscripcio' => 'required|booelan',
+            'places' => 'integer'
+        ];
 
-        $visita->nom = $request->input("nom");
-        $visita->descripcio = $request->input("descripcio");
-        $visita->dataInici = $request->input("dataInici");
-        $visita->dataFi = $request->input("dataFi");
-        $visita->reqInscripcio = $request->input("reqInscripcio");
-        $visita->places = $request->input("places");
-
-        return $this->dbActionBasic($visita, "save");
+        return $this->dbActionBasic(null, Visita::class, $request,"createOrFail", $regles);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Visita $visita): JsonResponse
+    public function show(string $id): JsonResponse
     {
-        return response()->json([
-            'visita' => Visita::find($visita)
-        ]);
+        return $this->dbActionBasic($id, VisitaController::class, null, "findOrFail", null);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Visita $visita)
+    public function edit(string $id)
     {
         //
     }
@@ -64,27 +62,24 @@ class VisitaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Visita $visita): JsonResponse
+    public function update(Request $request, string $id): JsonResponse
     {
-        $visita = Visita::find($visita);
-
-        $visita->nom = $request->input("nom");
-        $visita->descripcio = $request->input("descripcio");
-        $visita->dataInici = $request->input("dataInici");
-        $visita->dataFi = $request->input("dataFi");
-        $visita->reqInscripcio = $request->input("reqInscripcio");
-        $visita->places = $request->input("places");
-
-        return $this->dbActionBasic($visita, "save");
+        $regles = [
+            "nom" => 'required',
+            "descripcio" => "required",
+            "dataInici" => 'date|required',
+            'dataFi' => 'date',
+            'reqInscripcio' => 'required|booelan',
+            'places' => 'integer'
+        ];
+        return $this->dbActionBasic($id, Visita::class, $request, "updateOrFail", $regles);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Visita $visita): JsonResponse
+    public function destroy(string $id): JsonResponse
     {
-        $visita = Visita::find($visita);
-
-        return $this->dbActionBasic($visita, "delete");
+        return $this->dbActionBasic($id, Visita::class, null, "deleteOrFail",null);
     }
 }

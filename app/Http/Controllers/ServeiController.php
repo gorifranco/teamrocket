@@ -31,49 +31,44 @@ class ServeiController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $servei = new Servei();
-
-        // Lógica para guardar los datos del servicio (adaptar según tus campos)
-
-        return $this->dbActionBasic($servei, "save");
+        $regles = [
+            'nom' => 'required|unique:serveis.nom'
+        ];
+        return $this->dbActionBasic(null, Servei::class, $request, "createOrFail", $regles);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Servei $servei)
+    public function show(string $id)
     {
-        //
+        return $this->dbActionBasic($id, Servei::class, null, "findOrFaiil", null);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Servei $servei): JsonResponse
+    public function edit(string $id): JsonResponse
     {
-        return response()->json([
-            'servei' => Servei::find($servei)
-        ]);
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Servei $servei): JsonResponse
+    public function update(Request $request, string $id): JsonResponse
     {
-        $servei = Servei::find($servei);
-
-
-        return $this->dbActionBasic($servei, "save");
+        $regles = [
+            'nom' => 'required|unique:serveis.nom'
+        ];
+        return $this->dbActionBasic($id, Servei::class, $request, "updateOrFail", $regles);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Servei $servei): JsonResponse
+    public function destroy(string $id): JsonResponse
     {
-        $servei = Servei::find($servei);
-
-        return $this->dbActionBasic($servei, "delete");
+        return $this->dbActionBasic($id, Servei::class, null, "deleteOrFail", null);
     }
 }

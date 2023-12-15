@@ -7,6 +7,7 @@ use App\Models\Espai;
 use App\Models\HoraActiva;
 use App\Models\Municipi;
 use App\Models\TipusEspai;
+use App\Models\Zona;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -36,94 +37,80 @@ class EspaiController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $espai = new Espai();
+//        try {
+            $regles = [
+                "nom" => "required|unique:espais.nom",
+                "descripció" => 'required',
+                'direccio' => 'required',
+                'any_construccio' => 'required|date',
+                'grau_accessibilitat' => 'required|in:baix,mitj,alt',
+                'web' => 'url',
+                'email' => 'email',
+                'fk_arquitecte' => 'integer|min:0',
+                'fk_municipi' => 'required|integer|min:0',
+                'fk_tipusEspai' => 'required|integer|min:0'
+            ];
 
-        //Assigna els atributs de l'espai
-        $this->autoAssignar($espai, $request, ["destacada"]);
-
-//        $espai->nom = $request->input("nom");
-//        $espai->descripcio = $request->input("descripcio");
-//        $espai->direccio = $request->input("direccio");
-//        $espai->any_construccio = $request->input("any_construccio");
-//        $espai->grau_accessibilitat = $request->input("grau_accessibilitat");
-//        $espai->web = $request->input("web");
-//        $espai->email = $request->input("email");
-//        $espai->telefon = $request->input("telefon");
-        //destacada default = false
-
-        try {
-            //fk_arquitecte si passen NOM
-            $espai->fk_arquitecte = Arquitecte::findOrCreate($request->input("arquitecte"))->id;
-
-            //fk_municipi
-            $espai->fk_municipi = $request->input("municipi");
-
-            //fk_tipusEspai
-            $espai->fk_tipusEspai = $request->input("tipusEspai");
-
-            $espaiJSONResponse = $this->dbActionBasic($espai, "save");
-
-            //Si Hi ha hagut error durant el guardat de l'espai break i retorna el JSON de l'error
-            if ($espaiJSONResponse->status() !== 200) return $espaiJSONResponse;
-
-            //modalitats
-            $espai->modalitats()->attach($request->input("modalitats"));
-
-            //horesActiva
-            $hores = [];
-            foreach ($request->input("horesActives") as $horaActiva) {
-                $ha = new HoraActiva();
-
-                $ha->dia = $horaActiva->dia;
-                $ha->desde = $horaActiva->desde;
-                $ha->fins = $horaActiva->fins;
-
-                $ha->saveOrFail();
-                $hores[] = $ha;
-            }
-
-            $espai->horesActives()->attach($hores);
-
-            //
-
-            //serveis
-            $espai->serveis()->attach($request->input("serveis"));
-
-            //datesReforma
-            $espai->reformes()->createMany($request->input("datesReforma"));
-
-            return $espaiJSONResponse;
-
-        } catch (QueryException $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        } catch (\Exception $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        } catch (\Throwable $e) {
-            return response()->json([
-                'missatge' => $e->getMessage(),
-                'codi' => $e->getCode()
-            ], 400);
-        }
+            return $this->dbActionBasic(null, Espai::class, $request, "createOrFail", $regles);
+//
+//            //modalitats
+//            $espai->modalitats()->attach($request->input("modalitats"));
+//
+//            //horesActiva
+//            $hores = [];
+//            foreach ($request->input("horesActives") as $horaActiva) {
+//                $ha = new HoraActiva();
+//
+//                $ha->dia = $horaActiva->dia;
+//                $ha->desde = $horaActiva->desde;
+//                $ha->fins = $horaActiva->fins;
+//
+//                $ha->saveOrFail();
+//                $hores[] = $ha;
+//            }
+//
+//            $espai->horesActives()->attach($hores);
+//
+//            //
+//
+//            //serveis
+//            $espai->serveis()->attach($request->input("serveis"));
+//
+//            //datesReforma
+//            $espai->reformes()->createMany($request->input("datesReforma"));
+//
+//            return $espaiJSONResponse;
+//
+//        } catch (QueryException $e) {
+//            return response()->json([
+//                'missatge' => $e->getMessage(),
+//                'codi' => $e->getCode()
+//            ], 400);
+//        } catch (\Exception $e) {
+//            return response()->json([
+//                'missatge' => $e->getMessage(),
+//                'codi' => $e->getCode()
+//            ], 400);
+//        } catch (\Throwable $e) {
+//            return response()->json([
+//                'missatge' => $e->getMessage(),
+//                'codi' => $e->getCode()
+//            ], 400);
+//        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Espai $espai): JsonResponse
+    public function show(string $id): JsonResponse
     {
-        return $this->dbActionBasic($espai, "find");
+        return $this->dbActionBasic($id, Espai::class, null, "findOrFail", null);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Espai $espai)
+    public function edit(string $id)
     {
         //
     }
@@ -131,33 +118,28 @@ class EspaiController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Espai $espai): JsonResponse
+    public function update(Request $request, string $id): JsonResponse
     {
-        $espai = Espai::find($espai);
-
-        //Assigna tots els atributs del request a l'objecte, atributs amb el mateix nom, Es poden introduïr excepcions
-        $this->autoAssignar($espai, $request, ["destacada"]);
-
-//        $espai->nom = $request->input("nom");
-//        $espai->descripcio = $request->input("descripcio");
-//        $espai->direccio = $request->input("direccio");
-//        $espai->any_construccio = $request->input("any_construccio");
-//        $espai->grau_accessibilitat = $request->input("grau_accessibilitat");
-//        $espai->web = $request->input("web");
-//        $espai->email = $request->input("email");
-//        $espai->telefon = $request->input("telefon");
-
-        return $this->dbActionBasic($espai, "saveOrFail");
-
+        $regles = [
+            "nom" => "required|unique:espais.nom",
+            "descripció" => 'required',
+            'direccio' => 'required',
+            'any_construccio' => 'required|date',
+            'grau_accessibilitat' => 'required|in:baix,mitj,alt',
+            'web' => 'url',
+            'email' => 'email',
+            'fk_arquitecte' => 'integer|min:0',
+            'fk_municipi' => 'required|integer|min:0',
+            'fk_tipusEspai' => 'required|integer|min:0'
+        ];
+        return $this->dbActionBasic($id, Espai::class, $request, "updateOrFail", $regles);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Espai $espai): JsonResponse
+    public function destroy(string $id): JsonResponse
     {
-        $espai = Espai::find($espai);
-
-        return $this->dbActionBasic($espai, "delete");
+        return $this->dbActionBasic($id, Espai::class, null, "deleteOrFail", null);
     }
 }

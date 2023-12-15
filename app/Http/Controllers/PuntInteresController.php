@@ -31,11 +31,13 @@ class PuntInteresController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $puntInteres = new PuntInteres();
+        $regles = [
+            'nom' => 'required',
+            'descripcio' => 'required',
+            'fk_espai' => 'required|integer|min:0'
+        ];
+        return $this->dbActionBasic(null, PuntInteres::class, $request, "createOrFail", $regles);
 
-        // Lógica para guardar los datos del punto de interés (adaptar según tus campos)
-
-        return $this->dbActionBasic($puntInteres, "save");
     }
 
     /**
@@ -59,22 +61,21 @@ class PuntInteresController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, PuntInteres $puntInteres): JsonResponse
+    public function update(Request $request, string $id): JsonResponse
     {
-        $puntInteres = PuntInteres::find($puntInteres);
-
-        // Lógica para actualizar los datos del punto de interés (adaptar según tus campos)
-
-        return $this->dbActionBasic($puntInteres, "save");
+        $regles = [
+            'nom' => 'required',
+            'descripcio' => 'required',
+            'fk_espai' => 'required|integer|min:0'
+        ];
+        return $this->dbActionBasic($id, PuntInteres::class, $request, "updateOrFail", $regles);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PuntInteres $puntInteres): JsonResponse
+    public function destroy(string $id): JsonResponse
     {
-        $puntInteres = PuntInteres::find($puntInteres);
-
-        return $this->dbActionBasic($puntInteres, "delete");
+        return $this->dbActionBasic($id, PuntInteres::class, null, "deleteOrFail", null);
     }
 }

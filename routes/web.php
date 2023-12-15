@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MunicipiController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/mun', function () {
+    return [MunicipiController::class, 'index'];
+});
+

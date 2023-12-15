@@ -33,12 +33,12 @@ class ArquitecteController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $arquitecte = Arquitecte::create($request->all());
+        $regles = [
+            'nom' => "required|unique:arquitectes|max:255",
+            'data_naix' => 'date'
+        ];
+        return $this->dbActionBasic(null, Arquitecte::class, $request, "createOrFail", $regles);
 
-        return response()->json([
-            "message" => "success",
-            "arquitecte" => $arquitecte
-        ]);
     }
 
     /**
@@ -56,9 +56,9 @@ class ArquitecteController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id): View
+    public function edit(Arquitecte $arquitecte): View
     {
-        $arquitecte = Arquitecte::find($id);
+        $arquitecte = Arquitecte::find($arquitecte);
 
         return view('arquitectes.editar', ['arquitecte' => $arquitecte]);
     }
@@ -66,15 +66,13 @@ class ArquitecteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): JsonResponse
+    public function update(Request $request, String $id): JsonResponse
     {
-        $arquitecte = Arquitecte::find($id);
-
-        $arquitecte->nom = $request->input('nom');
-        $arquitecte->data_naix = $request->input('data_naix');
-        $arquitecte->descripcio = $request->input('descripcio');
-
-        return $this->dbActionBasic($arquitecte, "save");
+        $regles = [
+        'nom' => "required|unique:arquitectes|max:255",
+        'data_naix' => 'date'
+    ];
+        return $this->dbActionBasic($id, Arquitecte::class, $request, "updateOrFail", $regles);
     }
 
     /**
@@ -82,11 +80,6 @@ class ArquitecteController extends Controller
      */
     public function destroy(string $id): JsonResponse
     {
-        $arquitecte = Arquitecte::find($id);
-        Arquitecte::destroy($arquitecte);
-
-        return response()->json([
-            'arquitecte' => $arquitecte
-        ]);
+        return $this->dbActionBasic($id, Arquitecte::class, null, "deleteOrFail", null);
     }
 }

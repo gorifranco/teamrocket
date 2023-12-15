@@ -37,17 +37,15 @@ class ZonaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Zona $zona): JsonResponse
+    public function show(string $id): JsonResponse
     {
-        return response()->json([
-            'zona' => Zona::find($zona)
-        ]);
+        return $this->dbActionBasic($id, ZonaController::class, null, "findOrFail", null);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Zona $zona)
+    public function edit(string $id)
     {
         //
     }
@@ -55,7 +53,7 @@ class ZonaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Zona $zona)
+    public function update(Request $request, string $id)
     {
         //No canviaran
     }
@@ -63,7 +61,7 @@ class ZonaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Zona $zona)
+    public function destroy(string $id)
     {
         //No es borraran
     }

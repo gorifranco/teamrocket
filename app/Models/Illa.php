@@ -10,7 +10,7 @@ class Illa extends Model
 {
     use HasFactory;
 
-    protected $table = "illesSeeder";
+    protected $table = "illes";
 
     public function municipi(): BelongsTo
     {

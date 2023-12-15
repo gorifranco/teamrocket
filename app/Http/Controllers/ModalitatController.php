@@ -31,27 +31,24 @@ class ModalitatController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $modalitat = new Modalitat();
-
-        // Lógica para guardar los datos de la modalidad (adaptar según tus campos)
-
-        return $this->dbActionBasic($modalitat, "save");
+        $regles = [
+            'nom' => 'required|unique:modalitats.nom'
+        ];
+        return $this->dbActionBasic(null, Modalitat::class, $request, "findOrFail", $regles);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Modalitat $modalitat): JsonResponse
+    public function show(string $id): JsonResponse
     {
-        return response()->json([
-            'modalitat' => Modalitat::find($modalitat)
-        ]);
+return $this->dbActionBasic($id, Modalitat::class, null, "findOrFail", null);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Modalitat $modalitat)
+    public function edit(string $id)
     {
         //
     }
@@ -59,22 +56,19 @@ class ModalitatController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Modalitat $modalitat): JsonResponse
+    public function update(Request $request, string $id): JsonResponse
     {
-        $modalitat = Modalitat::find($modalitat);
-
-        // Lógica para actualizar los datos de la modalidad (adaptar según tus campos)
-
-        return $this->dbActionBasic($modalitat, "save");
+        $regles = [
+            'nom' => 'required|unique:modalitats.nom'
+        ];
+        return $this->dbActionBasic($id, Modalitat::class, $request, "updateOrFail", $regles);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Modalitat $modalitat): JsonResponse
+    public function destroy(string $id): JsonResponse
     {
-        $modalitat = Modalitat::find($modalitat);
-
-        return $this->dbActionBasic($modalitat, "delete");
+        return $this->dbActionBasic($id, Modalitat::class, null, "destroyOrFail",null);
     }
 }

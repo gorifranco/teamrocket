@@ -31,27 +31,24 @@ class ImatgeController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $imatge = new Imatge();
-
-        // Lógica para guardar los datos de la imagen (adaptar según tus campos)
-
-        return $this->dbActionBasic($imatge, "save");
+        $regles = [
+            "url" => 'unique:imatges.url'
+        ];
+        return $this->dbActionBasic(null, Imatge::class, $request, "createOrFail", $regles);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Imatge $imatge): JsonResponse
+    public function show(string $id): JsonResponse
     {
-        return response()->json([
-            'imatge' => Imatge::find($imatge)
-        ]);
+        return $this->dbActionBasic($id, Imatge::class, null, "findOrFail", null);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Imatge $imatge)
+    public function edit(string $id)
     {
         //
     }
@@ -59,22 +56,19 @@ class ImatgeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Imatge $imatge): JsonResponse
+    public function update(Request $request, string $id): JsonResponse
     {
-        $imatge = new Imatge();
-
-        // Lógica para actualizar los datos de la imagen (adaptar según tus campos)
-
-        return $this->dbActionBasic($imatge, "save");
+        $regles = [
+            "url" => 'unique:imatges.url'
+        ];
+         return $this->dbActionBasic($id, Imatge::class, $request, "updateOrFail", $regles);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Imatge $imatge): JsonResponse
+    public function destroy(string $id): JsonResponse
     {
-        $imatge = Imatge::find($imatge);
-
-        return $this->dbActionBasic($imatge, "delete");
+        return $this->dbActionBasic($id, Imatge::class, null, "destroyOrFail", null);
     }
 }

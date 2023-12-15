@@ -11,7 +11,7 @@ class Municipi extends Model
 {
     use HasFactory;
 
-    protected $table = "municipisSeeder";
+    protected $table = "municipis";
 
     public function espais(): BelongsTo
     {

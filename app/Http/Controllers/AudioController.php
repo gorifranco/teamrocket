@@ -32,29 +32,25 @@ class AudioController extends Controller
      */
     public function store(Request $request)
     {
-        $audio = new Audio();
+        $regles = [
+            'url' => "required|unique:audios.url|unique:imatges.url|url",
+        ];
+        return $this->dbActionBasic(null, Audio::class, $request, "createOrFail", $regles);
 
-        $audio->url = $request->input('nom');
-        $audio->ordre = $request->input('ordre');
-        $audio->transcripcio = $request->input('transcripcio');
-
-        return $this->dbActionBasic($audio, "save");
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Audio $audio)
+    public function show(string $id)
     {
-        return response()->json([
-            'audio' => Audio::find($audio)
-        ]);
+        return $this->dbActionBasic($id, Audio::class, null, "fildOrFail", null);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Audio $audio)
+    public function edit(string $id)
     {
         //Vista de punt d'interes
     }
@@ -62,24 +58,19 @@ class AudioController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Audio $audio)
+    public function update(Request $request, string $id)
     {
-        $audio = DB::find($audio);
-
-        $audio->url = $request->input('nom');
-        $audio->ordre = $request->input('ordre');
-        $audio->transcripcio = $request->input('transcripcio');
-
-        return $this->dbActionBasic($audio, "save");
+        $regles = [
+            'url' => "required|unique:audios.url|unique:imatges.url|url",
+        ];
+        return $this->dbActionBasic($id, Audio::class, $request, "updateOrFail", $regles);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Audio $audio)
+    public function destroy(string $id)
     {
-        $audio = Arquitecte::find($audio);
-
-        return $this->dbActionBasic($audio, "delete");
+        return $this->dbActionBasic($id, Audio::class, null, "deleteOrFail", null);
     }
 }
