@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password', 64);
             $table->string("llinatge1");
             $table->string("llinatge2");
             $table->string("DNI");
@@ -23,6 +23,9 @@ return new class extends Migration {
             $table->enum('tipusUsuari', ['administrador', 'gestor', 'usuari'])->default('usuari');
             $table->rememberToken();
             $table->timestamps();
+
+            //token
+            $table->string('token', 64)->unique()->nullable();
         });
     }
 

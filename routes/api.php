@@ -8,6 +8,7 @@ use App\Http\Controllers\EspaiController;
 use App\Http\Controllers\HoraActivaController;
 use App\Http\Controllers\IllaController;
 use App\Http\Controllers\ImatgeController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ModalitatController;
 use App\Http\Controllers\MunicipiController;
 use App\Http\Controllers\PuntInteresController;
@@ -33,21 +34,24 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::middleware('LoginMiddleware')->group(function () {
+    Route::apiResources([
+        'arquitectes' => ArquitecteController::class,
+        'audios' => AudioController::class,
+        'comentaris' => ComentariController::class,
+        'dates-reformes' => DataReformaController::class,
+        'espais' => EspaiController::class,
+        'hores-actives' => HoraActivaController::class,
+        'illes' => IllaController::class,
+        'imatges' => ImatgeController::class,
+        'modalitats' => ModalitatController::class,
+        'municipis' => MunicipiController::class,
+        'punts-interes' => PuntInteresController::class,
+        'serveis' => ServeiController::class,
+        'tipus-espais' => TipusEspaiController::class,
+        'visites' => VisitaController::class,
+        'zones' => ZonaController::class
+    ]);
+});
 
-Route::apiResources([
-    'arquitectes' => ArquitecteController::class,
-    'audios' => AudioController::class,
-    'comentaris' => ComentariController::class,
-    'dates-reformes' => DataReformaController::class,
-    'espais' => EspaiController::class,
-    'hores-actives' => HoraActivaController::class,
-    'illes' => IllaController::class,
-    'imatges' => ImatgeController::class,
-    'modalitats' => ModalitatController::class,
-    'municipis' => MunicipiController::class,
-    'punts-interes' => PuntInteresController::class,
-    'serveis' => ServeiController::class,
-    'tipus-espais' => TipusEspaiController::class,
-    'visites' => VisitaController::class,
-    'zones' => ZonaController::class
-]);
+Route::post("login", [LoginController::class, 'login']);
