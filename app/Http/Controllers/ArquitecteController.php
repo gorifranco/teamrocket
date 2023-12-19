@@ -37,6 +37,7 @@ class ArquitecteController extends Controller
             'nom' => "required|unique:arquitectes|max:255",
             'data_naix' => 'date'
         ];
+        dd($request->user());
         return $this->dbActionBasic(null, Arquitecte::class, $request, "createOrFail", $regles);
 
     }

@@ -22,18 +22,18 @@ class IllaController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
+//    public function create()
+//    {
+//        //
+//    }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //No canvien
-    }
+//    public function store(Request $request)
+//    {
+//        //No canvien
+//    }
 
     /**
      * Display the specified resource.
@@ -47,24 +47,24 @@ class IllaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(String $id)
-    {
-
-    }
+//    public function edit(String $id)
+//    {
+//
+//    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, String $id)
-    {
-        //No canvien
-    }
+//    public function update(Request $request, String $id)
+//    {
+//        //No canvien
+//    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(String $id)
-    {
-        //No Canvien
-    }
+//    public function destroy(String $id)
+//    {
+//        //No Canvien
+//    }
 }
