@@ -3,29 +3,30 @@
 namespace App\Http\Controllers;
 
 use app\Models\Arquitecte;
-use http\Client\Response;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ArquitecteController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(): \Inertia\Response
     {
-        return response()->json([
-            'arquitecte' => Arquitecte::all()
-        ]);
+        return Inertia::render("Arquitectes/index",[]);
+//        return response()->json([
+//            'arquitecte' => Arquitecte::all()
+//        ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+    public function create(): \Inertia\Response
     {
-        return view('arquitectes.crear');
+        return Inertia::render("Arquitectes/index2.jsp",[]);
     }
 
     /**
@@ -37,7 +38,6 @@ class ArquitecteController extends Controller
             'nom' => "required|unique:arquitectes|max:255",
             'data_naix' => 'date'
         ];
-        dd($request->user());
         return $this->dbActionBasic(null, Arquitecte::class, $request, "createOrFail", $regles);
 
     }

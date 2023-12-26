@@ -48,7 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::Resource('arquitectes', ArquitecteController::class)->only(['index', 'show']);
+Route::Resource('arquitectes', ArquitecteController::class)->only(['index', 'show', 'create']);
 Route::Resource('comentaris', ComentariController::class)->only(['index', 'show']);
 Route::Resource('espais', EspaiController::class)->only(['index', 'show']);
 Route::Resource('hores-actives', HoraActivaController::class)->only(['index', 'show']);
