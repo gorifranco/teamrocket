@@ -16,10 +16,10 @@ return new class extends Migration {
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string("llinatge1");
-            $table->string("llinatge2");
-            $table->string("DNI");
-            $table->string("telefon");
+            $table->string("llinatge1")->nullable();
+            $table->string("llinatge2")->nullable();
+            $table->string("DNI")->nullable();
+            $table->string("telefon")->nullable();
             $table->enum('tipusUsuari', ['administrador', 'gestor', 'usuari'])->default('usuari');
             $table->rememberToken();
             $table->timestamps();
