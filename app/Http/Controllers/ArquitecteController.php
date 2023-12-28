@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use app\Models\Arquitecte;
-use http\Client\Response;
+use App\Models\Arquitecte;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ArquitecteController extends Controller
 {
@@ -37,7 +37,30 @@ class ArquitecteController extends Controller
             'nom' => "required|unique:arquitectes|max:255",
             'data_naix' => 'date'
         ];
-        return $this->dbActionBasic(null, Arquitecte::class, $request, "createOrFail", $regles);
+//        $validated = $request->validate([
+//            'nom' => "required|unique:arquitectes|max:10",
+//            'data_naix' => 'date'
+//        ]);
+
+//        Arquitecte::create($validated);
+
+//        return redirect(route('arquitectes'));
+
+        $validacio = Validator::make($request->all(), $regles);
+        if (!$validacio->fails()) {
+            $obj = Arquitecte::create($request->all());
+            return response()->json([
+                'data' => $obj
+            ], 200);
+        }else{
+            return response()->json([
+                'errors'=> $validacio->errors()->toArray(),
+               'missatge' => 'no ha nat be'
+            ],400);
+        }
+
+
+//        return $this->dbActionBasic(null, Arquitecte::class, $request, "createOrFail", $regles);
 
     }
 
