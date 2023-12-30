@@ -16,7 +16,7 @@ class ArquitecteController extends Controller
     public function index(): JsonResponse
     {
         return response()->json([
-            'arquitecte' => Arquitecte::all()
+            'data' => Arquitecte::all()
         ]);
     }
 
