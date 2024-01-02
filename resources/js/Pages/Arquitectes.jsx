@@ -6,8 +6,10 @@ import {useEffect, useState} from "react";
 import Form from "@/Components/Form.jsx";
 import TableGori from "@/Components/TableGori.jsx";
 import Pagination from "@/Components/Pagination.jsx";
+import {data} from "autoprefixer";
 
 export default function index({auth}) {
+    const [currentPage, setCurrentPage] = useState(1);
     const [formData, setFormData] = useState([]);
 
     const [errors, setErrors] = useState({
@@ -63,17 +65,24 @@ export default function index({auth}) {
         });
     }
 
-    useEffect(() => {
-        async function fetchData (){
-            try {
-                const response = await axios.get('/api/arquitectes');
-                setTableData(response.data.data);
-            } catch (error) {
-                console.error('Error al obtener los datos:', error);
+        useEffect(() => {
+            async function fetchData(currentPage) {
+                try {
+
+                    const response = await axios.get(`/api/arquitectes?page=${currentPage}`);
+                    setTableData(response.data.data);
+                } catch (error) {
+                    console.error('Error al obtener los datos:', error);
+                }
             }
-        }
-        fetchData();
-    }, []);
+
+            fetchData(currentPage);
+        }, [currentPage]);
+
+
+    function handlePageChange (page) {
+        setCurrentPage(page);
+    }
 
     return (
         <AuthenticatedLayout
@@ -83,6 +92,11 @@ export default function index({auth}) {
             <Head title="Arquitectes"/>
             <TableGori data={tableData} cols={["nom", "data_naix", "descripcio"]}>
             </TableGori>
+            <Pagination
+                links={tableData.links}
+                onPageChange={handlePageChange}>
+
+            </Pagination>
             <Form handleSubmit={handleSubmit} titol={"Crear un arquitecte"}>
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nom">

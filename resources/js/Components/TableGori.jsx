@@ -28,7 +28,7 @@ export default function TableGori({value, data, cols, className = '', children, 
                                     className={`border-b ${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}
                                     key={"tr" + index}>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
-                                        key={"td1" + key + value + index}>{index + 1}</td>
+                                        key={"td1" + key + value + index}>{value["id"]}</td>
                                     <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
                                         key={"td2" + key + value + index}>
                                         {(value[cols[0]] !== null) ? value[cols[0]] : ""}
@@ -46,11 +46,6 @@ export default function TableGori({value, data, cols, className = '', children, 
                             }
                             </tbody>
                         </table>
-<div className={"flex justify-center"}>
-    <Pagination links={data.links}>
-    </Pagination>
-</div>
-
                     </div>
                 </div>
             </div>
