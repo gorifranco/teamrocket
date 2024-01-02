@@ -16,7 +16,7 @@ class ArquitecteController extends Controller
     public function index(): JsonResponse
     {
         return response()->json([
-            'data' => Arquitecte::all()
+            'data' => Arquitecte::paginate(5)
         ]);
     }
 

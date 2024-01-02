@@ -5,6 +5,7 @@ import axios from 'axios';
 import {useEffect, useState} from "react";
 import Form from "@/Components/Form.jsx";
 import TableGori from "@/Components/TableGori.jsx";
+import Pagination from "@/Components/Pagination.jsx";
 
 export default function index({auth}) {
     const [formData, setFormData] = useState([]);
