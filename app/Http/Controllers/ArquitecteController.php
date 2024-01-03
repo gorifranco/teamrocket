@@ -16,7 +16,7 @@ class ArquitecteController extends Controller
     public function index(): JsonResponse
     {
         return response()->json([
-            'data' => Arquitecte::paginate(5)
+            'data' => Arquitecte::paginate(10)
         ]);
     }
 
@@ -46,21 +46,21 @@ class ArquitecteController extends Controller
 
 //        return redirect(route('arquitectes'));
 
-        $validacio = Validator::make($request->all(), $regles);
-        if (!$validacio->fails()) {
-            $obj = Arquitecte::create($request->all());
-            return response()->json([
-                'data' => $obj
-            ], 200);
-        }else{
-            return response()->json([
-                'errors'=> $validacio->errors()->toArray(),
-               'missatge' => 'no ha nat be'
-            ],400);
-        }
+//        $validacio = Validator::make($request->all(), $regles);
+//        if (!$validacio->fails()) {
+//            $obj = Arquitecte::create($request->all());
+//            return response()->json([
+//                'data' => $obj
+//            ], 200);
+//        }else{
+//            return response()->json([
+//                'errors'=> $validacio->errors()->toArray(),
+//               'missatge' => 'no ha nat be'
+//            ],400);
+//        }
 
 
-//        return $this->dbActionBasic(null, Arquitecte::class, $request, "createOrFail", $regles);
+        return $this->dbActionBasic(null, Arquitecte::class, $request, "createOrFail", $regles);
 
     }
 

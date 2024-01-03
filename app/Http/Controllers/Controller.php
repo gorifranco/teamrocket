@@ -66,6 +66,7 @@ class Controller extends BaseController
                 }
             }
             return response()->json([
+                'errors'=> $validacio->errors()->toArray(),
                 'missatge' => "action fail",
             ], 400);
         } catch (Exception $e) {
