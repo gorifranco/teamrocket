@@ -1,7 +1,13 @@
 import DeleteButton from "@/Components/DeleteButton.jsx";
 import EditButton from "@/Components/EditButton.jsx";
+import InputTable from "@/Components/InputTable.jsx";
 
 export default function TableGori({value, data, cols, onClickEdit, onClickDelete, className = '', children, ...props}) {
+
+    function handleDelete(evt) {
+        //Torna s'id
+        onClickDelete(evt.target.parentElement.parentElement.firstChild.firstChild.data)
+    }
 
     return (
         <div className="flex flex-col">
@@ -11,16 +17,19 @@ export default function TableGori({value, data, cols, onClickEdit, onClickDelete
                         <table className="min-w-full">
                             <thead className="bg-white border-b">
                             <tr key={"th"}>
-                                <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                                <th scope="col" className="text-lg font-bold text-gray-900 px-9 py-4 text-center"
                                     key={"th#"}>#
                                 </th>
                                 {cols.map((val) => (
-                                    <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                                    <th scope="col"
+                                        className="text-lg font-medium text-gray-900 px-9 py-4 text-left capitalize"
                                         key={"th" + val}>
                                         {val}
                                     </th>
                                 ))}
-                                <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left" key={"thacc"}>
+                                <th scope="col"
+                                    className="text-lg font-medium text-gray-900 px-9 py-4 text-center capitalize"
+                                    key={"thacc"}>
                                     accions
                                 </th>
                             </tr>
@@ -31,25 +40,42 @@ export default function TableGori({value, data, cols, onClickEdit, onClickDelete
                                 <tr
                                     className={`border-b ${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}
                                     key={"tr" + index}>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
-                                        key={"td1" + key + value + index}>{value["id"]}</td>
-                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
+                                    <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900 text-center"
+                                        key={"td1" + key + value + index}>
+                                        {value["id"]}
+                                    </td>
+
+                                    <td className="text-sm text-gray-900 font-light px-9 py-3 whitespace-nowrap"
                                         key={"td2" + key + value + index}>
-                                        {(value[cols[0]] !== null) ? value[cols[0]] : ""}
+
+                                        <InputTable type={"text"}
+                                                    value={value[cols[0]]}
+                                                    disabled={true}
+                                                    key={"td3_input" + key + value + index}/>
+
                                     </td>
-                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
+                                    <td className="text-sm text-gray-900 font-light px-6 py-3 whitespace-nowrap"
                                         key={"td3" + key + value + index}>
-                                        {value[cols[1]]}
+
+                                        <InputTable type={"date"}
+                                                    value={value[cols[1]]}
+                                                    disabled={true}
+                                                    key={"td3_input" + key + value + index}/>
+
                                     </td>
-                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
+                                    <td className="text-sm text-gray-900 font-light px-9 py-3 whitespace-nowrap"
                                         key={"td4" + key + value + index}>
-                                        {value[cols[2]]}
+
+                                        <InputTable type={"text"}
+                                                    value={value[cols[2]]}
+                                                    disabled={true}
+                                                    key={"td3_input" + key + value + index}/>
                                     </td>
-                                    <td className="text-sm text-gray-900 font-light px-6 py-2 whitespace-nowrap">
+                                    <td className="text-sm text-gray-900 font-light px-6 py-3 whitespace-nowrap justify-center flex">
                                         <DeleteButton
-                                        onClick={onClickDelete}/>
+                                            onClick={handleDelete}/>
                                         <EditButton
-                                        onClick={onClickEdit}/>
+                                            onClick={onClickEdit}/>
                                     </td>
                                 </tr>
                             ))

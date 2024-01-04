@@ -47,7 +47,7 @@ export default function index({auth}) {
                     descripcio: ''
                 })
                 setSuccessMessage(true);
-                setCurrentPage(1);
+                fetchData(currentPage)
             })
             .catch(function (error) {
                 if (error.response) {
@@ -68,35 +68,43 @@ export default function index({auth}) {
         });
     }
 
-    useEffect(() => {
-        async function fetchData(currentPage) {
-            try {
-                const response = await axios.get(`/api/arquitectes?page=${currentPage}`);
-                setTableData(response.data.data);
-            } catch (error) {
-                console.error('Error al obtener los datos:', error);
-            }
+    const fetchData = async (currentPage) => {
+        try {
+            const response = await axios.get(`/api/arquitectes?page=${currentPage}`);
+            setTableData(response.data.data);
+        } catch (error) {
+            console.error('Error al obtener los datos:', error);
         }
+    };
 
+    useEffect(() => {
         fetchData(currentPage);
     }, [currentPage]);
-
 
     function handlePageChange(page) {
         setCurrentPage(page);
     }
 
-    function obrirFormCrear(){
-        if(formCrearVisible) setSuccessMessage(false)
+    function obrirFormCrear() {
+        if (formCrearVisible) setSuccessMessage(false)
         setFormHidden(!formCrearVisible)
     }
-    function onClickDelete(arquitecte){
-        <script></script>
+
+    function handleDelete(arquitecte) {
+        console.log(arquitecte)
+        if (confirm("Segur que vols borrar l'arquitecte " + arquitecte + "?")) {
+            axios.delete("api/arquitectes/" + arquitecte)
+                .then(() => {
+                    alert("Arquitecte borrat amb èxit")
+                    fetchData(currentPage)
+                })
+                .catch(() => {
+                    alert("L'arquitecte no s'ha pogut borrar")
+                })
+        }
     }
 
-
     return (
-
         <AuthenticatedLayout
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Arquitectes</h2>}
@@ -149,7 +157,7 @@ export default function index({auth}) {
 
                     {successMessage && (
                         <div
-                            className="mt-6 p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 font-medium"
+                            className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 font-medium"
                             role="alert">
                             Arquitecte creat!
                             again.
@@ -157,7 +165,7 @@ export default function index({auth}) {
                     )}
                 </Form>)
             }
-            <TableGori data={tableData} cols={["nom", "data_naix", "descripcio"]}>
+            <TableGori data={tableData} cols={["nom", "data_naix", "descripcio"]} onClickDelete={handleDelete}>
             </TableGori>
             <Pagination
                 links={tableData.links}

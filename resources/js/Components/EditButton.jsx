@@ -1,4 +1,4 @@
-export default function EditButton({onClick}){
+export default function EditButton({onClick}) {
     return (
         <button
             onClick={onClick}
