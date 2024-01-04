@@ -6,7 +6,7 @@ import {useEffect, useState} from "react";
 import Form from "@/Components/Form.jsx";
 import TableGori from "@/Components/TableGori.jsx";
 import Pagination from "@/Components/Pagination.jsx";
-import PlusButton from "@/icons/PlusButton.jsx";
+import PlusButton from "@/Components/PlusButton.jsx";
 
 export default function index({auth}) {
     const [currentPage, setCurrentPage] = useState(1);
@@ -86,10 +86,14 @@ export default function index({auth}) {
         setCurrentPage(page);
     }
 
-    function obrirFormCrear(hidden){
+    function obrirFormCrear(){
         if(formCrearVisible) setSuccessMessage(false)
         setFormHidden(!formCrearVisible)
     }
+    function onClickDelete(arquitecte){
+        <script></script>
+    }
+
 
     return (
 
@@ -158,7 +162,6 @@ export default function index({auth}) {
             <Pagination
                 links={tableData.links}
                 onPageChange={handlePageChange}>
-
             </Pagination>
         </AuthenticatedLayout>
     )

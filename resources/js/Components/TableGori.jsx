@@ -1,6 +1,7 @@
-import Pagination from "@/Components/Pagination.jsx";
+import DeleteButton from "@/Components/DeleteButton.jsx";
+import EditButton from "@/Components/EditButton.jsx";
 
-export default function TableGori({value, data, cols, className = '', children, ...props}) {
+export default function TableGori({value, data, cols, onClickEdit, onClickDelete, className = '', children, ...props}) {
 
     return (
         <div className="flex flex-col">
@@ -19,6 +20,9 @@ export default function TableGori({value, data, cols, className = '', children, 
                                         {val}
                                     </th>
                                 ))}
+                                <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left" key={"thacc"}>
+                                    accions
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -40,6 +44,12 @@ export default function TableGori({value, data, cols, className = '', children, 
                                     <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
                                         key={"td4" + key + value + index}>
                                         {value[cols[2]]}
+                                    </td>
+                                    <td className="text-sm text-gray-900 font-light px-6 py-2 whitespace-nowrap">
+                                        <DeleteButton
+                                        onClick={onClickDelete}/>
+                                        <EditButton
+                                        onClick={onClickEdit}/>
                                     </td>
                                 </tr>
                             ))
