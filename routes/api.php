@@ -51,3 +51,5 @@ Route::apiResources([
     'visites' => VisitaController::class,
     'zones' => ZonaController::class
 ]);
+
+Route::get('/arquitectes/find/{cerca}', [ArquitecteController::class, 'find']);

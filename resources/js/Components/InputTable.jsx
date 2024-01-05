@@ -1,23 +1,19 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 export default function InputTable({type, value, keyVal, disabled = true}) {
 
-    function setType() {
-        if (disabled && type === "date") {
-            return "text"
-        } else if (!disabled && type === "date") {
-            return "date"
-        }
-        return "type"
+    const [isDisabled, setDisabled] = useState(disabled)
+
+    function toggleDisabled() {
+        setDisabled(!isDisabled);
     }
 
+    function setType() {
+        return isDisabled && type === "date" ? "text" : type;
+    }
 
     function disabledClassName() {
-        if (disabled) {
-            return "border-0 bg-transparent"
-        } else {
-            return "border-1"
-        }
+        return isDisabled ? "border-0 bg-transparent" : "border-1 bg-black";
     }
 
     return (
@@ -25,9 +21,8 @@ export default function InputTable({type, value, keyVal, disabled = true}) {
             type={setType()}
             value={(value !== null) ? value : ""}
             className={disabledClassName()}
-            disabled={disabled}
+            disabled={isDisabled}
             key={keyVal}
         />
     );
 };
-

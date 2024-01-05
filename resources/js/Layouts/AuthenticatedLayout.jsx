@@ -4,8 +4,10 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import {Link} from '@inertiajs/react';
+import PlusButton from "@/Components/PlusButton.jsx";
 
-export default function Authenticated({user, header, children}) {
+export default function Authenticated({user, header, plusButton = false, onclickPlusButton, children}) {
+
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
@@ -119,7 +121,12 @@ export default function Authenticated({user, header, children}) {
 
             {header && (
                 <header className="bg-white dark:bg-gray-800 shadow">
-                    <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">{header}</div>
+                    <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex items-center">{header}
+                        {plusButton && (<PlusButton
+                            className={"ml-5"}
+                            onClick={onclickPlusButton}
+                        />)}
+                    </div>
                 </header>
             )}
 

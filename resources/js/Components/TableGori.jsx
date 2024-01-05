@@ -1,13 +1,28 @@
 import DeleteButton from "@/Components/DeleteButton.jsx";
 import EditButton from "@/Components/EditButton.jsx";
 import InputTable from "@/Components/InputTable.jsx";
+import AcceptButton from "@/Components/AcceptButton.jsx";
+import DenyButton from "@/Components/DenyButton.jsx";
 
-export default function TableGori({value, data, cols, onClickEdit, onClickDelete, className = '', children, ...props}) {
+export default function TableGori({
+                                      value,
+                                      data,
+                                      cols,
+                                      onClickEdit,
+                                      onClickDelete,
+                                      onClickAcceptButton,
+                                      onClickDenyButton,
+                                      className = '',
+                                      children,
+                                      ...props
+                                  }) {
 
     function handleDelete(evt) {
         //Torna s'id
         onClickDelete(evt.target.parentElement.parentElement.firstChild.firstChild.data)
     }
+
+
 
     return (
         <div className="flex flex-col">
@@ -73,9 +88,12 @@ export default function TableGori({value, data, cols, onClickEdit, onClickDelete
                                     </td>
                                     <td className="text-sm text-gray-900 font-light px-6 py-3 whitespace-nowrap justify-center flex">
                                         <DeleteButton
-                                            onClick={handleDelete}/>
+                                            onClick={handleDelete}
+                                        />
                                         <EditButton
                                             onClick={onClickEdit}/>
+                                        <AcceptButton/>
+                                        <DenyButton/>
                                     </td>
                                 </tr>
                             ))

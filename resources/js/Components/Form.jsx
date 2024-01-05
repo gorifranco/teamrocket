@@ -4,7 +4,7 @@ export default function Form({className = '', titol, handleSubmit, children, ...
 
     return (
         <div className={"flex flex-row justify-center items-center"}>
-            <form className={"bg-white shadow-md rounded px-8 pt-6 pb-8 mb-6 w-full max-w-xs" + className}
+            <form className={"bg-white shadow-md rounded px-8 pt-6 pb-8 mb-6 w-full max-w-xs " + className}
                   onSubmit={handleSubmit}>
                 <div className={"text-center font-bold"}>{titol}</div>
                 {children}

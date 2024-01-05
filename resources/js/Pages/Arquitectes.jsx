@@ -4,14 +4,18 @@ import InputError from "@/Components/InputError.jsx";
 import axios from 'axios';
 import {useEffect, useState} from "react";
 import Form from "@/Components/Form.jsx";
+import AcceptButton from "@/Components/AcceptButton.jsx";
 import TableGori from "@/Components/TableGori.jsx";
 import Pagination from "@/Components/Pagination.jsx";
-import PlusButton from "@/Components/PlusButton.jsx";
+import InputLabel from "@/Components/InputLabel.jsx";
+import TextInput from "@/Components/TextInput.jsx";
+import PrimaryButton from "@/Components/PrimaryButton.jsx";
 
 export default function index({auth}) {
     const [currentPage, setCurrentPage] = useState(1);
     const [formCrearVisible, setFormHidden] = useState(false)
     const [formData, setFormData] = useState([]);
+    const [cercadorValue, setCercadorValue] = useState("")
 
     const [errors, setErrors] = useState({
         nom: '',
@@ -30,11 +34,13 @@ export default function index({auth}) {
 
     const [successMessage, setSuccessMessage] = useState(false);
 
+
+    //Guardat del formulari
     async function handleSubmit(event) {
         event.preventDefault()
 
         axios.post('/api/arquitectes', formData)
-            .then(function (response) {
+            .then(() => {
                 setFormData({
                     nom: '',
                     data_naix: '',
@@ -68,9 +74,31 @@ export default function index({auth}) {
         });
     }
 
+    function handleEditClick(e) {
+        console.log(e.target.previousSibling)
+        e.target.previousSibling.style.display = "none"
+        e.target.style.display = "none"
+
+        e.target.nextSibling.style.display = "block"
+        e.target.nextSibling.nextSibling.style.display = "block"
+        let p1 = e.target.parentElement.parentElement.firstChild.nextSibling
+        p1.firstChild.disabled=false
+
+
+    }
+
     const fetchData = async (currentPage) => {
         try {
             const response = await axios.get(`/api/arquitectes?page=${currentPage}`);
+            setTableData(response.data.data);
+        } catch (error) {
+            console.error('Error al obtener los datos:', error);
+        }
+    };
+
+    const fetchDataFiltrada = async (currentPage, filter) => {
+        try {
+            const response = await axios.get(`/api/arquitectes/find/${filter}?page=${currentPage}`);
             setTableData(response.data.data);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
@@ -88,6 +116,19 @@ export default function index({auth}) {
     function obrirFormCrear() {
         if (formCrearVisible) setSuccessMessage(false)
         setFormHidden(!formCrearVisible)
+    }
+
+    function cercadorChange(e) {
+        setCercadorValue(e.target.value)
+    }
+
+    function cercadorClick() {
+        setCurrentPage(0)
+        if (cercadorValue === "") {
+            fetchData(currentPage)
+        } else {
+            fetchDataFiltrada(currentPage, cercadorValue)
+        }
     }
 
     function handleDelete(arquitecte) {
@@ -108,13 +149,12 @@ export default function index({auth}) {
         <AuthenticatedLayout
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Arquitectes</h2>}
+            plusButton={true}
+            onclickPlusButton={obrirFormCrear}
         >
             <Head title="Arquitectes"/>
-            <div className={"flex justify-center my-6"}>
-                <PlusButton onClick={obrirFormCrear}/>
-            </div>
             {formCrearVisible &&
-                (<Form handleSubmit={handleSubmit} titol={"Crear un arquitecte"}>
+                (<Form handleSubmit={handleSubmit} titol={"Crear un arquitecte"} className={"mt-5"}>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nom">
                             Nom
@@ -165,7 +205,17 @@ export default function index({auth}) {
                     )}
                 </Form>)
             }
-            <TableGori data={tableData} cols={["nom", "data_naix", "descripcio"]} onClickDelete={handleDelete}>
+            <div className={"flex justify-center mt-2"}>
+                <InputLabel>
+                    <TextInput placeholder={"Cercador"} className={"border"} value={cercadorValue}
+                               onChange={cercadorChange}/>
+                </InputLabel>
+                <PrimaryButton className={"ml-4"} onClick={cercadorClick}>
+                    Cercar
+                </PrimaryButton>
+            </div>
+            <TableGori data={tableData} cols={["nom", "data_naix", "descripcio"]} onClickDelete={handleDelete}
+                       onClickEdit={handleEditClick}>
             </TableGori>
             <Pagination
                 links={tableData.links}
