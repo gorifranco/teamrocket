@@ -18,7 +18,6 @@ class RootUser_seeder extends Seeder
                 "email" => "root@webmaster.com",
                 "password" =>Hash::make("1234"),
                 "tipusUsuari" => "Administrador"]
-
         ]);
     }
 }

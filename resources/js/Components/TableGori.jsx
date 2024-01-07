@@ -3,6 +3,7 @@ import EditButton from "@/Components/EditButton.jsx";
 import InputTable from "@/Components/InputTable.jsx";
 import AcceptButton from "@/Components/AcceptButton.jsx";
 import DenyButton from "@/Components/DenyButton.jsx";
+import {useState} from "react";
 
 export default function TableGori({
                                       value,
@@ -16,13 +17,32 @@ export default function TableGori({
                                       children,
                                       ...props
                                   }) {
+    const [editing, setEditing] = useState(false)
+    const [rowEditing , setRowEditing] = useState(-1)
+
+    function handleEdit(evt, index, rowData) {
+        evt.preventDefault();
+        setEditing(true);
+        setRowEditing(index);
+    }
+
+    function handleAccept(evt, index) {
+        evt.preventDefault();
+        if (confirm("segur que vols canviar la fila " + index + "?")) {
+            setEditing(false);
+            setRowEditing(-1);
+        } else {
+        }
+    }
+        function handleDeny(){
+        setEditing(false)
+        setRowEditing(-1)
+    }
 
     function handleDelete(evt) {
         //Torna s'id
         onClickDelete(evt.target.parentElement.parentElement.firstChild.firstChild.data)
     }
-
-
 
     return (
         <div className="flex flex-col">
@@ -87,13 +107,21 @@ export default function TableGori({
                                                     key={"td3_input" + key + value + index}/>
                                     </td>
                                     <td className="text-sm text-gray-900 font-light px-6 py-3 whitespace-nowrap justify-center flex">
-                                        <DeleteButton
-                                            onClick={handleDelete}
-                                        />
-                                        <EditButton
-                                            onClick={onClickEdit}/>
-                                        <AcceptButton/>
-                                        <DenyButton/>
+
+                                        {rowEditing !== index && (
+                                            <>
+                                                <EditButton onClick={(evt) => handleEdit(evt, index, value)} />
+                                                <DeleteButton onClick={handleDelete} />
+                                            </>
+                                        )}
+
+                                        {editing && rowEditing === index && (
+                                            <>
+                                                <AcceptButton onClick={(evt) => handleAccept(evt, index)} />
+                                                <DenyButton onClick={(evt) => handleDeny(evt, index)} />
+                                            </>
+                                        )}
+
                                     </td>
                                 </tr>
                             ))
