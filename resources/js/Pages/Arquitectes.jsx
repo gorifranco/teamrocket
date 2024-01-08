@@ -4,7 +4,6 @@ import InputError from "@/Components/InputError.jsx";
 import axios from 'axios';
 import {useEffect, useState} from "react";
 import Form from "@/Components/Form.jsx";
-import AcceptButton from "@/Components/AcceptButton.jsx";
 import TableGori from "@/Components/TableGori.jsx";
 import Pagination from "@/Components/Pagination.jsx";
 import InputLabel from "@/Components/InputLabel.jsx";
@@ -66,6 +65,18 @@ export default function index({auth}) {
 
     }
 
+    function handleEdit(dades){
+        console.log(dades)
+        axios.put("api/arquitectes/" + dades.id, dades)
+            .then(response => {
+                alert("Arquitecte guardat amb èxit")
+                fetchData(currentPage)
+            }).catch((e) => {
+             alert("Error guardant l'arquitecte:\n" +
+             e)
+        })
+    }
+
     function handleChange(e) {
         const {name, value} = e.target;
         setFormData({
@@ -74,18 +85,6 @@ export default function index({auth}) {
         });
     }
 
-    function handleEditClick(e) {
-        console.log(e.target.previousSibling)
-        e.target.previousSibling.style.display = "none"
-        e.target.style.display = "none"
-
-        e.target.nextSibling.style.display = "block"
-        e.target.nextSibling.nextSibling.style.display = "block"
-        let p1 = e.target.parentElement.parentElement.firstChild.nextSibling
-        p1.firstChild.disabled=false
-
-
-    }
 
     const fetchData = async (currentPage) => {
         try {
@@ -214,8 +213,7 @@ export default function index({auth}) {
                     Cercar
                 </PrimaryButton>
             </div>
-            <TableGori data={tableData} cols={["nom", "data_naix", "descripcio"]} onClickDelete={handleDelete}
-                       onClickEdit={handleEditClick}>
+            <TableGori data={tableData} cols={["nom", "data_naix", "descripcio"]} onClickDelete={handleDelete} onEdit={handleEdit}>
             </TableGori>
             <Pagination
                 links={tableData.links}

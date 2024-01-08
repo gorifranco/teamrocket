@@ -9,10 +9,8 @@ export default function TableGori({
                                       value,
                                       data,
                                       cols,
-                                      onClickEdit,
                                       onClickDelete,
-                                      onClickAcceptButton,
-                                      onClickDenyButton,
+                                      onEdit,
                                       className = '',
                                       children,
                                       ...props
@@ -32,9 +30,9 @@ export default function TableGori({
     function handleAccept(evt, index) {
         evt.preventDefault();
         if (confirm("segur que vols canviar la fila " + index + "?")) {
+            onEdit(editedValues)
             setEditing(false);
             setRowEditing(-1);
-        } else {
         }
     }
         function handleDeny(){
@@ -95,27 +93,33 @@ export default function TableGori({
                                         key={"td2" + key + value + index}>
 
                                         <InputTable type={"text"}
-                                                    value={rowEditing === index ? editedValues[cols[0]] || value[cols[0]] : value[cols[0]]}
+                                                    value={rowEditing === index ? editedValues[cols[0]] : value[cols[0]]}
                                                     disabled={rowEditing !== index}
-                                                    key={"td3_input" + key + value + index}/>
+                                                    key={"td3_input" + key + value + index}
+                                                    onChange={(evt) => handleChange(evt, cols[0])}
+                                        />
 
                                     </td>
                                     <td className="text-sm text-gray-900 font-light px-6 py-3 whitespace-nowrap"
                                         key={"td3" + key + value + index}>
 
                                         <InputTable type={"date"}
-                                                    value={rowEditing === index ? editedValues[cols[1]] || value[cols[1]] : value[cols[1]]}
+                                                    value={rowEditing === index ? editedValues[cols[1]] : value[cols[1]]}
                                                     disabled={rowEditing !== index}
-                                                    key={"td3_input" + key + value + index}/>
+                                                    key={"td3_input" + key + value + index}
+                                                    onChange={(evt) => handleChange(evt, cols[1])}
+                                        />
 
                                     </td>
                                     <td className="text-sm text-gray-900 font-light px-9 py-3 whitespace-nowrap"
                                         key={"td4" + key + value + index}>
 
                                         <InputTable type={"text"}
-                                                    value={rowEditing === index ? editedValues[cols[2]] || value[cols[2]] : value[cols[2]]}
+                                                    value={rowEditing === index ? editedValues[cols[2]] : value[cols[2]]}
                                                     disabled={rowEditing !== index}
-                                                    key={"td3_input" + key + value + index}/>
+                                                    key={"td3_input" + key + value + index}
+                                                    onChange={(evt) => handleChange(evt, cols[2])}
+                                        />
                                     </td>
                                     <td className="text-sm text-gray-900 font-light px-6 py-3 whitespace-nowrap justify-center flex">
 

@@ -6,7 +6,7 @@ use App\Models\Arquitecte;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
 class ArquitecteController extends Controller
 {
     /**
@@ -72,10 +72,28 @@ class ArquitecteController extends Controller
     public function update(Request $request, String $id): JsonResponse
     {
         $regles = [
-        'nom' => "required|unique:arquitectes|max:255",
-        'data_naix' => 'date'
+            'nom' => "required|unique:arquitectes,nom,$id|max:255",
+            'data_naix' => 'date'
     ];
-        return $this->dbActionBasic($id, Arquitecte::class, $request, "updateOrFail", $regles);
+
+        $validacio = Validator::make($request->only(["nom", "data_naix"]), $regles);
+
+        if (!$validacio->fails()) {
+            try {
+                $obj = Arquitecte::findOrFail($id);
+                $obj->updateOrFail($request->all());
+
+                return response()->json([
+                    'data' => $obj
+                ], 200);
+            } catch (\Exception $e) {
+                return response()->json(['error' => $e->getMessage()], 500);
+            }
+        } else {
+            return response()->json(['error' => $validacio->errors()], 422);
+        }
+
+//        return $this->dbActionBasic($id, Arquitecte::class, $request, "updateOrFail", $regles);
     }
 
     /**

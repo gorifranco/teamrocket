@@ -21,7 +21,7 @@ class Controller extends BaseController
             switch ($accio) {
                 case "updateOrFail":
                     {
-                        $validacio = Validator::make($request->all(), $regles);
+                        $validacio = Validator::make($request->except(["updated_at", "created_at", "id"]), $regles);
                         if (!$validacio->fails()) {
                             $obj = resolve($classe)::findOrFail($id);
                             $obj::updateOrFail($request->all());

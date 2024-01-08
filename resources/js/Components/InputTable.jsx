@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 
-export default function InputTable({type, value, keyVal, disabled = true}) {
+export default function InputTable({type, value, keyVal, onChange, disabled = true}) {
 
 
     function setType() {
@@ -17,6 +17,7 @@ export default function InputTable({type, value, keyVal, disabled = true}) {
             value={(value !== null) ? value : ""}
             className={disabledClassName()}
             disabled={disabled}
+            onChange={onChange}
             key={keyVal}
         />
     );
