@@ -17,13 +17,16 @@ export default function TableGori({
                                       children,
                                       ...props
                                   }) {
+
     const [editing, setEditing] = useState(false)
     const [rowEditing , setRowEditing] = useState(-1)
+    const [editedValues, setEditedValues] = useState({});
 
     function handleEdit(evt, index, rowData) {
         evt.preventDefault();
         setEditing(true);
         setRowEditing(index);
+        setEditedValues(rowData);
     }
 
     function handleAccept(evt, index) {
@@ -38,6 +41,14 @@ export default function TableGori({
         setEditing(false)
         setRowEditing(-1)
     }
+
+    const handleChange = (evt, columnName) => {
+        const { value } = evt.target;
+        setEditedValues({
+            ...editedValues,
+            [columnName]: value,
+        });
+    };
 
     function handleDelete(evt) {
         //Torna s'id
@@ -84,8 +95,8 @@ export default function TableGori({
                                         key={"td2" + key + value + index}>
 
                                         <InputTable type={"text"}
-                                                    value={value[cols[0]]}
-                                                    disabled={true}
+                                                    value={rowEditing === index ? editedValues[cols[0]] || value[cols[0]] : value[cols[0]]}
+                                                    disabled={rowEditing !== index}
                                                     key={"td3_input" + key + value + index}/>
 
                                     </td>
@@ -93,8 +104,8 @@ export default function TableGori({
                                         key={"td3" + key + value + index}>
 
                                         <InputTable type={"date"}
-                                                    value={value[cols[1]]}
-                                                    disabled={true}
+                                                    value={rowEditing === index ? editedValues[cols[1]] || value[cols[1]] : value[cols[1]]}
+                                                    disabled={rowEditing !== index}
                                                     key={"td3_input" + key + value + index}/>
 
                                     </td>
@@ -102,8 +113,8 @@ export default function TableGori({
                                         key={"td4" + key + value + index}>
 
                                         <InputTable type={"text"}
-                                                    value={value[cols[2]]}
-                                                    disabled={true}
+                                                    value={rowEditing === index ? editedValues[cols[2]] || value[cols[2]] : value[cols[2]]}
+                                                    disabled={rowEditing !== index}
                                                     key={"td3_input" + key + value + index}/>
                                     </td>
                                     <td className="text-sm text-gray-900 font-light px-6 py-3 whitespace-nowrap justify-center flex">
