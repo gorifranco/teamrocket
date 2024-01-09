@@ -64,7 +64,7 @@ export default function TableGori({
                                 <th scope="col" className="text-lg font-bold text-gray-900 px-9 py-4 text-center"
                                     key={"th#"}>#
                                 </th>
-                                {cols.map((val) => (
+                                {Object.keys(cols).map((val) => (
                                     <th scope="col"
                                         className="text-lg font-medium text-gray-900 px-9 py-4 text-left capitalize"
                                         key={"th" + val}>
@@ -89,38 +89,20 @@ export default function TableGori({
                                         {value["id"]}
                                     </td>
 
-                                    <td className="text-sm text-gray-900 font-light px-9 py-3 whitespace-nowrap"
-                                        key={"td2" + key + value + index}>
+                                    {Object.entries(cols).map(([colName, colType], colIndex) => (
+                                        <td className="text-sm text-gray-900 font-light px-9 py-3 whitespace-nowrap"
+                                            key={"td2" + colName + colType + colIndex}
+                                        >
+                                            <InputTable
+                                                type={colType}
+                                                value={rowEditing === index ? editedValues[colName] : value[colName]}
+                                                disabled={rowEditing !== index}
+                                                key={"td3_input" + colName + colType + colIndex}
+                                                onChange={(evt) => handleChange(evt, colName)}
+                                            />
+                                        </td>
+                                    ))}
 
-                                        <InputTable type={"text"}
-                                                    value={rowEditing === index ? editedValues[cols[0]] : value[cols[0]]}
-                                                    disabled={rowEditing !== index}
-                                                    key={"td3_input" + key + value + index}
-                                                    onChange={(evt) => handleChange(evt, cols[0])}
-                                        />
-
-                                    </td>
-                                    <td className="text-sm text-gray-900 font-light px-6 py-3 whitespace-nowrap"
-                                        key={"td3" + key + value + index}>
-
-                                        <InputTable type={"date"}
-                                                    value={rowEditing === index ? editedValues[cols[1]] : value[cols[1]]}
-                                                    disabled={rowEditing !== index}
-                                                    key={"td3_input" + key + value + index}
-                                                    onChange={(evt) => handleChange(evt, cols[1])}
-                                        />
-
-                                    </td>
-                                    <td className="text-sm text-gray-900 font-light px-9 py-3 whitespace-nowrap"
-                                        key={"td4" + key + value + index}>
-
-                                        <InputTable type={"text"}
-                                                    value={rowEditing === index ? editedValues[cols[2]] : value[cols[2]]}
-                                                    disabled={rowEditing !== index}
-                                                    key={"td3_input" + key + value + index}
-                                                    onChange={(evt) => handleChange(evt, cols[2])}
-                                        />
-                                    </td>
                                     <td className="text-sm text-gray-900 font-light px-6 py-3 whitespace-nowrap justify-center flex">
 
                                         {rowEditing !== index && (

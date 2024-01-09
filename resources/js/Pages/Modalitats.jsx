@@ -17,21 +17,15 @@ export default function index({auth}) {
     const [cercadorValue, setCercadorValue] = useState("")
     const cols = {
         nom: 'text',
-        data_naix: 'date',
-        descripcio: 'text'
     }
 
     const [errors, setErrors] = useState({
         nom: '',
-        data_naix: '',
-        descripcio: ''
     });
 
     const [tableData, setTableData] = useState({
             data: [{
                 nom: "",
-                data_naix: "",
-                descripcio: "",
             }]
         }
     )
@@ -43,18 +37,14 @@ export default function index({auth}) {
     async function handleSubmit(event) {
         event.preventDefault()
 
-        axios.post('/api/arquitectes', formData)
+        axios.post('/api/modalitats', formData)
             .then(() => {
                 setFormData({
                     nom: '',
-                    data_naix: '',
-                    descripcio: ''
                 });
 
                 setErrors({
                     nom: '',
-                    data_naix: '',
-                    descripcio: ''
                 })
                 setSuccessMessage(true);
                 fetchData(currentPage)
@@ -71,14 +61,13 @@ export default function index({auth}) {
     }
 
     function handleEdit(dades){
-        console.log(dades)
-        axios.put("api/arquitectes/" + dades.id, dades)
+        axios.put("api/modalitats/" + dades.id, dades)
             .then(response => {
-                alert("Arquitecte guardat amb èxit")
+                alert("Modalitat guardat amb èxit")
                 fetchData(currentPage)
             }).catch((e) => {
-             alert("Error guardant l'arquitecte:\n" +
-             e)
+            alert("Error guardant la modalitat:\n" +
+                e)
         })
     }
 
@@ -93,7 +82,7 @@ export default function index({auth}) {
 
     const fetchData = async (currentPage) => {
         try {
-            const response = await axios.get(`/api/arquitectes?page=${currentPage}`);
+            const response = await axios.get(`/api/modalitats?page=${currentPage}`);
             setTableData(response.data.data);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
@@ -102,7 +91,7 @@ export default function index({auth}) {
 
     const fetchDataFiltrada = async (currentPage, filter) => {
         try {
-            const response = await axios.get(`/api/arquitectes/find/${filter}?page=${currentPage}`);
+            const response = await axios.get(`/api/modalitats/find/${filter}?page=${currentPage}`);
             setTableData(response.data.data);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
@@ -135,16 +124,15 @@ export default function index({auth}) {
         }
     }
 
-    function handleDelete(arquitecte) {
-        console.log(arquitecte)
-        if (confirm("Segur que vols borrar l'arquitecte " + arquitecte + "?")) {
-            axios.delete("api/arquitectes/" + arquitecte)
+    function handleDelete(modalitat) {
+        if (confirm("Segur que vols borrar la modalitat " + modalitat + "?")) {
+            axios.delete("api/modalitats/" + modalitat)
                 .then(() => {
-                    alert("Arquitecte borrat amb èxit")
+                    alert("Modalitat borrada amb èxit")
                     fetchData(currentPage)
                 })
                 .catch(() => {
-                    alert("L'arquitecte no s'ha pogut borrar")
+                    alert("La modalitat no s'ha pogut borrar")
                 })
         }
     }
@@ -152,13 +140,13 @@ export default function index({auth}) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Arquitectes</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Modalitats</h2>}
             plusButton={true}
             onclickPlusButton={obrirFormCrear}
         >
-            <Head title="Arquitectes"/>
+            <Head title="Modalitats"/>
             {formCrearVisible &&
-                (<Form handleSubmit={handleSubmit} titol={"Crear un arquitecte"} className={"mt-5"}>
+                (<Form handleSubmit={handleSubmit} titol={"Crear una modalitat"} className={"mt-5"}>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nom">
                             Nom
@@ -170,32 +158,6 @@ export default function index({auth}) {
                             onChange={handleChange}/>
                         <InputError message={errors.nom}/>
                     </div>
-                    <div className="relative max-w-sm">
-                        <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                            <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                 xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                <path
-                                    d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-                            </svg>
-                        </div>
-                        <input type="date"
-                               className="mt-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                               placeholder="Select date" name={"data_naix"}
-                               value={formData.data_naix}
-                               onChange={handleChange}/>
-                        <InputError message={errors.data_naix}/>
-                    </div>
-                    <div className="mb-6 mt-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-                            Descripció
-                        </label>
-                        <textarea
-                            className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                            name={"descripcio"} id="descripcio" rows={4} placeholder="Descripció" required={true}
-                            value={formData.descripcio}
-                            onChange={handleChange}/>
-                        <InputError message={errors.descripcio}/>
-                    </div>
                     <div className="flex items-center justify-center">
                     </div>
 
@@ -203,7 +165,7 @@ export default function index({auth}) {
                         <div
                             className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 font-medium"
                             role="alert">
-                            Arquitecte creat!
+                            Modalitat creada!
                         </div>
                     )}
                 </Form>)
@@ -217,12 +179,17 @@ export default function index({auth}) {
                     Cercar
                 </PrimaryButton>
             </div>
-            <TableGori data={tableData} cols={cols} onClickDelete={handleDelete} onEdit={handleEdit}>
-            </TableGori>
-            <Pagination
+            {tableData !== undefined && (
+                <>
+                <TableGori data={tableData} cols={cols} onClickDelete={handleDelete} onEdit={handleEdit}>
+                </TableGori>
+                <Pagination
                 links={tableData.links}
-                onPageChange={handlePageChange}>
-            </Pagination>
+            onPageChange={handlePageChange}>
+        </Pagination>
+                </>
+            )}
+
         </AuthenticatedLayout>
     )
 }

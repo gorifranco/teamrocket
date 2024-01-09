@@ -24,7 +24,7 @@ class Controller extends BaseController
                         $validacio = Validator::make($request->except(["updated_at", "created_at", "id"]), $regles);
                         if (!$validacio->fails()) {
                             $obj = resolve($classe)::findOrFail($id);
-                            $obj::updateOrFail($request->all());
+                            $obj->updateOrFail($request->all());
                             return response()->json([
                                 'data' => $obj
                             ], 200);

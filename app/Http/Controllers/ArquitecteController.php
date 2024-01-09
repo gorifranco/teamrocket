@@ -76,24 +76,8 @@ class ArquitecteController extends Controller
             'data_naix' => 'date'
     ];
 
-        $validacio = Validator::make($request->only(["nom", "data_naix"]), $regles);
 
-        if (!$validacio->fails()) {
-            try {
-                $obj = Arquitecte::findOrFail($id);
-                $obj->updateOrFail($request->all());
-
-                return response()->json([
-                    'data' => $obj
-                ], 200);
-            } catch (\Exception $e) {
-                return response()->json(['error' => $e->getMessage()], 500);
-            }
-        } else {
-            return response()->json(['error' => $validacio->errors()], 422);
-        }
-
-//        return $this->dbActionBasic($id, Arquitecte::class, $request, "updateOrFail", $regles);
+        return $this->dbActionBasic($id, Arquitecte::class, $request, "updateOrFail", $regles);
     }
 
     /**

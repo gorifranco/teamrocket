@@ -33,6 +33,12 @@ Route::get('/arquitectes', function (){
     return Inertia::render("Arquitectes");
 })->name('arquitectes');
 
+Route::get('/modalitats', function (){
+    return Inertia::render("Modalitats");
+})->name('modalitats');
+
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

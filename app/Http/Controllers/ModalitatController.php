@@ -14,7 +14,7 @@ class ModalitatController extends Controller
     public function index(): JsonResponse
     {
         return response()->json([
-            'modalitats' => Modalitat::all()
+            'data' => Modalitat::paginate(10)
         ]);
     }
 
@@ -32,9 +32,9 @@ class ModalitatController extends Controller
     public function store(Request $request): JsonResponse
     {
         $regles = [
-            'nom' => 'required|unique:modalitats.nom'
+            'nom' => 'required|unique:modalitats,nom'
         ];
-        return $this->dbActionBasic(null, Modalitat::class, $request, "findOrFail", $regles);
+        return $this->dbActionBasic(null, Modalitat::class, $request, "createOrFail", $regles);
     }
 
     /**
@@ -59,7 +59,7 @@ return $this->dbActionBasic($id, Modalitat::class, null, "findOrFail", null);
     public function update(Request $request, string $id): JsonResponse
     {
         $regles = [
-            'nom' => 'required|unique:modalitats.nom'
+            'nom' => "required|unique:modalitats,nom,$id"
         ];
         return $this->dbActionBasic($id, Modalitat::class, $request, "updateOrFail", $regles);
     }
@@ -69,6 +69,7 @@ return $this->dbActionBasic($id, Modalitat::class, null, "findOrFail", null);
      */
     public function destroy(string $id): JsonResponse
     {
-        return $this->dbActionBasic($id, Modalitat::class, null, "destroyOrFail",null);
+        return $this->dbActionBasic($id, Modalitat::class, null, "deleteOrFail",null);
+
     }
 }
