@@ -19,6 +19,6 @@ class DatabaseSeeder extends Seeder
         $this->call(modalitats_seeder::class);
         $this->call(serveis_seeder::class);
         $this->call(tipusEspais_seeder::class);
-        $this->call(RootUser_seeder::class);
+        $this->call(User_seeder::class);
     }
 }
