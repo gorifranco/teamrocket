@@ -37,6 +37,10 @@ Route::get('/modalitats', function (){
     return Inertia::render("Modalitats");
 })->name('modalitats');
 
+Route::get('/tipus_espais', function (){
+    return Inertia::render("Tipus_espais");
+})->name('tipus_espais');
+
 
 
 Route::middleware('auth')->group(function () {

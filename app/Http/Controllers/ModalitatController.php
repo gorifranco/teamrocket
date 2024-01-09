@@ -72,4 +72,15 @@ return $this->dbActionBasic($id, Modalitat::class, null, "findOrFail", null);
         return $this->dbActionBasic($id, Modalitat::class, null, "deleteOrFail",null);
 
     }
+
+    public function find(string $str): JsonResponse
+    {
+        $data = Modalitat::where('nom', 'LIKE', '%' . $str . '%')
+            ->orWhere('id', 'LIKE','%'. $str. '%')
+            ->paginate(10);
+
+        return response()->json([
+            'data' => $data
+        ]);
+    }
 }

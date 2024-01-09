@@ -41,7 +41,7 @@ export default function Authenticated({user, header, plusButton = false, onclick
 
                                 <Dropdown.Content>
                                     <Dropdown.Link href={route('modalitats')}>Modalitats</Dropdown.Link>
-                                    <Dropdown.Link href={route('logout')}>Tipus d'espais</Dropdown.Link>
+                                    <Dropdown.Link href={route('tipus_espais')}>Tipus d'espais</Dropdown.Link>
                                 </Dropdown.Content>
                             </Dropdown>
                         </div>

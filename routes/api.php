@@ -46,9 +46,11 @@ Route::apiResources([
     'municipis' => MunicipiController::class,
     'punts-interes' => PuntInteresController::class,
     'serveis' => ServeiController::class,
-    'tipus-espais' => TipusEspaiController::class,
+    'tipus_espais' => TipusEspaiController::class,
     'visites' => VisitaController::class,
     'zones' => ZonaController::class
 ]);
 
 Route::get('/arquitectes/find/{cerca}', [ArquitecteController::class, 'find']);
+Route::get('/modalitats/find/{cerca}', [ModalitatController::class, 'find']);
+Route::get('/tipus_espais/find/{cerca}', [TipusEspaiController::class, 'find']);
