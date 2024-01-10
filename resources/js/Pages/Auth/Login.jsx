@@ -26,6 +26,10 @@ export default function Login({status, canResetPassword}) {
         post(route('login'));
     };
 
+    function apiLogin () {
+
+    }
+
     return (
         <GuestLayout>
             <Head title="Log in"/>

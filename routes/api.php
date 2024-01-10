@@ -33,12 +33,22 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
 Route::post('/login', [LoginController::class, 'login']);
 
+
+//Guest routes
+
+Route::apiResource("arquitectes", ArquitecteController::class)
+    ->only("index", "show");
+
+
 Route::middleware(['apiMiddleware'])->group(function () {
+    Route::apiResource("arquitectes", ArquitecteController::class)
+        ->only("store", "destroy", "update")
+        ->middleware("tipusUsuari:administrador,gestor");
+
     Route::apiResources([
-        'arquitectes' => ArquitecteController::class,
+//        'arquitectes' => ArquitecteController::class,
         'audios' => AudioController::class,
         'comentaris' => ComentariController::class,
         'dates-reformes' => DataReformaController::class,

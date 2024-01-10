@@ -28,9 +28,7 @@ Route::get('/', function () {
 
 Route::group(['middleware' => 'auth'], function() {
     Route::inertia('/dashboard', 'Dashboard')->name('dashboard');
-    Route::group(['middleware' => 'tipusUsuari:administrador'], function() {
-        Route::inertia('/arquitectes', 'Arquitectes')->name('arquitectes');
-    });
+    Route::inertia("/arquitectes", "Arquitectes")->name('arquitectes');
 });
 
 
@@ -43,13 +41,11 @@ Route::get('/tipus_espais', function (){
     return Inertia::render("Tipus_espais");
 })->name('tipus_espais');
 
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/arquitectes', function (){
-        return Inertia::render("Arquitectes");
-    })->name("arquitectes");
 });
 
 require __DIR__.'/auth.php';

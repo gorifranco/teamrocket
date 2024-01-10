@@ -37,7 +37,11 @@ export default function index({auth}) {
     async function handleSubmit(event) {
         event.preventDefault()
 
-        axios.post('/api/tipus_espais', formData)
+        axios.post('/api/tipus_espais', formData, {
+            headers: {
+                'Authorization': `Bearer ${auth.user.api_token}`,
+            }
+        })
             .then(() => {
                 setFormData({
                     nom: '',
@@ -61,7 +65,11 @@ export default function index({auth}) {
     }
 
     function handleEdit(dades){
-        axios.put("api/tipus_espais/" + dades.id, dades)
+        axios.put("api/tipus_espais/" + dades.id, dades, {
+            headers: {
+                'Authorization': `Bearer ${auth.user.api_token}`,
+            }
+        })
             .then(response => {
                 alert("Tipus d'espai guardat amb èxit")
                 fetchData(currentPage)
@@ -82,7 +90,11 @@ export default function index({auth}) {
 
     const fetchData = async (currentPage) => {
         try {
-            const response = await axios.get(`/api/tipus_espais?page=${currentPage}`);
+            const response = await axios.get(`/api/tipus_espais?page=${currentPage}`, {
+                headers: {
+                    'Authorization': `Bearer ${auth.user.api_token}`,
+                }
+            });
             setTableData(response.data.data);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
@@ -91,7 +103,11 @@ export default function index({auth}) {
 
     const fetchDataFiltrada = async (currentPage, filter) => {
         try {
-            const response = await axios.get(`/api/tipus_espais/find/${filter}?page=${currentPage}`);
+            const response = await axios.get(`/api/tipus_espais/find/${filter}?page=${currentPage}`, {
+                headers: {
+                    'Authorization': `Bearer ${auth.user.api_token}`,
+                }
+            });
             setTableData(response.data.data);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
@@ -126,7 +142,11 @@ export default function index({auth}) {
 
     function handleDelete(tipusEspai) {
         if (confirm("Segur que vols borrar el tipus d'espai " + tipusEspai + "?")) {
-            axios.delete("api/tipus_espais/" + tipusEspai)
+            axios.delete("api/tipus_espais/" + tipusEspai, {
+                headers: {
+                    'Authorization': `Bearer ${auth.user.api_token}`,
+                }
+            })
                 .then(() => {
                     alert("Tipus d'espai borrat amb èxit")
                     fetchData(currentPage)
