@@ -19,6 +19,7 @@ class LoginController extends Controller
             return response()->json(['status' => 'Login OK','result' => $apikey]);
         }else{
             return response()->json(['status' => 'fail'],401);
+
         }
     }
 }

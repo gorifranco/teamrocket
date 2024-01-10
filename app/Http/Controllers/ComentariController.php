@@ -76,9 +76,16 @@ class ComentariController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(string $id, Request $request): JsonResponse
     {
-        return $this->dbActionBasic($id, Comentari::class, null, "deleteOrFail", null);
+        $comentari = Comentari::find($id);
+        if($comentari->usuari() == $request->user() || $request->user()->esAdministrador() ||$request->user()->esGestor()){
+            return $this->dbActionBasic($id, Comentari::class, null, "deleteOrFail", null);
+        }else{
+            return response()->json([
+                "missatge" => 'usuari no autoritzat'
+            ]);
+        }
     }
 
     public function validar(string $id): JsonResponse

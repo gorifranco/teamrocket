@@ -21,18 +21,18 @@ class MunicipiController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
+//    public function create()
+//    {
+//        //
+//    }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //No es creen
-    }
+//    public function store(Request $request)
+//    {
+//        //No es creen
+//    }
 
     /**
      * Display the specified resource.
@@ -45,24 +45,24 @@ class MunicipiController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(String $id)
-    {
-        //
-    }
+//    public function edit(String $id)
+//    {
+//        //
+//    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //No canvien
-    }
+//    public function update(Request $request, string $id)
+//    {
+//        //No canvien
+//    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //No es destrueixen
-    }
+//    public function destroy(string $id)
+//    {
+//        //No es destrueixen
+//    }
 }

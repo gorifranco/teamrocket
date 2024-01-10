@@ -24,6 +24,9 @@ return new class extends Migration {
             $table->string("api_token", 64)->nullable();
             $table->rememberToken();
             $table->timestamps();
+
+            //token
+            $table->string('token', 64)->unique()->nullable();
         });
     }
 

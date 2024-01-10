@@ -8,6 +8,7 @@ use App\Models\HoraActiva;
 use App\Models\Municipi;
 use App\Models\TipusEspai;
 use App\Models\Zona;
+use Dotenv\Validator;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

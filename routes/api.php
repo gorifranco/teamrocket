@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArquitecteController;
 use App\Http\Controllers\AudioController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ComentariController;
 use App\Http\Controllers\DataReformaController;
 use App\Http\Controllers\EspaiController;
@@ -34,6 +35,23 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::post('/login', [LoginController::class, 'login']);
+
+Route::post('/auth/register', [AuthController::class, 'createUser']);
+Route::post('/auth/login', [AuthController::class, 'loginUser']);
+
+Route::apiResource('arquitectes', ArquitecteController::class)->only(['index', 'show']);
+Route::apiResource('comentaris', ComentariController::class)->only(['index', 'show']);
+Route::apiResource('espais', EspaiController::class)->only(['index', 'show']);
+Route::apiResource('hores-actives', HoraActivaController::class)->only(['index', 'show']);
+Route::apiResource('illes', IllaController::class);
+Route::apiResource('imatges', ImatgeController::class)->only(['index', 'show']);
+Route::apiResource('modalitats', ModalitatController::class)->only(['index', 'show']);
+Route::apiResource('municipis', MunicipiController::class);
+Route::apiResource('punts-interes', PuntInteresController::class)->only(['index', 'show']);
+Route::apiResource('serveis', ServeiController::class)->only(['index', 'show']);
+Route::apiResource('tipus-espais', TipusEspaiController::class)->only(['index', 'show']);
+Route::apiResource('visites', VisitaController::class)->only(['index', 'show']);
+Route::apiResource('zones', ZonaController::class);
 
 
 //Guest routes
