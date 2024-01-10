@@ -80,7 +80,7 @@ Route::middleware(['apiMiddleware'])->group(function () {
         'illes' => IllaController::class,
         'imatges' => ImatgeController::class,
 //        'modalitats' => ModalitatController::class,
-        'municipis' => MunicipiController::class,
+//        'municipis' => MunicipiController::class,
         'punts-interes' => PuntInteresController::class,
 //        'serveis' => ServeiController::class,
 //        'tipus_espais' => TipusEspaiController::class,
