@@ -18,6 +18,4 @@ class Visita extends Model
     {
         return $this->belongsToMany(PuntInteres::class, 'visita_puntInteres', 'fk_visita', 'fk_puntInteres');
     }
-
-
 }

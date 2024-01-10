@@ -9,6 +9,7 @@ use App\Http\Controllers\EspaiController;
 use App\Http\Controllers\HoraActivaController;
 use App\Http\Controllers\IllaController;
 use App\Http\Controllers\ImatgeController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ModalitatController;
 use App\Http\Controllers\MunicipiController;
 use App\Http\Controllers\PuntInteresController;
@@ -33,6 +34,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::post('/login', [LoginController::class, 'login']);
 
 Route::post('/auth/register', [AuthController::class, 'createUser']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
@@ -51,59 +53,60 @@ Route::apiResource('tipus-espais', TipusEspaiController::class)->only(['index', 
 Route::apiResource('visites', VisitaController::class)->only(['index', 'show']);
 Route::apiResource('zones', ZonaController::class);
 
-Route::middleware('auth:sanctum')->group(function () {
 
-    //rutes per usuari:
-    Route::middleware('usuari')->group(function () {
-        Route::apiResource('comentaris', ComentariController::class)->only(['store', 'update', 'destroy']);
-    });
+//Guest routes
+Route::apiResource("arquitectes", ArquitecteController::class)->only("index", "show");
+Route::apiResource('audios', AudioController::class)->only(['index', 'show']);
+Route::apiResource('comentaris', ComentariController::class)->only(['index', 'show']);
+Route::apiResource('dates-reformes', DataReformaController::class)->only(['index', 'show']);
+Route::apiResource('espais', EspaiController::class)->only(['index', 'show']);
+Route::apiResource('hores-actives', HoraActivaController::class)->only(['index', 'show']);
+Route::apiResource('illes', IllaController::class)->only(['index', 'show']);
+Route::apiResource('imatges', ImatgeController::class)->only(['index', 'show']);
+Route::apiResource('modalitats', ModalitatController::class)->only(['index', 'show']);
+Route::apiResource('municipis', MunicipiController::class)->only(['index', 'show']);
+Route::apiResource('punts-interes', PuntInteresController::class)->only(['index', 'show']);
+Route::apiResource('serveis', ServeiController::class)->only(['index', 'show']);
+Route::apiResource('tipus_espais', TipusEspaiController::class)->only(['index', 'show']);
+Route::apiResource('visites', VisitaController::class)->only(['index', 'show']);
+Route::apiResource('zones', ZonaController::class)->only(['index', 'show']);
 
-    //rutes per gestor
-    Route::middleware('gestor')->group(function () {
-        Route::apiResources([
-            'arquitectes' => ArquitecteController::class,
-            'audios' => AudioController::class,
-            'comentaris' => ComentariController::class,
-            'dates-reformes' => DataReformaController::class,
-            'espais' => EspaiController::class,
-            'hores-actives' => HoraActivaController::class,
-            'illes' => IllaController::class,
-            'imatges' => ImatgeController::class,
-            'modalitats' => ModalitatController::class,
-            'municipis' => MunicipiController::class,
-            'punts-interes' => PuntInteresController::class,
-            'tipus-espais' => TipusEspaiController::class,
-            'visites' => VisitaController::class,
-            'zones' => ZonaController::class
-        ]);
-        Route::apiResource('serveis', ServeiController::class)->except(['create', 'update', 'destroy']);
-        Route::apiResource('modalitats', ModalitatController::class)->only(['index', 'show']);
-        Route::apiResource('tipus-espais', TipusEspaiController::class)->only(['index', 'show']);
 
-    });
 
-    //Rutes administrador
-    Route::middleware('administrador')->group(function () {
-        Route::apiResources([
-            'arquitectes' => ArquitecteController::class,
-            'audios' => AudioController::class,
-            'comentaris' => ComentariController::class,
-            'dates-reformes' => DataReformaController::class,
-            'espais' => EspaiController::class,
-            'hores-actives' => HoraActivaController::class,
-            'illes' => IllaController::class,
-            'imatges' => ImatgeController::class,
-            'modalitats' => ModalitatController::class,
-            'municipis' => MunicipiController::class,
-            'punts-interes' => PuntInteresController::class,
-            'serveis' => ServeiController::class,
-            'tipus-espais' => TipusEspaiController::class,
-            'visites' => VisitaController::class,
-            'zones' => ZonaController::class
-        ]);
-    });
+Route::middleware(['apiMiddleware'])->group(function () {
+    Route::apiResource("arquitectes", ArquitecteController::class)
+        ->only("store", "destroy", "update")
+        ->middleware("tipusUsuari:administrador,gestor");
+    Route::apiResource("tipus_espais", TipusEspaiController::class)
+        ->only("store", "destroy", "update")
+        ->middleware("tipusUsuari:administrador,gestor");
+    Route::apiResource("serveis", ServeiController::class)
+        ->only("store", "destroy", "update")
+        ->middleware("tipusUsuari:administrador,gestor");
+    Route::apiResource("modalitats", ModalitatController::class)
+        ->only("store", "destroy", "update")
+        ->middleware("tipusUsuari:administrador,gestor");
+
+
+    Route::apiResources([
+//        'arquitectes' => ArquitecteController::class,
+        'audios' => AudioController::class,
+        'comentaris' => ComentariController::class,
+        'dates-reformes' => DataReformaController::class,
+        'espais' => EspaiController::class,
+        'hores-actives' => HoraActivaController::class,
+        'illes' => IllaController::class,
+        'imatges' => ImatgeController::class,
+//        'modalitats' => ModalitatController::class,
+//        'municipis' => MunicipiController::class,
+        'punts-interes' => PuntInteresController::class,
+//        'serveis' => ServeiController::class,
+//        'tipus_espais' => TipusEspaiController::class,
+        'visites' => VisitaController::class,
+        'zones' => ZonaController::class
+    ]);
 });
 
-
-
-
+Route::get('/arquitectes/find/{cerca}', [ArquitecteController::class, 'find']);
+Route::get('/modalitats/find/{cerca}', [ModalitatController::class, 'find']);
+Route::get('/tipus_espais/find/{cerca}', [TipusEspaiController::class, 'find']);

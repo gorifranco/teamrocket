@@ -21,10 +21,10 @@ class Controller extends BaseController
             switch ($accio) {
                 case "updateOrFail":
                     {
-                        $validacio = Validator::make($request->all(), $regles);
+                        $validacio = Validator::make($request->except(["updated_at", "created_at", "id"]), $regles);
                         if (!$validacio->fails()) {
                             $obj = resolve($classe)::findOrFail($id);
-                            $obj::updateOrFail($request->all());
+                            $obj->updateOrFail($request->all());
                             return response()->json([
                                 'data' => $obj
                             ], 200);
@@ -66,6 +66,7 @@ class Controller extends BaseController
                 }
             }
             return response()->json([
+                'errors'=> $validacio->errors()->toArray(),
                 'missatge' => "action fail",
             ], 400);
         } catch (Exception $e) {

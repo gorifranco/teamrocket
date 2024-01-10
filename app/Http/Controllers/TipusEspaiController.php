@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Modalitat;
 use App\Models\TipusEspai;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -15,7 +15,7 @@ class TipusEspaiController extends Controller
     public function index(): JsonResponse
     {
         return response()->json([
-            'tipus_espais' => TipusEspai::all()
+            'data' => TipusEspai::paginate(10)
         ]);
     }
 
@@ -33,7 +33,7 @@ class TipusEspaiController extends Controller
     public function store(Request $request): JsonResponse
     {
         $regles = [
-            'nom' => 'required|unique:tipusespais.nom'
+            'nom' => 'required|unique:tipusespais,nom'
         ];
 
         return $this->dbActionBasic(null, TipusEspai::class, $request, "createOrFail", $regles);
@@ -61,7 +61,7 @@ class TipusEspaiController extends Controller
     public function update(Request $request, string $id): JsonResponse
     {
         $regles = [
-            'nom' => 'required|unique:tipusespais.nom'
+            'nom' => "required|unique:tipusespais,nom$id"
         ];
 
         return $this->dbActionBasic($id, TipusEspai::class, $request, "updateOrFail", $regles);
@@ -74,4 +74,16 @@ class TipusEspaiController extends Controller
     {
         return $this->dbActionBasic($id, TipusEspai::class, null, "deleteOrFail", null);
     }
+
+    public function find(string $str): JsonResponse
+    {
+        $data = TipusEspai::where('nom', 'LIKE', '%' . $str . '%')
+            ->orWhere('id', 'LIKE','%'. $str. '%')
+            ->paginate(10);
+
+        return response()->json([
+            'data' => $data
+        ]);
+    }
+
 }

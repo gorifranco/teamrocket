@@ -9,23 +9,17 @@ use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function login(Request $request)
     {
-        $user = User::where('email', $request->input('email'))->first;
-        if ($user && Hash::check($request->input('password'), $user->password))
-        {
+        $user = User::where('email', $request->input('email'))->first();
+        if($user && Hash::check($request->input('password'), $user->password)){
             $apikey = base64_encode(Str::random(40));
-            $user["api_token"] = $apikey;
+            $user["api_token"]=$apikey;
             $user->save();
-            return response()->json(['status' => 'Login success',
-                'result' => $apikey], 200);
-        }
-        else
-        {
-            return response()->json(['status' => 'Login fail'], 400);
+            return response()->json(['status' => 'Login OK','result' => $apikey]);
+        }else{
+            return response()->json(['status' => 'fail'],401);
+
         }
     }
 }

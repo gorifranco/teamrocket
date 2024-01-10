@@ -15,12 +15,13 @@ return new class extends Migration {
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password', 64);
+            $table->string('password');
             $table->string("llinatge1")->nullable();
             $table->string("llinatge2")->nullable();
-            $table->string("DNI")->nullable()->default(null);
+            $table->string("DNI")->nullable();
             $table->string("telefon")->nullable();
             $table->enum('tipusUsuari', ['administrador', 'gestor', 'usuari'])->default('usuari');
+            $table->string("api_token", 64)->nullable();
             $table->rememberToken();
             $table->timestamps();
 

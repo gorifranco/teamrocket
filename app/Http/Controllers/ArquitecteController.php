@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use app\Models\Arquitecte;
-use http\Client\Response;
+use App\Models\Arquitecte;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
 class ArquitecteController extends Controller
 {
     /**
@@ -16,16 +15,16 @@ class ArquitecteController extends Controller
     public function index(): JsonResponse
     {
         return response()->json([
-            'arquitecte' => Arquitecte::all()
+            'data' => Arquitecte::paginate(10)
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+    public function create()
     {
-        return view('arquitectes.crear');
+
     }
 
     /**
@@ -37,7 +36,7 @@ class ArquitecteController extends Controller
             'nom' => "required|unique:arquitectes|max:255",
             'data_naix' => 'date'
         ];
-        dd($request->user());
+
         return $this->dbActionBasic(null, Arquitecte::class, $request, "createOrFail", $regles);
 
     }
@@ -54,14 +53,17 @@ class ArquitecteController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Arquitecte $arquitecte): View
+    public function find(string $str)
     {
-        $arquitecte = Arquitecte::find($arquitecte);
+        $data = Arquitecte::where('nom', 'LIKE', '%' . $str . '%')
+            ->orWhere('descripcio', 'LIKE', '%' . $str . '%')
+            ->orWhere('id', 'LIKE','%'. $str. '%')
+            ->orWhere('data_naix', 'LIKE','%'. $str. '%')
+            ->paginate(10);
 
-        return view('arquitectes.editar', ['arquitecte' => $arquitecte]);
+        return response()->json([
+            'data' => $data
+            ]);
     }
 
     /**
@@ -69,11 +71,12 @@ class ArquitecteController extends Controller
      */
     public function update(Request $request, String $id): JsonResponse
     {
-        $regles = [
-        'nom' => "required|unique:arquitectes|max:255",
-        'data_naix' => 'date'
-    ];
-        return $this->dbActionBasic($id, Arquitecte::class, $request, "updateOrFail", $regles);
+            $regles = [
+                'nom' => "required|unique:arquitectes,nom,$id|max:255",
+                'data_naix' => 'date'
+            ];
+
+            return $this->dbActionBasic($id, Arquitecte::class, $request, "updateOrFail", $regles);
     }
 
     /**
