@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\LoginController;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -37,6 +38,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $loginController = new LoginController();
+        $response = $loginController->login($request);
+
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
@@ -45,21 +49,19 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
 
-//        if($request->header("Authorization")){
-//            $key = explode(' ', $request->header('Authorization'));
-//            $token = $key[1];
-//            $user = User::where('api_token', $token)->first();
-//            if($user){
-//                try{
-//                    $user->api_token = null;
-//                    $user->save();
-//                }catch (Exception $e){
-//                    Log::error('Error al actualizar el token de usuario: ' . $e->getMessage());
-//                }
-//            }
-//        }
+        $user = User::where('email', $request->user()->email)->first();
+
+        if($user){
+            try{
+                $user->api_token = null;
+                $user->save();
+            }catch (Exception $e){
+                Log::error('Error al actualizar el token de usuario: ' . $e->getMessage());
+            }
+        }
+
+        Auth::guard('web')->logout();
 
         $request->session()->invalidate();
 

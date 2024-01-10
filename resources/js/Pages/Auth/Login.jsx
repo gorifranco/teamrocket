@@ -24,11 +24,8 @@ export default function Login({status, canResetPassword}) {
         e.preventDefault();
 
         post(route('login'));
+
     };
-
-    function apiLogin () {
-
-    }
 
     return (
         <GuestLayout>

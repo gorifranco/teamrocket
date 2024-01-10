@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
-    public function login(Request $request)
+    public function login(Request $request): JsonResponse
     {
         $user = User::where('email', $request->input('email'))->first();
         if($user && Hash::check($request->input('password'), $user->password)){
@@ -20,5 +21,9 @@ class LoginController extends Controller
         }else{
             return response()->json(['status' => 'fail'],401);
         }
+    }
+
+    public function logout(Request $request){
+
     }
 }
