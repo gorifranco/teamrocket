@@ -22,9 +22,9 @@ class ArquitecteController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+    public function create()
     {
-        return view('arquitectes.crear');
+
     }
 
     /**
@@ -71,13 +71,12 @@ class ArquitecteController extends Controller
      */
     public function update(Request $request, String $id): JsonResponse
     {
-        $regles = [
-            'nom' => "required|unique:arquitectes,nom,$id|max:255",
-            'data_naix' => 'date'
-    ];
+            $regles = [
+                'nom' => "required|unique:arquitectes,nom,$id|max:255",
+                'data_naix' => 'date'
+            ];
 
-
-        return $this->dbActionBasic($id, Arquitecte::class, $request, "updateOrFail", $regles);
+            return $this->dbActionBasic($id, Arquitecte::class, $request, "updateOrFail", $regles);
     }
 
     /**

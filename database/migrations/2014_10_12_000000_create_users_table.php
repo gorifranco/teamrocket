@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->string("DNI")->nullable();
             $table->string("telefon")->nullable();
             $table->enum('tipusUsuari', ['administrador', 'gestor', 'usuari'])->default('usuari');
+            $table->string("api_token", 64)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
