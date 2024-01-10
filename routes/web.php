@@ -29,18 +29,10 @@ Route::get('/', function () {
 Route::group(['middleware' => 'auth'], function() {
     Route::inertia('/dashboard', 'Dashboard')->name('dashboard');
     Route::inertia("/arquitectes", "Arquitectes")->name('arquitectes');
+    Route::inertia("/serveis", "Serveis")->name('serveis');
+    Route::inertia("/modalitats", "Modalitats")->name('modalitats');
+    Route::inertia("/tipus_espais", "Tipus_espais")->name('tipus_espais');
 });
-
-
-
-Route::get('/modalitats', function (){
-    return Inertia::render("Modalitats");
-})->name('modalitats');
-
-Route::get('/tipus_espais', function (){
-    return Inertia::render("Tipus_espais");
-})->name('tipus_espais');
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -37,15 +37,38 @@ Route::post('/login', [LoginController::class, 'login']);
 
 
 //Guest routes
+Route::apiResource("arquitectes", ArquitecteController::class)->only("index", "show");
+Route::apiResource('audios', AudioController::class)->only(['index', 'show']);
+Route::apiResource('comentaris', ComentariController::class)->only(['index', 'show']);
+Route::apiResource('dates-reformes', DataReformaController::class)->only(['index', 'show']);
+Route::apiResource('espais', EspaiController::class)->only(['index', 'show']);
+Route::apiResource('hores-actives', HoraActivaController::class)->only(['index', 'show']);
+Route::apiResource('illes', IllaController::class)->only(['index', 'show']);
+Route::apiResource('imatges', ImatgeController::class)->only(['index', 'show']);
+Route::apiResource('modalitats', ModalitatController::class)->only(['index', 'show']);
+Route::apiResource('municipis', MunicipiController::class)->only(['index', 'show']);
+Route::apiResource('punts-interes', PuntInteresController::class)->only(['index', 'show']);
+Route::apiResource('serveis', ServeiController::class)->only(['index', 'show']);
+Route::apiResource('tipus_espais', TipusEspaiController::class)->only(['index', 'show']);
+Route::apiResource('visites', VisitaController::class)->only(['index', 'show']);
+Route::apiResource('zones', ZonaController::class)->only(['index', 'show']);
 
-Route::apiResource("arquitectes", ArquitecteController::class)
-    ->only("index", "show");
 
 
 Route::middleware(['apiMiddleware'])->group(function () {
     Route::apiResource("arquitectes", ArquitecteController::class)
         ->only("store", "destroy", "update")
         ->middleware("tipusUsuari:administrador,gestor");
+    Route::apiResource("tipus_espais", TipusEspaiController::class)
+        ->only("store", "destroy", "update")
+        ->middleware("tipusUsuari:administrador,gestor");
+    Route::apiResource("serveis", ServeiController::class)
+        ->only("store", "destroy", "update")
+        ->middleware("tipusUsuari:administrador,gestor");
+    Route::apiResource("modalitats", ModalitatController::class)
+        ->only("store", "destroy", "update")
+        ->middleware("tipusUsuari:administrador,gestor");
+
 
     Route::apiResources([
 //        'arquitectes' => ArquitecteController::class,
@@ -56,11 +79,11 @@ Route::middleware(['apiMiddleware'])->group(function () {
         'hores-actives' => HoraActivaController::class,
         'illes' => IllaController::class,
         'imatges' => ImatgeController::class,
-        'modalitats' => ModalitatController::class,
+//        'modalitats' => ModalitatController::class,
         'municipis' => MunicipiController::class,
         'punts-interes' => PuntInteresController::class,
-        'serveis' => ServeiController::class,
-        'tipus_espais' => TipusEspaiController::class,
+//        'serveis' => ServeiController::class,
+//        'tipus_espais' => TipusEspaiController::class,
         'visites' => VisitaController::class,
         'zones' => ZonaController::class
     ]);
