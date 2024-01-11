@@ -62,4 +62,9 @@ class Espai extends Model
     {
         return $this->belongsTo(Comentari::class, "fk_espai");
     }
+
+    public function gestor(): HasOne
+    {
+        return $this->hasOne(User::class, "fk_gestor");
+    }
 }

@@ -69,7 +69,10 @@ Route::middleware(['apiMiddleware'])->group(function () {
     Route::apiResource("modalitats", ModalitatController::class)
         ->only("store", "destroy", "update")
         ->middleware("tipusUsuari:administrador,gestor");
-
+    Route::get("/espais_per_gestor", [EspaiController::class, "espais_per_gestor"])
+        ->middleware("tipusUsuari:gestor");
+    Route::get("/espais_per_gestor/find/{cerca}", [EspaiController::class, "espais_per_gestor_find"])
+        ->middleware("tipusUsuari:gestor");
 
     Route::apiResources([
 //        'arquitectes' => ArquitecteController::class,
@@ -78,7 +81,7 @@ Route::middleware(['apiMiddleware'])->group(function () {
         'dates-reformes' => DataReformaController::class,
         'espais' => EspaiController::class,
         'hores-actives' => HoraActivaController::class,
-        'illes' => IllaController::class,
+//        'illes' => IllaController::class,
         'imatges' => ImatgeController::class,
 //        'modalitats' => ModalitatController::class,
 //        'municipis' => MunicipiController::class,
@@ -86,10 +89,12 @@ Route::middleware(['apiMiddleware'])->group(function () {
 //        'serveis' => ServeiController::class,
 //        'tipus_espais' => TipusEspaiController::class,
         'visites' => VisitaController::class,
-        'zones' => ZonaController::class
+//        'zones' => ZonaController::class
     ]);
 });
 
 Route::get('/arquitectes/find/{cerca}', [ArquitecteController::class, 'find']);
 Route::get('/modalitats/find/{cerca}', [ModalitatController::class, 'find']);
 Route::get('/tipus_espais/find/{cerca}', [TipusEspaiController::class, 'find']);
+
+
