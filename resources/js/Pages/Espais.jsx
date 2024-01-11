@@ -13,7 +13,15 @@ import PrimaryButton from "@/Components/PrimaryButton.jsx";
 export default function index({auth}) {
     const [currentPage, setCurrentPage] = useState(1);
     const [formCrearVisible, setFormHidden] = useState(false)
-    const [formData, setFormData] = useState([]);
+    const [formData, setFormData] =
+        useState({
+            nom: '',
+            descripcio: '',
+            direccio: '',
+            web: '',
+
+
+        });
     const [cercadorValue, setCercadorValue] = useState("")
     const cols = {
         activat: 'boolean',
@@ -23,10 +31,10 @@ export default function index({auth}) {
     }
 
     const [errors, setErrors] = useState({
-        activat: 'boolean',
-        nom: 'text',
-        descripcio: 'text',
-        web: "text",
+        activat: '',
+        nom: '',
+        descripcio: '',
+        web: "",
     });
 
     const [tableData, setTableData] = useState({
@@ -50,7 +58,7 @@ export default function index({auth}) {
 
     }
 
-    function handleEdit(){
+    function handleEdit($id){
 
         //ruta al formulari
 
@@ -67,7 +75,6 @@ export default function index({auth}) {
 
     const fetchData = async (currentPage) => {
         try {
-
             const response = await axios.get(`/api/espais_per_gestor?page=${currentPage}`, {
                 headers: {
                     'Authorization': `Bearer ${auth.user.api_token}`,
@@ -75,9 +82,11 @@ export default function index({auth}) {
             });
 
             setTableData(response.data.data);
+            console.log(response)
         } catch (error) {
             console.error('Error al obtener los datos:', error);
         }
+
     };
 
     const fetchDataFiltrada = async (currentPage, filter) => {
@@ -158,32 +167,48 @@ export default function index({auth}) {
                             onChange={handleChange}/>
                         <InputError message={(errors !== undefined)?errors.nom:""}/>
                     </div>
-                    <div className="relative max-w-sm">
-                        <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                            <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                 xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                <path
-                                    d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-                            </svg>
-                        </div>
-                        <input type="date"
-                               className="mt-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                               placeholder="Select date" name={"data_naix"}
-                               value={formData.data_naix}
-                               onChange={handleChange}/>
-                        <InputError message={(errors !== undefined)?errors.data_naix:""}/>
-                    </div>
-                    <div className="mb-6 mt-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="desc">
                             Descripció
                         </label>
-                        <textarea
-                            className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                            name={"descripcio"} id="descripcio" rows={4} placeholder="Descripció" required={true}
-                            value={formData.descripcio}
-                            onChange={handleChange}/>
+                        <textarea rows={7} className={"block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}
+                        placeholder={"Descripció"}
+                        >
+                        </textarea>
                         <InputError message={(errors !== undefined)?errors.descripcio:""}/>
                     </div>
+
+                    <div className={"mt-4"}>
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="direccio">
+                            Direcció
+                        </label>
+                        <input
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="direccio" type="text" placeholder="Direcció" name={"direccio"} required={true}
+                            value={formData.direccio}
+                            onChange={handleChange}/>
+                        <InputError message={(errors !== undefined)?errors.direccio:""}/>
+                    </div>
+
+                    <div className={"mt-4"}>
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="web">
+                            Web
+                        </label>
+                        <input
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="web" type="text" placeholder="Web" name={"web"} required={true}
+                            value={formData.web}
+                            onChange={handleChange}/>
+                        <InputError message={(errors !== undefined)?errors.web:""}/>
+                    </div>
+
+                    <div className={"mt-4"}>
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="web">
+                            Arquitecte
+                        </label>
+
+                    </div>
+
                     <div className="flex items-center justify-center">
                     </div>
 

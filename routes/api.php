@@ -53,6 +53,7 @@ Route::apiResource('serveis', ServeiController::class)->only(['index', 'show']);
 Route::apiResource('tipus_espais', TipusEspaiController::class)->only(['index', 'show']);
 Route::apiResource('visites', VisitaController::class)->only(['index', 'show']);
 Route::apiResource('zones', ZonaController::class)->only(['index', 'show']);
+Route::get("arquitectes_tots", [ArquitecteController::class, "tots"]);
 
 
 

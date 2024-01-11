@@ -7,6 +7,7 @@ use App\Models\Espai;
 use App\Models\HoraActiva;
 use App\Models\Municipi;
 use App\Models\TipusEspai;
+use App\Models\User;
 use App\Models\Zona;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
@@ -26,7 +27,11 @@ class EspaiController extends Controller
 
     public function espais_per_gestor(Request $request): JsonResponse
     {
-        $id_gestor = $request->user()->id;
+        $key = explode(' ', $request->header('Authorization'));
+        $token = $key[1];
+        $user = User::where('api_token', $token)->first();
+
+        $id_gestor = $user->id;
 
         $data = Espai::where("fk_gestor", $id_gestor)->paginate(10);
 
@@ -38,7 +43,12 @@ class EspaiController extends Controller
 
     public function espais_per_gestor_find(request $request, string $str): JsonResponse
     {
-        $id_gestor = $request->user()->id;
+        $key = explode(' ', $request->header('Authorization'));
+        $token = $key[1];
+        $user = User::where('api_token', $token)->first();
+
+        $id_gestor = $user->id;
+
         $data = Espai::where('fk_gestor', $id_gestor)
             ->where(function ($query) use ($str) {
                 $query->where('nom', 'LIKE', '%' . $str . '%')
