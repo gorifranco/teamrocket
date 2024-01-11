@@ -14,7 +14,7 @@ class ServeiController extends Controller
     public function index(): JsonResponse
     {
         return response()->json([
-            'serveis' => Servei::all()
+            'data' => Servei::paginate(10)
         ]);
     }
 
@@ -32,7 +32,7 @@ class ServeiController extends Controller
     public function store(Request $request): JsonResponse
     {
         $regles = [
-            'nom' => 'required|unique:serveis.nom'
+            'nom' => 'required|unique:serveis,nom'
         ];
         return $this->dbActionBasic(null, Servei::class, $request, "createOrFail", $regles);
     }
@@ -48,7 +48,7 @@ class ServeiController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id): JsonResponse
+    public function edit(string $id)
     {
 
     }
@@ -59,7 +59,7 @@ class ServeiController extends Controller
     public function update(Request $request, string $id): JsonResponse
     {
         $regles = [
-            'nom' => 'required|unique:serveis.nom'
+            'nom' => "required|unique:serveis,nom,$id"
         ];
         return $this->dbActionBasic($id, Servei::class, $request, "updateOrFail", $regles);
     }

@@ -37,7 +37,7 @@ export default function index({auth}) {
     async function handleSubmit(event) {
         event.preventDefault()
 
-        axios.post('/api/tipus_espais', formData, {
+        axios.post('/api/serveis', formData, {
             headers: {
                 'Authorization': `Bearer ${auth.user.api_token}`,
             }
@@ -65,16 +65,16 @@ export default function index({auth}) {
     }
 
     function handleEdit(dades){
-        axios.put("api/tipus_espais/" + dades.id, dades, {
+        axios.put("api/serveis/" + dades.id, dades,{
             headers: {
                 'Authorization': `Bearer ${auth.user.api_token}`,
             }
         })
             .then(response => {
-                alert("Tipus d'espai guardat amb èxit")
+                alert("Modalitat guardat amb èxit")
                 fetchData(currentPage)
             }).catch((e) => {
-            alert("Error guardant el tipus d'espai:\n" +
+            alert("Error guardant la modalitat:\n" +
                 e)
         })
     }
@@ -90,7 +90,7 @@ export default function index({auth}) {
 
     const fetchData = async (currentPage) => {
         try {
-            const response = await axios.get(`/api/tipus_espais?page=${currentPage}`, {
+            const response = await axios.get(`/api/serveis?page=${currentPage}`,{
                 headers: {
                     'Authorization': `Bearer ${auth.user.api_token}`,
                 }
@@ -103,7 +103,7 @@ export default function index({auth}) {
 
     const fetchDataFiltrada = async (currentPage, filter) => {
         try {
-            const response = await axios.get(`/api/tipus_espais/find/${filter}?page=${currentPage}`, {
+            const response = await axios.get(`/api/serveis/find/${filter}?page=${currentPage}`, {
                 headers: {
                     'Authorization': `Bearer ${auth.user.api_token}`,
                 }
@@ -140,19 +140,19 @@ export default function index({auth}) {
         }
     }
 
-    function handleDelete(tipusEspai) {
-        if (confirm("Segur que vols borrar el tipus d'espai " + tipusEspai + "?")) {
-            axios.delete("api/tipus_espais/" + tipusEspai, {
+    function handleDelete(modalitat) {
+        if (confirm("Segur que vols borrar la modalitat " + modalitat + "?")) {
+            axios.delete("api/serveis/" + modalitat,{
                 headers: {
                     'Authorization': `Bearer ${auth.user.api_token}`,
                 }
             })
                 .then(() => {
-                    alert("Tipus d'espai borrat amb èxit")
+                    alert("Modalitat borrada amb èxit")
                     fetchData(currentPage)
                 })
                 .catch(() => {
-                    alert("El tipus d'espai no s'ha pogut borrar")
+                    alert("La modalitat no s'ha pogut borrar")
                 })
         }
     }
@@ -160,13 +160,13 @@ export default function index({auth}) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Tipus d'espais</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Serveis</h2>}
             plusButton={true}
             onclickPlusButton={obrirFormCrear}
         >
-            <Head title="Modalitats"/>
+            <Head title="serveis"/>
             {formCrearVisible &&
-                (<Form handleSubmit={handleSubmit} titol={"Crear un tipus d'espai"} className={"mt-5"}>
+                (<Form handleSubmit={handleSubmit} titol={"Crear una modalitat"} className={"mt-5"}>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nom">
                             Nom
@@ -185,7 +185,7 @@ export default function index({auth}) {
                         <div
                             className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 font-medium"
                             role="alert">
-                            Tipus d'espai creat!
+                            Modalitat creada!
                         </div>
                     )}
                 </Form>)
@@ -209,7 +209,6 @@ export default function index({auth}) {
                     </Pagination>
                 </>
             )}
-
         </AuthenticatedLayout>
     )
 }

@@ -13,19 +13,36 @@ import PrimaryButton from "@/Components/PrimaryButton.jsx";
 export default function index({auth}) {
     const [currentPage, setCurrentPage] = useState(1);
     const [formCrearVisible, setFormHidden] = useState(false)
-    const [formData, setFormData] = useState([]);
+    const [formData, setFormData] =
+        useState({
+            nom: '',
+            descripcio: '',
+            direccio: '',
+            web: '',
+
+
+        });
     const [cercadorValue, setCercadorValue] = useState("")
     const cols = {
+        activat: 'boolean',
         nom: 'text',
+        descripcio: 'text',
+        web: "text",
     }
 
     const [errors, setErrors] = useState({
+        activat: '',
         nom: '',
+        descripcio: '',
+        web: "",
     });
 
     const [tableData, setTableData] = useState({
             data: [{
-                nom: "",
+                activat: '',
+                nom: '',
+                descripcio: '',
+                web: "",
             }]
         }
     )
@@ -37,46 +54,14 @@ export default function index({auth}) {
     async function handleSubmit(event) {
         event.preventDefault()
 
-        axios.post('/api/tipus_espais', formData, {
-            headers: {
-                'Authorization': `Bearer ${auth.user.api_token}`,
-            }
-        })
-            .then(() => {
-                setFormData({
-                    nom: '',
-                });
-
-                setErrors({
-                    nom: '',
-                })
-                setSuccessMessage(true);
-                fetchData(currentPage)
-            })
-            .catch(function (error) {
-                if (error.response) {
-                    setErrors(error.response.data.errors);
-                    console.log(error.response.data.errors); // Acceder a los errores de validación
-                } else {
-                    console.log('Error:', error.message);
-                }
-            });
+        //ruta al formulari per crear un espai
 
     }
 
-    function handleEdit(dades){
-        axios.put("api/tipus_espais/" + dades.id, dades, {
-            headers: {
-                'Authorization': `Bearer ${auth.user.api_token}`,
-            }
-        })
-            .then(response => {
-                alert("Tipus d'espai guardat amb èxit")
-                fetchData(currentPage)
-            }).catch((e) => {
-            alert("Error guardant el tipus d'espai:\n" +
-                e)
-        })
+    function handleEdit($id){
+
+        //ruta al formulari
+
     }
 
     function handleChange(e) {
@@ -90,23 +75,26 @@ export default function index({auth}) {
 
     const fetchData = async (currentPage) => {
         try {
-            const response = await axios.get(`/api/tipus_espais?page=${currentPage}`, {
+            const response = await axios.get(`/api/espais_per_gestor?page=${currentPage}`, {
                 headers: {
                     'Authorization': `Bearer ${auth.user.api_token}`,
-                }
+                },
             });
+
             setTableData(response.data.data);
+            console.log(response)
         } catch (error) {
             console.error('Error al obtener los datos:', error);
         }
+
     };
 
     const fetchDataFiltrada = async (currentPage, filter) => {
         try {
-            const response = await axios.get(`/api/tipus_espais/find/${filter}?page=${currentPage}`, {
+            const response = await axios.get(`/api/espais_per_gestor/find/${filter}?page=${currentPage}`,{
                 headers: {
                     'Authorization': `Bearer ${auth.user.api_token}`,
-                }
+                },
             });
             setTableData(response.data.data);
         } catch (error) {
@@ -140,19 +128,20 @@ export default function index({auth}) {
         }
     }
 
-    function handleDelete(tipusEspai) {
-        if (confirm("Segur que vols borrar el tipus d'espai " + tipusEspai + "?")) {
-            axios.delete("api/tipus_espais/" + tipusEspai, {
+    function handleDelete(espai) {
+        console.log(espai)
+        if (confirm("Segur que vols borrar l'espai " + espai + "?")) {
+            axios.delete("api/espais/" + espai,{
                 headers: {
                     'Authorization': `Bearer ${auth.user.api_token}`,
-                }
+                },
             })
                 .then(() => {
-                    alert("Tipus d'espai borrat amb èxit")
+                    alert("Espai borrat amb èxit")
                     fetchData(currentPage)
                 })
                 .catch(() => {
-                    alert("El tipus d'espai no s'ha pogut borrar")
+                    alert("L'espai no s'ha pogut borrar")
                 })
         }
     }
@@ -160,13 +149,13 @@ export default function index({auth}) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Tipus d'espais</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Els meus espais</h2>}
             plusButton={true}
             onclickPlusButton={obrirFormCrear}
         >
-            <Head title="Modalitats"/>
+            <Head title="Els meus espais"/>
             {formCrearVisible &&
-                (<Form handleSubmit={handleSubmit} titol={"Crear un tipus d'espai"} className={"mt-5"}>
+                (<Form handleSubmit={handleSubmit} titol={"Crear un espai"} className={"mt-5"}>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nom">
                             Nom
@@ -176,8 +165,50 @@ export default function index({auth}) {
                             id="nom" type="text" placeholder="Nom" name={"nom"} required={true}
                             value={formData.nom}
                             onChange={handleChange}/>
-                        <InputError message={errors.nom}/>
+                        <InputError message={(errors !== undefined)?errors.nom:""}/>
                     </div>
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="desc">
+                            Descripció
+                        </label>
+                        <textarea rows={7} className={"block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}
+                        placeholder={"Descripció"}
+                        >
+                        </textarea>
+                        <InputError message={(errors !== undefined)?errors.descripcio:""}/>
+                    </div>
+
+                    <div className={"mt-4"}>
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="direccio">
+                            Direcció
+                        </label>
+                        <input
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="direccio" type="text" placeholder="Direcció" name={"direccio"} required={true}
+                            value={formData.direccio}
+                            onChange={handleChange}/>
+                        <InputError message={(errors !== undefined)?errors.direccio:""}/>
+                    </div>
+
+                    <div className={"mt-4"}>
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="web">
+                            Web
+                        </label>
+                        <input
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="web" type="text" placeholder="Web" name={"web"} required={true}
+                            value={formData.web}
+                            onChange={handleChange}/>
+                        <InputError message={(errors !== undefined)?errors.web:""}/>
+                    </div>
+
+                    <div className={"mt-4"}>
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="web">
+                            Arquitecte
+                        </label>
+
+                    </div>
+
                     <div className="flex items-center justify-center">
                     </div>
 
@@ -185,7 +216,7 @@ export default function index({auth}) {
                         <div
                             className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 font-medium"
                             role="alert">
-                            Tipus d'espai creat!
+                            Arquitecte creat!
                         </div>
                     )}
                 </Form>)
@@ -199,17 +230,12 @@ export default function index({auth}) {
                     Cercar
                 </PrimaryButton>
             </div>
-            {tableData !== undefined && (
-                <>
-                    <TableGori data={tableData} cols={cols} onClickDelete={handleDelete} onEdit={handleEdit}>
-                    </TableGori>
-                    <Pagination
-                        links={tableData.links}
-                        onPageChange={handlePageChange}>
-                    </Pagination>
-                </>
-            )}
-
+            <TableGori data={tableData} cols={cols} onClickDelete={handleDelete} onEdit={handleEdit}>
+            </TableGori>
+            <Pagination
+                links={tableData.links}
+                onPageChange={handlePageChange}>
+            </Pagination>
         </AuthenticatedLayout>
     )
 }

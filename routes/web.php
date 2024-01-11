@@ -25,23 +25,15 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/arquitectes', function (){
-    return Inertia::render("Arquitectes");
-})->name('arquitectes');
-
-Route::get('/modalitats', function (){
-    return Inertia::render("Modalitats");
-})->name('modalitats');
-
-Route::get('/tipus_espais', function (){
-    return Inertia::render("Tipus_espais");
-})->name('tipus_espais');
-
-
+Route::group(['middleware' => 'auth'], function() {
+    Route::inertia('/dashboard', 'Dashboard')->name('dashboard');
+    Route::inertia("/arquitectes", "Arquitectes")->name('arquitectes');
+    Route::inertia("/serveis", "Serveis")->name('serveis');
+    Route::inertia("/modalitats", "Modalitats")->name('modalitats');
+    Route::inertia("/tipus_espais", "Tipus_espais")->name('tipus_espais');
+    Route::inertia("/espais", "Espais")->name('espais_per_gestor');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -24,6 +24,7 @@ export default function Login({status, canResetPassword}) {
         e.preventDefault();
 
         post(route('login'));
+
     };
 
     return (

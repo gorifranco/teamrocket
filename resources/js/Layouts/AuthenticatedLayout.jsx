@@ -27,6 +27,11 @@ export default function Authenticated({user, header, plusButton = false, onclick
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
                                 </NavLink>
+                                {user.tipusUsuari === "gestor" && (
+                                    <NavLink href={route('espais_per_gestor')} active={route().current('espais_per_gestor')}>
+                                        Els meus espais
+                                    </NavLink>)
+                                }
                                 <NavLink href={route('arquitectes')} active={route().current('arquitectes')}>
                                     Arquitectes
                                 </NavLink>
@@ -38,10 +43,10 @@ export default function Authenticated({user, header, plusButton = false, onclick
                                         <Dropdown.Trigger>
                                             Altres
                                         </Dropdown.Trigger>
-
-                                <Dropdown.Content>
+                                <Dropdown.Content align={"left"}>
                                     <Dropdown.Link href={route('modalitats')}>Modalitats</Dropdown.Link>
                                     <Dropdown.Link href={route('tipus_espais')}>Tipus d'espais</Dropdown.Link>
+                                    <Dropdown.Link href={route('serveis')}>Serveis</Dropdown.Link>
                                 </Dropdown.Content>
                             </Dropdown>
                         </div>

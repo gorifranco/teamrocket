@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->string("email")->nullable();
             $table->string("telefon");
             $table->boolean("destacada")->default(false);
+            $table->boolean("activat")->default(false);
             $table->timestamps();
         });
     }
