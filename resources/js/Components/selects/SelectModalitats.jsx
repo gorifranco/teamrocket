@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 
-export default function ModalitatsSelect({id, className}){
+export default function ModalitatsSelect({id, className, key, name, handleChange}){
 
     const [valors, setValors] = useState([])
 
@@ -20,9 +20,11 @@ export default function ModalitatsSelect({id, className}){
 
     return (
         <>
-            <select id={id} className={"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 " +
+            <select key={key} id={id} className={"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 " +
                 "focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" +
-                " dark:focus:ring-blue-500 dark:focus:border-blue-500 " + className}>
+                " dark:focus:ring-blue-500 dark:focus:border-blue-500 " + className}
+            name={name}
+                    onChange={(e) => handleChange(e)}>
                 <option key={-1} value={""}>Selecciona una modalitat</option>
                 {valors.map((modalitat) => (
                     <option key={modalitat.id} value={modalitat.id}>

@@ -27,7 +27,12 @@ export default function index({auth}) {
             direccio: '',
             web: '',
             telefon: '',
-            any_construccio: ''
+            any_construccio: '',
+            grau_acces: '',
+            tipusEspai: '',
+            municipi: '',
+            modalitats: [],
+            arquitectes: [],
         });
 
     const [cercadorValue, setCercadorValue] = useState("")
@@ -44,7 +49,12 @@ export default function index({auth}) {
         descripcio: '',
         web: "",
         telefon: '',
-        any_construccio: ''
+        any_construccio: '',
+        grau_acces: '',
+        tipusEspai: '',
+        municipi: '',
+        modalitats: [],
+        arquitectes: [],
     });
 
     const [tableData, setTableData] = useState({
@@ -81,7 +91,7 @@ export default function index({auth}) {
         let arq =[];
 
         for (let i = 0; i < numeroArquitectes; i++) {
-            arq.push(<ArquitectesSelect className={"mt-2"}></ArquitectesSelect>)
+            arq.push(<ArquitectesSelect key={"arq" + i} className={"mt-2"} name={"arquitectes " + i} onChange={handleChange}></ArquitectesSelect>)
         }
         return arq;
     }
@@ -90,7 +100,7 @@ export default function index({auth}) {
         let mod =[];
 
         for (let i = 0; i < numeroModalitats; i++) {
-            mod.push(<ModalitatsSelect className={"mt-2"}></ModalitatsSelect>)
+            mod.push(<ModalitatsSelect name={"modalitats " + i} key={"mod" + i} className={"mt-2"} onChange={handleChange}></ModalitatsSelect>)
         }
         return mod;
     }
@@ -100,6 +110,7 @@ export default function index({auth}) {
     async function handleSubmit(event) {
         event.preventDefault()
 
+        console.log(formData)
 
     }
 
@@ -110,11 +121,29 @@ export default function index({auth}) {
     }
 
     function handleChange(e) {
-        const {name, value} = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
+        const { name, value } = e.target;
+
+        if (!name.includes(" ")) {
+            setFormData({
+                ...formData,
+                [name]: value,
+            });
+        } else {
+            console.log("a1")
+            let [fieldName, index] = name.split(" ");
+            index = parseInt(index, 10);
+
+            setFormData((prevFormData) => {
+                const newArrayField = [...prevFormData[fieldName]];
+                newArrayField[index] = value;
+
+                return {
+                    ...prevFormData,
+                    [fieldName]: newArrayField,
+                };
+            });
+        }
+        console.log(formData)
     }
 
 
@@ -252,7 +281,7 @@ export default function index({auth}) {
                         </label>
                         <input
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="any" type="number" placeholder="Any de construcció" name={"any"} required={true}
+                            id="any" type="number" placeholder="Any de construcció" name={"any_construccio"} required={true}
                             value={formData.any_construccio}
                             onChange={handleChange}/>
                         <InputError message={(errors !== undefined)?errors.any_construccio:""}/>
@@ -275,9 +304,10 @@ export default function index({auth}) {
                             Municipi
                         </label>
                         <MunicipisSelect/>
+                        <InputError message={(errors !== undefined)?errors.municipi:""}/>
                     </div>
 
-                    <div className={"mt-4"}>
+                    <div className={"mt-4"} key={"divx"}>
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={"arquitecte"}>
                             Arquitectes
                         </label>
@@ -289,6 +319,7 @@ export default function index({auth}) {
                             {numeroArquitectes>1 && (
                                 <MenosButton className={"mt-2 bg-gray-400 hover:bg-gray-500"} color={"#222222"} onClick={llevarArquitecte}></MenosButton>
                             )}
+                            <InputError message={(errors !== undefined)?errors.arquitectes:""}/>
                         </div>
                     </div>
 
@@ -304,6 +335,7 @@ export default function index({auth}) {
                             {numeroModalitats>1 && (
                                 <MenosButton className={"mt-2 bg-gray-400 hover:bg-gray-500"} color={"#222222"} onClick={llevarModalitat}></MenosButton>
                             )}
+                            <InputError message={(errors !== undefined)?errors.modalitats:""}/>
                         </div>
                     </div>
 
@@ -312,6 +344,7 @@ export default function index({auth}) {
                             Tipus d'espai
                         </label>
                         <TipusEspaiSelect/>
+                        <InputError message={(errors !== undefined)?errors.tipusEspai:""}/>
                     </div>
 
                     <div className={"mt-4 mb-6"}>
@@ -319,6 +352,7 @@ export default function index({auth}) {
                             Grau d'accessibilitat
                         </label>
                         <GrauAccesSelect/>
+                        <InputError message={(errors !== undefined)?errors.grau_acces:""}/>
                     </div>
 
                     <div className="flex items-center justify-center">

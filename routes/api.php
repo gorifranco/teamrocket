@@ -78,21 +78,13 @@ Route::middleware(['apiMiddleware'])->group(function () {
         ->middleware("tipusUsuari:gestor");
 
     Route::apiResources([
-//        'arquitectes' => ArquitecteController::class,
         'audios' => AudioController::class,
         'comentaris' => ComentariController::class,
         'dates-reformes' => DataReformaController::class,
-        'espais' => EspaiController::class,
         'hores-actives' => HoraActivaController::class,
-//        'illes' => IllaController::class,
         'imatges' => ImatgeController::class,
-//        'modalitats' => ModalitatController::class,
-//        'municipis' => MunicipiController::class,
         'punts-interes' => PuntInteresController::class,
-//        'serveis' => ServeiController::class,
-//        'tipus_espais' => TipusEspaiController::class,
         'visites' => VisitaController::class,
-//        'zones' => ZonaController::class
     ]);
 });
 
