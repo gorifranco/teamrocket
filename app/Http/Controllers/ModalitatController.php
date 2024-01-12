@@ -18,6 +18,13 @@ class ModalitatController extends Controller
         ]);
     }
 
+    public function tots(): JsonResponse
+    {
+        return response()->json([
+            'data' => Modalitat::all(),
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

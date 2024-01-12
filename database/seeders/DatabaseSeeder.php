@@ -20,5 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(serveis_seeder::class);
         $this->call(tipusEspais_seeder::class);
         $this->call(Users_seeder::class);
+        $this->call(Arquitectes_seeder::class);
     }
 }

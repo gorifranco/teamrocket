@@ -14,7 +14,7 @@ class MunicipiController extends Controller
     public function index(): JsonResponse
     {
         return response()->json([
-            'municipis' => Municipi::all()
+            'data' => Municipi::all()
         ]);
     }
 

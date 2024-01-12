@@ -19,6 +19,12 @@ class ArquitecteController extends Controller
         ]);
     }
 
+    public function tots(){
+        return response()->json([
+            'data' => Arquitecte::all()
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -33,7 +39,7 @@ class ArquitecteController extends Controller
     public function store(Request $request): JsonResponse
     {
         $regles = [
-            'nom' => "required|unique:arquitectes|max:255",
+            'nom' => "required|unique:arquitectes,nom|max:500",
             'data_naix' => 'date'
         ];
 
@@ -72,7 +78,7 @@ class ArquitecteController extends Controller
     public function update(Request $request, String $id): JsonResponse
     {
             $regles = [
-                'nom' => "required|unique:arquitectes,nom,$id|max:255",
+                'nom' => "required|unique:arquitectes,nom,$id|max:500",
                 'data_naix' => 'date'
             ];
 

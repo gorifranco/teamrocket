@@ -51,6 +51,7 @@ class EspaiController extends Controller
 
         $data = Espai::where('fk_gestor', $id_gestor)
             ->where(function ($query) use ($str) {
+
                 $query->where('nom', 'LIKE', '%' . $str . '%')
                     ->orWhere('descripcio', 'LIKE', '%' . $str . '%')
                     ->orWhere('id', 'LIKE', '%' . $str . '%');

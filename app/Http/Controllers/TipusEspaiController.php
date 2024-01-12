@@ -27,6 +27,13 @@ class TipusEspaiController extends Controller
         //
     }
 
+    public function tots(): JsonResponse
+    {
+        return response()->json([
+           'data' => TipusEspai::all()
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      */

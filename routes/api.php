@@ -48,12 +48,14 @@ Route::apiResource('illes', IllaController::class)->only(['index', 'show']);
 Route::apiResource('imatges', ImatgeController::class)->only(['index', 'show']);
 Route::apiResource('modalitats', ModalitatController::class)->only(['index', 'show']);
 Route::apiResource('municipis', MunicipiController::class)->only(['index', 'show']);
-Route::apiResource('punts-interes', PuntInteresController::class)->only(['index', 'show']);
+Route::apiResource('punts_interes', PuntInteresController::class)->only(['index', 'show']);
 Route::apiResource('serveis', ServeiController::class)->only(['index', 'show']);
 Route::apiResource('tipus_espais', TipusEspaiController::class)->only(['index', 'show']);
 Route::apiResource('visites', VisitaController::class)->only(['index', 'show']);
 Route::apiResource('zones', ZonaController::class)->only(['index', 'show']);
 Route::get("arquitectes_tots", [ArquitecteController::class, "tots"]);
+Route::get("tipus_espais_tots", [TipusEspaiController::class, "tots"]);
+Route::get("modalitats_tots", [ModalitatController::class, "tots"]);
 
 
 
