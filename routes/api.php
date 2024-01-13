@@ -72,6 +72,9 @@ Route::middleware(['apiMiddleware'])->group(function () {
     Route::apiResource("modalitats", ModalitatController::class)
         ->only("store", "destroy", "update")
         ->middleware("tipusUsuari:administrador,gestor");
+    Route::apiResource("espais", ModalitatController::class)
+        ->only("store", "destroy", "update")
+        ->middleware("tipusUsuari:administrador,gestor");
     Route::get("/espais_per_gestor", [EspaiController::class, "espais_per_gestor"])
         ->middleware("tipusUsuari:gestor");
     Route::get("/espais_per_gestor/find/{cerca}", [EspaiController::class, "espais_per_gestor_find"])

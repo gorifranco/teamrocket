@@ -23,9 +23,9 @@ class Espai extends Model
             "fk_modalitat", "fk_espai");
     }
 
-    public function arquitecte(): HasOne
+    public function arquitectes(): BelongsToMany
     {
-        return $this->hasOne(Arquitecte::class, 'fk_arquitecte');
+        return $this->belongsToMany(Arquitecte::class, "espai_arquitecte", "fk_espai", "fk_arquitecte");
     }
 
     public function reformes(): HasMany

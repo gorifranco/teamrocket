@@ -11,12 +11,6 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('espais', function (Blueprint $table) {
-            $table->unsignedBigInteger('fk_arquitecte')->nullable();
-            $table->foreign('fk_arquitecte')
-                ->references('id')
-                ->on('arquitectes')
-                ->onDelete('CASCADE')
-                ->onUpdate('SET NULL');
 
             $table->unsignedBigInteger("fk_municipi")->nullable();
             $table->foreign("fk_municipi")
@@ -47,7 +41,6 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('espais', function (Blueprint $table) {
-            $table->dropForeign("espais_fk_arquitecte_foreign");
             $table->dropForeign("espais_fk_municipi_foreign");
             $table->dropForeign("espais_fk_tipusEspai_foreign");
             $table->dropForeign("espais_fk_gestor_foreign");

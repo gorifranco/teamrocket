@@ -110,8 +110,53 @@ export default function index({auth}) {
     async function handleSubmit(event) {
         event.preventDefault()
 
-        console.log(formData)
+        axios.post('/api/espais', formData,{
+            headers: {
+                'Authorization': `Bearer ${auth.user.api_token}`,
+            },
+        })
+            .then(() => {
+                setNumeroArquitectes(1)
+                setNumeroModalitats(1)
+                setFormData({
+                    nom: '',
+                    descripcio: '',
+                    direccio: '',
+                    web: '',
+                    telefon: '',
+                    any_construccio: '',
+                    grau_acces: '',
+                    tipusEspai: '',
+                    municipi: '',
+                    modalitats: [],
+                    arquitectes: [],
+                });
 
+                setErrors({
+                    nom: '',
+                    descripcio: '',
+                    direccio: '',
+                    web: '',
+                    telefon: '',
+                    any_construccio: '',
+                    grau_acces: '',
+                    tipusEspai: '',
+                    municipi: '',
+                    modalitats: [],
+                    arquitectes: [],
+                })
+                setSuccessMessage(true);
+                fetchData(currentPage)
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    setErrors(error.response.data.errors);
+                    console.log(error); // Acceder a los errores de validación
+                    alert(error.request.statusText)
+                } else {
+                    console.log('Error:', error.message);
+                }
+            });
     }
 
     function handleEdit($id){
@@ -129,7 +174,6 @@ export default function index({auth}) {
                 [name]: value,
             });
         } else {
-            console.log("a1")
             let [fieldName, index] = name.split(" ");
             index = parseInt(index, 10);
 
@@ -246,6 +290,8 @@ export default function index({auth}) {
                         <textarea rows={7} className={"block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}
                         placeholder={"Descripció"}
                                   required={true}
+                                  onChange={handleChange}
+                                  name={"descripcio"}
                         >
                         </textarea>
                         <InputError message={(errors !== undefined)?errors.descripcio:""}/>
@@ -303,7 +349,7 @@ export default function index({auth}) {
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={"municipi"}>
                             Municipi
                         </label>
-                        <MunicipisSelect/>
+                        <MunicipisSelect onChange={handleChange}/>
                         <InputError message={(errors !== undefined)?errors.municipi:""}/>
                     </div>
 
@@ -343,7 +389,7 @@ export default function index({auth}) {
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={"tipus"}>
                             Tipus d'espai
                         </label>
-                        <TipusEspaiSelect/>
+                        <TipusEspaiSelect onChange={handleChange}/>
                         <InputError message={(errors !== undefined)?errors.tipusEspai:""}/>
                     </div>
 
@@ -351,7 +397,7 @@ export default function index({auth}) {
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={"grau_acces"}>
                             Grau d'accessibilitat
                         </label>
-                        <GrauAccesSelect/>
+                        <GrauAccesSelect onChange={handleChange}/>
                         <InputError message={(errors !== undefined)?errors.grau_acces:""}/>
                     </div>
 

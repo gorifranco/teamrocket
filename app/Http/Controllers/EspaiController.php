@@ -12,6 +12,7 @@ use App\Models\Zona;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class EspaiController extends Controller
 {
@@ -78,20 +79,44 @@ class EspaiController extends Controller
     {
 //        try {
             $regles = [
-                "nom" => "required|unique:espais,nom",
-                "descripció" => 'required',
-                'direccio' => 'required',
-                'any_construccio' => 'required|date',
-                'grau_accessibilitat' => 'required|in:baix,mitj,alt',
-                'web' => 'url',
-                'email' => 'required|email',
-                'fk_arquitecte' => 'integer|min:0',
-                'fk_municipi' => 'required|integer|min:0',
-                'fk_tipusEspai' => 'required|integer|min:0',
-                'fk_gestor' => 'required|integer|min:0',
+//                "nom" => "required|unique:espais,nom",
+//                "descripcio" => 'required',
+//                'direccio' => 'required',
+//                'any_construccio' => 'required|date',
+//                'grau_accessibilitat' => 'required|in:baix,mitj,alt',
+//                'web' => 'url',
+//                'email' => 'required|email',
+//                'fk_municipi' => 'required|integer|min:0',
+//                'fk_tipusEspai' => 'required|integer|min:0',
+//                'fk_gestor' => 'required|integer|min:0',
             ];
+        return response()->json(['status' => 'success','data' => $request],200);
 
-            return $this->dbActionBasic(null, Espai::class, $request, "createOrFail", $regles);
+        $validacio = Validator::make($request->except(["modalitats", "arquitectes"]),$regles);
+        If (!$validacio->fails()) {
+
+            $key = explode(' ', $request->header('Authorization'));
+                $token = $key[1]; // key[0]->Bearer key[1]→token
+            $user = User::where('api_token', $token)->first();
+
+            $espai = new Espai();
+            $espai->nom = $request->nom;
+            $espai->web = $request->web;
+            $espai->direccio = $request->direccio;
+            $espai->descripcio   = $request->descripcio;
+            $espai->fk_tipusEspai = $request->tipusEspai;
+            $espai->fk_municipi = $request->municipi;
+            $espai->email = $request->email;
+            $espai->grau_accessibilitat = $request->grau_accessibilitat;
+            $espai->any_construccio = $request->any_construccio;
+            $espai->fk_gestor = $user->id;
+
+            $espai->save();
+            return response()->json(['status' => 'success','data' => $espai],200);
+        } else {
+            return response()->json([ 'status' => 'error','data'=>$validacio->errors() ], 400);
+        }
+//            return $this->dbActionBasic(null, Espai::class, $request, "createOrFail", $regles);
 
     }
 
