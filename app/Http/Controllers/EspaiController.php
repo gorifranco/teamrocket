@@ -90,7 +90,6 @@ class EspaiController extends Controller
 //                'fk_tipusEspai' => 'required|integer|min:0',
 //                'fk_gestor' => 'required|integer|min:0',
             ];
-        return response()->json(['status' => 'success','data' => $request],200);
 
         $validacio = Validator::make($request->except(["modalitats", "arquitectes"]),$regles);
         If (!$validacio->fails()) {
@@ -102,6 +101,7 @@ class EspaiController extends Controller
             $espai = new Espai();
             $espai->nom = $request->nom;
             $espai->web = $request->web;
+            $espai->telefon = $request->telefon;
             $espai->direccio = $request->direccio;
             $espai->descripcio   = $request->descripcio;
             $espai->fk_tipusEspai = $request->tipusEspai;

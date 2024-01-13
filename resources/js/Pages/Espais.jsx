@@ -28,7 +28,7 @@ export default function index({auth}) {
             web: '',
             telefon: '',
             any_construccio: '',
-            grau_acces: '',
+            grau_accessibilitat: '',
             tipusEspai: '',
             municipi: '',
             modalitats: [],
@@ -44,13 +44,13 @@ export default function index({auth}) {
     }
 
     const [errors, setErrors] = useState({
-        activat: '',
         nom: '',
         descripcio: '',
-        web: "",
+        direccio: '',
+        web: '',
         telefon: '',
         any_construccio: '',
-        grau_acces: '',
+        grau_accessibilitat: '',
         tipusEspai: '',
         municipi: '',
         modalitats: [],
@@ -125,7 +125,7 @@ export default function index({auth}) {
                     web: '',
                     telefon: '',
                     any_construccio: '',
-                    grau_acces: '',
+                    grau_accessibilitat: '',
                     tipusEspai: '',
                     municipi: '',
                     modalitats: [],
@@ -398,7 +398,7 @@ export default function index({auth}) {
                             Grau d'accessibilitat
                         </label>
                         <GrauAccesSelect onChange={handleChange}/>
-                        <InputError message={(errors !== undefined)?errors.grau_acces:""}/>
+                        <InputError message={(errors !== undefined)?errors.grau_accessibilitat:""}/>
                     </div>
 
                     <div className="flex items-center justify-center">

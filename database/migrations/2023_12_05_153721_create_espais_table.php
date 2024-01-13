@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string("nom")->unique();
             $table->string("descripcio");
             $table->string("direccio");
-            $table->date("any_construccio");
+            $table->integer("any_construccio");
             $table->enum("grau_accessibilitat", ["baix", "mitj", "alt"]);
             $table->string("web")->nullable();
             $table->string("email")->nullable();
