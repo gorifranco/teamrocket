@@ -79,16 +79,15 @@ class EspaiController extends Controller
     {
 //        try {
             $regles = [
-//                "nom" => "required|unique:espais,nom",
-//                "descripcio" => 'required',
-//                'direccio' => 'required',
-//                'any_construccio' => 'required|date',
-//                'grau_accessibilitat' => 'required|in:baix,mitj,alt',
-//                'web' => 'url',
-//                'email' => 'required|email',
-//                'fk_municipi' => 'required|integer|min:0',
-//                'fk_tipusEspai' => 'required|integer|min:0',
-//                'fk_gestor' => 'required|integer|min:0',
+                "nom" => "required|unique:espais,nom",
+                "descripcio" => 'required',
+                'direccio' => 'required',
+                'any_construccio' => 'required|integer',
+                'grau_accessibilitat' => 'required|in:baix,mitj,alt',
+                'web' => 'url',
+                'email' => 'required|email',
+                'municipi' => 'required|integer|min:0',
+                'tipusEspai' => 'required|integer|min:0',
             ];
 
         $validacio = Validator::make($request->except(["modalitats", "arquitectes"]),$regles);
@@ -111,7 +110,11 @@ class EspaiController extends Controller
             $espai->any_construccio = $request->any_construccio;
             $espai->fk_gestor = $user->id;
 
+            $espai->arquitectes()->insert($request->arquitectes);
+            $espai->modalitats()->insert($request->modalitats);
+
             $espai->save();
+
             return response()->json(['status' => 'success','data' => $espai],200);
         } else {
             return response()->json([ 'status' => 'error','data'=>$validacio->errors() ], 400);

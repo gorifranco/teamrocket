@@ -23,6 +23,7 @@ export default function index({auth}) {
     const [formData, setFormData] =
         useState({
             nom: '',
+            email: '',
             descripcio: '',
             direccio: '',
             web: '',
@@ -45,6 +46,7 @@ export default function index({auth}) {
 
     const [errors, setErrors] = useState({
         nom: '',
+        email: '',
         descripcio: '',
         direccio: '',
         web: '',
@@ -120,6 +122,7 @@ export default function index({auth}) {
                 setNumeroModalitats(1)
                 setFormData({
                     nom: '',
+                    email: '',
                     descripcio: '',
                     direccio: '',
                     web: '',
@@ -134,6 +137,7 @@ export default function index({auth}) {
 
                 setErrors({
                     nom: '',
+                    email: '',
                     descripcio: '',
                     direccio: '',
                     web: '',
@@ -150,8 +154,8 @@ export default function index({auth}) {
             })
             .catch(function (error) {
                 if (error.response) {
-                    setErrors(error.response.data.errors);
-                    console.log(error); // Acceder a los errores de validación
+                    setErrors(error.response.data.data);
+                    console.log(error.data); // Acceder a los errores de validación
                     alert(error.request.statusText)
                 } else {
                     console.log('Error:', error.message);
@@ -281,20 +285,21 @@ export default function index({auth}) {
                             id="nom" type="text" placeholder="Nom" name={"nom"} required={true}
                             value={formData.nom}
                             onChange={handleChange}/>
-                        <InputError message={(errors !== undefined)?errors.nom:""}/>
+                        <InputError message={(errors !== undefined) ? errors.nom : ""}/>
                     </div>
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="desc">
                             Descripció
                         </label>
-                        <textarea rows={7} className={"block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}
-                        placeholder={"Descripció"}
+                        <textarea rows={7}
+                                  className={"block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}
+                                  placeholder={"Descripció"}
                                   required={true}
                                   onChange={handleChange}
                                   name={"descripcio"}
                         >
                         </textarea>
-                        <InputError message={(errors !== undefined)?errors.descripcio:""}/>
+                        <InputError message={(errors !== undefined) ? errors.descripcio : ""}/>
                     </div>
 
                     <div className={"mt-4"}>
@@ -306,7 +311,7 @@ export default function index({auth}) {
                             id="direccio" type="text" placeholder="Direcció" name={"direccio"} required={true}
                             value={formData.direccio}
                             onChange={handleChange}/>
-                        <InputError message={(errors !== undefined)?errors.direccio:""}/>
+                        <InputError message={(errors !== undefined) ? errors.direccio : ""}/>
                     </div>
 
                     <div className={"mt-4"}>
@@ -318,7 +323,19 @@ export default function index({auth}) {
                             id="telefon" type="tel" placeholder="Telèfon" name={"telefon"} required={true}
                             value={formData.telefon}
                             onChange={handleChange}/>
-                        <InputError message={(errors !== undefined)?errors.telefon:""}/>
+                        <InputError message={(errors !== undefined) ? errors.telefon : ""}/>
+                    </div>
+
+                    <div className={"mt-4"}>
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+                            Email
+                        </label>
+                        <input
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="email" type="tel" placeholder="Email" name={"email"} required={true}
+                            value={formData.email}
+                            onChange={handleChange}/>
+                        <InputError message={(errors !== undefined) ? errors.email : ""}/>
                     </div>
 
                     <div className={"mt-4"}>
@@ -327,10 +344,11 @@ export default function index({auth}) {
                         </label>
                         <input
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="any" type="number" placeholder="Any de construcció" name={"any_construccio"} required={true}
+                            id="any" type="number" placeholder="Any de construcció" name={"any_construccio"}
+                            required={true}
                             value={formData.any_construccio}
                             onChange={handleChange}/>
-                        <InputError message={(errors !== undefined)?errors.any_construccio:""}/>
+                        <InputError message={(errors !== undefined) ? errors.any_construccio : ""}/>
                     </div>
 
                     <div className={"mt-4"}>
@@ -342,7 +360,7 @@ export default function index({auth}) {
                             id="web" type="text" placeholder="Web" name={"web"} required={true}
                             value={formData.web}
                             onChange={handleChange}/>
-                        <InputError message={(errors !== undefined)?errors.web:""}/>
+                        <InputError message={(errors !== undefined) ? errors.web : ""}/>
                     </div>
 
                     <div className={"mt-4"}>
@@ -350,7 +368,7 @@ export default function index({auth}) {
                             Municipi
                         </label>
                         <MunicipisSelect onChange={handleChange}/>
-                        <InputError message={(errors !== undefined)?errors.municipi:""}/>
+                        <InputError message={(errors !== undefined) ? errors.municipi : ""}/>
                     </div>
 
                     <div className={"mt-4"} key={"divx"}>
@@ -361,11 +379,13 @@ export default function index({auth}) {
                             {arquitectes()}
                         </>
                         <div className={"flex"}>
-                            <PlusButton className={"mt-2 bg-gray-400 hover:bg-gray-500"} color={"#222222"} onClick={afegirArquitecte}></PlusButton>
-                            {numeroArquitectes>1 && (
-                                <MenosButton className={"mt-2 bg-gray-400 hover:bg-gray-500"} color={"#222222"} onClick={llevarArquitecte}></MenosButton>
+                            <PlusButton className={"mt-2 bg-gray-400 hover:bg-gray-500"} color={"#222222"}
+                                        onClick={afegirArquitecte}></PlusButton>
+                            {numeroArquitectes > 1 && (
+                                <MenosButton className={"mt-2 bg-gray-400 hover:bg-gray-500"} color={"#222222"}
+                                             onClick={llevarArquitecte}></MenosButton>
                             )}
-                            <InputError message={(errors !== undefined)?errors.arquitectes:""}/>
+                            <InputError message={(errors !== undefined) ? errors.arquitectes : ""}/>
                         </div>
                     </div>
 
@@ -377,11 +397,13 @@ export default function index({auth}) {
                             {modalitats()}
                         </>
                         <div className={"flex"}>
-                            <PlusButton className={"mt-2 bg-gray-400 hover:bg-gray-500"} color={"#222222"} onClick={afegirModalitat}></PlusButton>
-                            {numeroModalitats>1 && (
-                                <MenosButton className={"mt-2 bg-gray-400 hover:bg-gray-500"} color={"#222222"} onClick={llevarModalitat}></MenosButton>
+                            <PlusButton className={"mt-2 bg-gray-400 hover:bg-gray-500"} color={"#222222"}
+                                        onClick={afegirModalitat}></PlusButton>
+                            {numeroModalitats > 1 && (
+                                <MenosButton className={"mt-2 bg-gray-400 hover:bg-gray-500"} color={"#222222"}
+                                             onClick={llevarModalitat}></MenosButton>
                             )}
-                            <InputError message={(errors !== undefined)?errors.modalitats:""}/>
+                            <InputError message={(errors !== undefined) ? errors.modalitats : ""}/>
                         </div>
                     </div>
 
@@ -390,7 +412,7 @@ export default function index({auth}) {
                             Tipus d'espai
                         </label>
                         <TipusEspaiSelect onChange={handleChange}/>
-                        <InputError message={(errors !== undefined)?errors.tipusEspai:""}/>
+                        <InputError message={(errors !== undefined) ? errors.tipusEspai : ""}/>
                     </div>
 
                     <div className={"mt-4 mb-6"}>
@@ -398,7 +420,7 @@ export default function index({auth}) {
                             Grau d'accessibilitat
                         </label>
                         <GrauAccesSelect onChange={handleChange}/>
-                        <InputError message={(errors !== undefined)?errors.grau_accessibilitat:""}/>
+                        <InputError message={(errors !== undefined) ? errors.grau_accessibilitat : ""}/>
                     </div>
 
                     <div className="flex items-center justify-center">
