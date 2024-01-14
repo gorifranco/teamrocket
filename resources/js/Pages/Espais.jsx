@@ -89,6 +89,14 @@ export default function index({auth}) {
         setNumeroModalitats(numeroModalitats - 1)
     }
 
+    async function handleSwitch($id) {
+        const response = await axios.put('/api/espais/' + $id + "/activar_desactivar", null,  {
+            headers: {
+                'Authorization': `Bearer ${auth.user.api_token}`,
+            },
+        });
+    }
+
     function arquitectes(){
         let arq =[];
 
@@ -444,7 +452,7 @@ export default function index({auth}) {
                     Cercar
                 </PrimaryButton>
             </div>
-            <TableGori data={tableData} cols={cols} onClickDelete={handleDelete} onEdit={handleEdit}>
+            <TableGori data={tableData} cols={cols} onClickDelete={handleDelete} onEdit={handleEdit} handleSwitch={handleSwitch}>
             </TableGori>
             <Pagination
                 links={tableData.links}

@@ -4,7 +4,7 @@ import InputTable from "@/Components/InputTable.jsx";
 import AcceptButton from "@/Components/AcceptButton.jsx";
 import DenyButton from "@/Components/DenyButton.jsx";
 import {useState} from "react";
-
+import BasicHooksExample from "@/Components/SwitchGoriBo.jsx";
 export default function TableGori({
                                       value,
                                       data,
@@ -13,6 +13,7 @@ export default function TableGori({
                                       onEdit,
                                       className = '',
                                       children,
+    handleSwitch,
                                       ...props
                                   }) {
 
@@ -87,12 +88,21 @@ export default function TableGori({
                                     <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900 text-center"
                                         key={"td1" + key + value + index}>
                                         {value["id"]}
+
                                     </td>
 
                                     {Object.entries(cols).map(([colName, colType], colIndex) => (
                                         <td className="text-sm text-gray-900 font-light px-9 py-3 whitespace-nowrap"
                                             key={"td2" + colName + colType + colIndex}
                                         >
+                                            {colType==="boolean" && (
+                                                <BasicHooksExample
+                                                    estat={Boolean(value[colName])}
+                                                    onChange={(newCheckedState) => handleSwitch(value["id"], newCheckedState)}
+                                              />
+                                            )}
+                                            {colType!=="boolean" && (
+
                                             <InputTable
                                                 type={colType}
                                                 value={rowEditing === index ? editedValues[colName] : value[colName]}
@@ -100,6 +110,7 @@ export default function TableGori({
                                                 key={"td3_input" + colName + colType + colIndex}
                                                 onChange={(evt) => handleChange(evt, colName)}
                                             />
+                                            )}
                                         </td>
                                     ))}
 

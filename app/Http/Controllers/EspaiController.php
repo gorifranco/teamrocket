@@ -21,8 +21,9 @@ class EspaiController extends Controller
      */
     public function index(): JsonResponse
     {
+        $espais = Espai::where("activat", 1)->get();
         return response()->json([
-            'data' => Espai::all()
+            'data' => $espais
         ], 200);
     }
 
@@ -177,4 +178,18 @@ class EspaiController extends Controller
         return $this->dbActionBasic($id, Espai::class, null, "deleteOrFail", null);
     }
 
+    public function activar_desactivar(Request $request, string $id){
+
+        $key = explode(' ', $request->header('Authorization'));
+        $token = $key[1]; // key[0]->Bearer key[1]→token
+        $user = User::where('api_token', $token)->first();
+
+        $espai = Espai::where("id", $id)->first();
+
+        if($user->esAdministrador() || $user->id === $espai->fk_gestor){
+
+            $espai->activat = !$espai->activat;
+            $espai->save();
+        }
+    }
 }
