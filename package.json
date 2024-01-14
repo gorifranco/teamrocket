@@ -20,5 +20,6 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
+        "react-switch": "^7.0.0"
     }
 }

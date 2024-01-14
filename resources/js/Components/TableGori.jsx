@@ -4,7 +4,7 @@ import InputTable from "@/Components/InputTable.jsx";
 import AcceptButton from "@/Components/AcceptButton.jsx";
 import DenyButton from "@/Components/DenyButton.jsx";
 import {useState} from "react";
-
+import BasicHooksExample from "@/Components/SwitchGoriBo.jsx";
 export default function TableGori({
                                       value,
                                       data,
@@ -13,6 +13,7 @@ export default function TableGori({
                                       onEdit,
                                       className = '',
                                       children,
+    handleSwitch,
                                       ...props
                                   }) {
 
@@ -93,6 +94,14 @@ export default function TableGori({
                                         <td className="text-sm text-gray-900 font-light px-9 py-3 whitespace-nowrap"
                                             key={"td2" + colName + colType + colIndex}
                                         >
+                                            {colType==="boolean" && (
+                                                <BasicHooksExample
+                                                    estat={value[colName] === 0}
+                                                    onChange={(newCheckedState) => handleSwitch(value["id"], newCheckedState)}
+                                                />
+                                            )}
+                                            {colType!=="boolean" && (
+
                                             <InputTable
                                                 type={colType}
                                                 value={rowEditing === index ? editedValues[colName] : value[colName]}
@@ -100,6 +109,7 @@ export default function TableGori({
                                                 key={"td3_input" + colName + colType + colIndex}
                                                 onChange={(evt) => handleChange(evt, colName)}
                                             />
+                                            )}
                                         </td>
                                     ))}
 
