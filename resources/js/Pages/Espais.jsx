@@ -88,7 +88,6 @@ export default function index({auth}) {
     }
 
     async function handleSwitch($id) {
-
         const response = await axios.put('/api/espais/' + $id + "/activar_desactivar", null,  {
             headers: {
                 'Authorization': `Bearer ${auth.user.api_token}`,

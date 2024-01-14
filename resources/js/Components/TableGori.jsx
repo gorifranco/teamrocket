@@ -88,6 +88,7 @@ export default function TableGori({
                                     <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900 text-center"
                                         key={"td1" + key + value + index}>
                                         {value["id"]}
+
                                     </td>
 
                                     {Object.entries(cols).map(([colName, colType], colIndex) => (
@@ -96,9 +97,9 @@ export default function TableGori({
                                         >
                                             {colType==="boolean" && (
                                                 <BasicHooksExample
-                                                    estat={value[colName] === 0}
+                                                    estat={Boolean(value[colName])}
                                                     onChange={(newCheckedState) => handleSwitch(value["id"], newCheckedState)}
-                                                />
+                                              />
                                             )}
                                             {colType!=="boolean" && (
 

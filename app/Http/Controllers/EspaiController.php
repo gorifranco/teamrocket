@@ -21,8 +21,9 @@ class EspaiController extends Controller
      */
     public function index(): JsonResponse
     {
+        $espais = Espai::where("activat", 1)->get();
         return response()->json([
-            'data' => Espai::all()
+            'data' => $espais
         ], 200);
     }
 

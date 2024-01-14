@@ -20,7 +20,7 @@ class Espai extends Model
     public function modalitats(): BelongsToMany
     {
         return $this->belongsToMany(Modalitat::class, 'espai_modalitat',
-            "fk_modalitat", "fk_espai");
+            "fk_espai", "fk_modalitat");
     }
 
     public function arquitectes(): BelongsToMany
