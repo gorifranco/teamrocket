@@ -25,6 +25,7 @@ Route::get('/', function () {
     ]);
 });
 
+Route::inertia("/espai/{id}", "Espai")->name("espai");
 
 Route::group(['middleware' => 'auth'], function() {
     Route::inertia('/dashboard', 'Dashboard')->name('dashboard');

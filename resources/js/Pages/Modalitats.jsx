@@ -64,8 +64,8 @@ export default function index({auth}) {
 
     }
 
-    function handleEdit(dades){
-        axios.put("api/modalitats/" + dades.id, dades,{
+    function handleEdit(dades) {
+        axios.put("api/modalitats/" + dades.id, dades, {
             headers: {
                 'Authorization': `Bearer ${auth.user.api_token}`,
             }
@@ -90,7 +90,7 @@ export default function index({auth}) {
 
     const fetchData = async (currentPage) => {
         try {
-            const response = await axios.get(`/api/modalitats?page=${currentPage}`,{
+            const response = await axios.get(`/api/modalitats?page=${currentPage}`, {
                 headers: {
                     'Authorization': `Bearer ${auth.user.api_token}`,
                 }
@@ -142,7 +142,7 @@ export default function index({auth}) {
 
     function handleDelete(modalitat) {
         if (confirm("Segur que vols borrar la modalitat " + modalitat + "?")) {
-            axios.delete("api/modalitats/" + modalitat,{
+            axios.delete("api/modalitats/" + modalitat, {
                 headers: {
                     'Authorization': `Bearer ${auth.user.api_token}`,
                 }
@@ -201,12 +201,12 @@ export default function index({auth}) {
             </div>
             {tableData !== undefined && (
                 <>
-                <TableGori data={tableData} cols={cols} onClickDelete={handleDelete} onEdit={handleEdit}>
-                </TableGori>
-                <Pagination
-                links={tableData.links}
-            onPageChange={handlePageChange}>
-        </Pagination>
+                    <TableGori data={tableData} cols={cols} onClickDelete={handleDelete} onEdit={handleEdit}>
+                    </TableGori>
+                    <Pagination
+                        links={tableData.links}
+                        onPageChange={handlePageChange}>
+                    </Pagination>
                 </>
             )}
         </AuthenticatedLayout>

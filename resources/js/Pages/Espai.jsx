@@ -1,27 +1,8 @@
-import {Link, Head} from '@inertiajs/react';
-import React from "react";
-import {useEffect, useState} from "react";
-import axios from "axios";
-import EspaiDisplay from "@/Components/EspaiDisplay.jsx";
+import {Head, Link} from "@inertiajs/react";
 
-export default function Welcome({auth, laravelVersion, phpVersion}) {
+export default function Espai({auth}) {
 
-    const [posts, setPosts] = useState({})
-    const [currentPage, setCurrentPage] = useState(1)
 
-    const fetchData = async (currentPage) => {
-        try {
-            const response = await axios.get(`/api/espais`);
-            setPosts(response.data.data);
-            console.log(response.data)
-        } catch (error) {
-            console.error('Error al obtener los datos:', error);
-        }
-    };
-
-    useEffect(() => {
-        fetchData(currentPage);
-    }, [currentPage]);
 
 
     return (
@@ -53,20 +34,9 @@ export default function Welcome({auth, laravelVersion, phpVersion}) {
                     </>
                 )}
             </div>
-
-            <div className={"justify-center flex mx-auto my-5"}><h1 className={"text-3xl"}>TEAMROCKET</h1></div>
-
-            <div className={"w-screen flex justify-center"}>
-                <div className={"w-7/12"}>
-                    {Object.values(posts).map((value) => (
-                        <React.Fragment key={value.id}>
-                            <EspaiDisplay data={value}></EspaiDisplay>
-                            <hr className={"my-5"}/>
-                        </React.Fragment>
-                    ))}
-                </div>
-            </div>
-
+            <div className={"absolute top"}></div>
+            console.log()
+            <h1>SOM UN ESPAI PUTA</h1>
         </>
-    );
+    )
 }

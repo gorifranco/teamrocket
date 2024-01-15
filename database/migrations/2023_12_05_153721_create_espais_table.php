@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('espais', function (Blueprint $table) {
             $table->id();
             $table->string("nom")->unique();
-            $table->string("descripcio");
+            $table->string("descripcio",1000);
             $table->string("direccio");
             $table->integer("any_construccio");
             $table->enum("grau_accessibilitat", ["baix", "mitj", "alt"]);

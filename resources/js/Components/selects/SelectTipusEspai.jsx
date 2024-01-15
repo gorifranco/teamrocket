@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 
-export default function TipusEspaiSelect({id = "tipus", onChange}){
+export default function TipusEspaiSelect({id = "tipus", onChange}) {
 
     const [valors, setValors] = useState([])
 
@@ -20,7 +20,8 @@ export default function TipusEspaiSelect({id = "tipus", onChange}){
 
     return (
         <>
-            <select onChange={onChange} name={'tipusEspai'} id={id} className={"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}>
+            <select onChange={onChange} name={'tipusEspai'} id={id}
+                    className={"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}>
                 <option key={-1} value={""}>Tipus d'espai</option>
                 {valors.map((tipus) => (
                     <option key={tipus.id} value={tipus.id}>

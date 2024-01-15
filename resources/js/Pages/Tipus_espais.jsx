@@ -64,7 +64,7 @@ export default function index({auth}) {
 
     }
 
-    function handleEdit(dades){
+    function handleEdit(dades) {
         axios.put("api/tipus_espais/" + dades.id, dades, {
             headers: {
                 'Authorization': `Bearer ${auth.user.api_token}`,

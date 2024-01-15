@@ -43,7 +43,7 @@ export default function index({auth}) {
     async function handleSubmit(event) {
         event.preventDefault()
 
-        axios.post('/api/arquitectes', formData,{
+        axios.post('/api/arquitectes', formData, {
             headers: {
                 'Authorization': `Bearer ${auth.user.api_token}`,
             },
@@ -75,9 +75,9 @@ export default function index({auth}) {
             });
     }
 
-    function handleEdit(dades){
+    function handleEdit(dades) {
 
-        axios.put("api/arquitectes/" + dades.id, dades,{
+        axios.put("api/arquitectes/" + dades.id, dades, {
             headers: {
                 'Authorization': `Bearer ${auth.user.api_token}`,
             },
@@ -86,8 +86,8 @@ export default function index({auth}) {
                 alert("Arquitecte guardat amb èxit")
                 fetchData(currentPage)
             }).catch((e) => {
-             alert("Error guardant l'arquitecte:\n" +
-             e)
+            alert("Error guardant l'arquitecte:\n" +
+                e)
         })
     }
 
@@ -117,11 +117,11 @@ export default function index({auth}) {
 
     const fetchDataFiltrada = async (currentPage, filter) => {
         try {
-            const response = await axios.get(`/api/arquitectes/find/${filter}?page=${currentPage}`,{
+            const response = await axios.get(`/api/arquitectes/find/${filter}?page=${currentPage}`, {
                 headers: {
                     'Authorization': `Bearer ${auth.user.api_token}`,
                 },
-                });
+            });
             setTableData(response.data.data);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
@@ -157,7 +157,7 @@ export default function index({auth}) {
     function handleDelete(arquitecte) {
         console.log(arquitecte)
         if (confirm("Segur que vols borrar l'arquitecte " + arquitecte + "?")) {
-            axios.delete("api/arquitectes/" + arquitecte,{
+            axios.delete("api/arquitectes/" + arquitecte, {
                 headers: {
                     'Authorization': `Bearer ${auth.user.api_token}`,
                 },
@@ -191,7 +191,7 @@ export default function index({auth}) {
                             id="nom" type="text" placeholder="Nom" name={"nom"} required={true}
                             value={formData.nom}
                             onChange={handleChange}/>
-                        <InputError message={(errors !== undefined)?errors.nom:""}/>
+                        <InputError message={(errors !== undefined) ? errors.nom : ""}/>
                     </div>
                     <div className="relative max-w-sm">
                         <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
@@ -206,7 +206,7 @@ export default function index({auth}) {
                                placeholder="Select date" name={"data_naix"}
                                value={formData.data_naix}
                                onChange={handleChange}/>
-                        <InputError message={(errors !== undefined)?errors.data_naix:""}/>
+                        <InputError message={(errors !== undefined) ? errors.data_naix : ""}/>
                     </div>
                     <div className="mb-6 mt-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
@@ -217,7 +217,7 @@ export default function index({auth}) {
                             name={"descripcio"} id="descripcio" rows={4} placeholder="Descripció" required={true}
                             value={formData.descripcio}
                             onChange={handleChange}/>
-                        <InputError message={(errors !== undefined)?errors.descripcio:""}/>
+                        <InputError message={(errors !== undefined) ? errors.descripcio : ""}/>
                     </div>
                     <div className="flex items-center justify-center">
                     </div>

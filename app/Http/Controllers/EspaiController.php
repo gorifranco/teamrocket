@@ -120,8 +120,6 @@ class EspaiController extends Controller
         } else {
             return response()->json([ 'status' => 'error','data'=>$validacio->errors() ], 400);
         }
-//            return $this->dbActionBasic(null, Espai::class, $request, "createOrFail", $regles);
-
     }
 
     /**
@@ -178,7 +176,8 @@ class EspaiController extends Controller
         return $this->dbActionBasic($id, Espai::class, null, "deleteOrFail", null);
     }
 
-    public function activar_desactivar(Request $request, string $id){
+    public function activar_desactivar(Request $request, string $id): JsonResponse
+    {
 
         $key = explode(' ', $request->header('Authorization'));
         $token = $key[1]; // key[0]->Bearer key[1]→token
@@ -190,6 +189,18 @@ class EspaiController extends Controller
 
             $espai->activat = !$espai->activat;
             $espai->save();
+
+            return response()->json([
+                "state" => "success",
+                "data" => $espai
+            ],200);
+
+        }else{
+
+            return response()->json([
+                "state" => "error",
+            ],400);
         }
     }
+
 }

@@ -12,8 +12,8 @@ export default function AcceptButton({onClick, size = 24, color = "#ffffff", cla
             <svg fill="#ffffff" height={size} width={size} version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
                  xmlnsXlink="http://www.w3.org/1999/xlink"
                  viewBox="0 0 490 490" xmlSpace="preserve">
-<polygon points="452.253,28.326 197.831,394.674 29.044,256.875 0,292.469 207.253,461.674 490,54.528 "/>
-</svg>
+                <polygon points="452.253,28.326 197.831,394.674 29.044,256.875 0,292.469 207.253,461.674 490,54.528 "/>
+            </svg>
 
         </button>
     )

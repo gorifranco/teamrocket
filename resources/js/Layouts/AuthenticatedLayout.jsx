@@ -28,7 +28,8 @@ export default function Authenticated({user, header, plusButton = false, onclick
                                     Dashboard
                                 </NavLink>
                                 {user.tipusUsuari === "gestor" && (
-                                    <NavLink href={route('espais_per_gestor')} active={route().current('espais_per_gestor')}>
+                                    <NavLink href={route('espais_per_gestor')}
+                                             active={route().current('espais_per_gestor')}>
                                         Els meus espais
                                     </NavLink>)
                                 }
@@ -43,20 +44,20 @@ export default function Authenticated({user, header, plusButton = false, onclick
                                         <Dropdown.Trigger>
                                             Altres
                                         </Dropdown.Trigger>
-                                <Dropdown.Content align={"left"}>
-                                    <Dropdown.Link href={route('modalitats')}>Modalitats</Dropdown.Link>
-                                    <Dropdown.Link href={route('tipus_espais')}>Tipus d'espais</Dropdown.Link>
-                                    <Dropdown.Link href={route('serveis')}>Serveis</Dropdown.Link>
-                                </Dropdown.Content>
-                            </Dropdown>
+                                        <Dropdown.Content align={"left"}>
+                                            <Dropdown.Link href={route('modalitats')}>Modalitats</Dropdown.Link>
+                                            <Dropdown.Link href={route('tipus_espais')}>Tipus d'espais</Dropdown.Link>
+                                            <Dropdown.Link href={route('serveis')}>Serveis</Dropdown.Link>
+                                        </Dropdown.Content>
+                                    </Dropdown>
+                                </div>
+                            </div>
                         </div>
-                        </div>
-                    </div>
 
-                    <div className="hidden sm:flex sm:items-center sm:ms-6">
-                        <div className="ms-3 relative">
-                            <Dropdown>
-                                <Dropdown.Trigger>
+                        <div className="hidden sm:flex sm:items-center sm:ms-6">
+                            <div className="ms-3 relative">
+                                <Dropdown>
+                                    <Dropdown.Trigger>
                                         <span className="inline-flex rounded-md">
                                             <button
                                                 type="button"

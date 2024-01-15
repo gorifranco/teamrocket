@@ -73,44 +73,46 @@ export default function index({auth}) {
     const [numeroArquitectes, setNumeroArquitectes] = useState(1)
     const [numeroModalitats, setNumeroModalitats] = useState(1)
 
-    function afegirArquitecte(){
+    function afegirArquitecte() {
         setNumeroArquitectes(numeroArquitectes + 1)
     }
 
-    function llevarArquitecte(){
+    function llevarArquitecte() {
         setNumeroArquitectes(numeroArquitectes - 1)
     }
 
-    function afegirModalitat(){
+    function afegirModalitat() {
         setNumeroModalitats(numeroModalitats + 1)
     }
 
-    function llevarModalitat(){
+    function llevarModalitat() {
         setNumeroModalitats(numeroModalitats - 1)
     }
 
     async function handleSwitch($id) {
-        const response = await axios.put('/api/espais/' + $id + "/activar_desactivar", null,  {
+        const response = await axios.put('/api/espais/' + $id + "/activar_desactivar", null, {
             headers: {
                 'Authorization': `Bearer ${auth.user.api_token}`,
             },
         });
     }
 
-    function arquitectes(){
-        let arq =[];
+    function arquitectes() {
+        let arq = [];
 
         for (let i = 0; i < numeroArquitectes; i++) {
-            arq.push(<ArquitectesSelect key={"arq" + i} className={"mt-2"} name={"arquitectes " + i} onChange={handleChange}></ArquitectesSelect>)
+            arq.push(<ArquitectesSelect key={"arq" + i} className={"mt-2"} name={"arquitectes " + i}
+                                        onChange={handleChange}></ArquitectesSelect>)
         }
         return arq;
     }
 
-    function modalitats(){
-        let mod =[];
+    function modalitats() {
+        let mod = [];
 
         for (let i = 0; i < numeroModalitats; i++) {
-            mod.push(<ModalitatsSelect name={"modalitats " + i} key={"mod" + i} className={"mt-2"} onChange={handleChange}></ModalitatsSelect>)
+            mod.push(<ModalitatsSelect name={"modalitats " + i} key={"mod" + i} className={"mt-2"}
+                                       onChange={handleChange}></ModalitatsSelect>)
         }
         return mod;
     }
@@ -120,7 +122,7 @@ export default function index({auth}) {
     async function handleSubmit(event) {
         event.preventDefault()
 
-        axios.post('/api/espais', formData,{
+        axios.post('/api/espais', formData, {
             headers: {
                 'Authorization': `Bearer ${auth.user.api_token}`,
             },
@@ -171,14 +173,14 @@ export default function index({auth}) {
             });
     }
 
-    function handleEdit($id){
+    function handleEdit($id) {
 
         //ruta al formulari
 
     }
 
     function handleChange(e) {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
 
         if (!name.includes(" ")) {
             setFormData({
@@ -220,7 +222,7 @@ export default function index({auth}) {
 
     const fetchDataFiltrada = async (currentPage, filter) => {
         try {
-            const response = await axios.get(`/api/espais_per_gestor/find/${filter}?page=${currentPage}`,{
+            const response = await axios.get(`/api/espais_per_gestor/find/${filter}?page=${currentPage}`, {
                 headers: {
                     'Authorization': `Bearer ${auth.user.api_token}`,
                 },
@@ -259,7 +261,7 @@ export default function index({auth}) {
 
     function handleDelete(espai) {
         if (confirm("Segur que vols borrar l'espai " + espai + "?")) {
-            axios.delete("api/espais/" + espai,{
+            axios.delete("api/espais/" + espai, {
                 headers: {
                     'Authorization': `Bearer ${auth.user.api_token}`,
                 },
@@ -452,7 +454,8 @@ export default function index({auth}) {
                     Cercar
                 </PrimaryButton>
             </div>
-            <TableGori data={tableData} cols={cols} onClickDelete={handleDelete} onEdit={handleEdit} handleSwitch={handleSwitch}>
+            <TableGori data={tableData} cols={cols} onClickDelete={handleDelete} onEdit={handleEdit}
+                       handleSwitch={handleSwitch}>
             </TableGori>
             <Pagination
                 links={tableData.links}

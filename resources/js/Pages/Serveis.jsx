@@ -64,8 +64,8 @@ export default function index({auth}) {
 
     }
 
-    function handleEdit(dades){
-        axios.put("api/serveis/" + dades.id, dades,{
+    function handleEdit(dades) {
+        axios.put("api/serveis/" + dades.id, dades, {
             headers: {
                 'Authorization': `Bearer ${auth.user.api_token}`,
             }
@@ -90,7 +90,7 @@ export default function index({auth}) {
 
     const fetchData = async (currentPage) => {
         try {
-            const response = await axios.get(`/api/serveis?page=${currentPage}`,{
+            const response = await axios.get(`/api/serveis?page=${currentPage}`, {
                 headers: {
                     'Authorization': `Bearer ${auth.user.api_token}`,
                 }
@@ -142,7 +142,7 @@ export default function index({auth}) {
 
     function handleDelete(modalitat) {
         if (confirm("Segur que vols borrar la modalitat " + modalitat + "?")) {
-            axios.delete("api/serveis/" + modalitat,{
+            axios.delete("api/serveis/" + modalitat, {
                 headers: {
                     'Authorization': `Bearer ${auth.user.api_token}`,
                 }

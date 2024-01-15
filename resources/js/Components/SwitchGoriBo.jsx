@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import Switch from "react-switch";
 
-export default function BasicHooksExample ({estat, onChange})  {
+export default function BasicHooksExample({estat, onChange}) {
     const [checked, setChecked] = useState(estat);
 
     useEffect(() => {
