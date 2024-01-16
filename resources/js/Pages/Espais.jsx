@@ -454,7 +454,7 @@ export default function index({auth}) {
                 </PrimaryButton>
             </div>
             <TableGori data={tableData} cols={cols} onClickDelete={handleDelete} onEdit={handleEdit}
-                       handleSwitch={handleSwitch}>
+                       handleSwitch={handleSwitch} editUrl={"editarEspai"}>
             </TableGori>
             <Pagination
                 links={tableData.links}

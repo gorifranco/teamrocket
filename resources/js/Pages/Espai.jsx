@@ -15,7 +15,11 @@ export default function Espai({auth}) {
 
     async function fetchData () {
         try {
-            const response = await axios.get(`/api/espais/`+ id)
+            const response = await axios.get(`/api/espais/`+ id,{
+                headers: {
+                    'Authorization': `Bearer ${auth.user.api_token}`,
+                },
+            });
             setData(response.data.data);
         } catch (error) {
             console.error('Error al obtener los datos:', error);

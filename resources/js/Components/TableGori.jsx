@@ -24,14 +24,16 @@ export default function TableGori({
     const [editedValues, setEditedValues] = useState({});
 
     function handleEdit(evt, index, rowData) {
+        console.log(rowData)
         evt.preventDefault();
 
         if(editUrl){
-            route(editurl)
+            window.location.href = route("editarEspai", {id: rowData.id})
+        }else{
+            setEditing(true);
+            setRowEditing(index);
+            setEditedValues(rowData);
         }
-        setEditing(true);
-        setRowEditing(index);
-        setEditedValues(rowData);
     }
 
     function handleAccept(evt, index) {
