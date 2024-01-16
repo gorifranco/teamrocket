@@ -2,14 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Arquitecte;
 use App\Models\Espai;
-use App\Models\HoraActiva;
-use App\Models\Municipi;
-use App\Models\TipusEspai;
 use App\Models\User;
-use App\Models\Zona;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -78,7 +72,7 @@ class EspaiController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-//        try {
+
             $regles = [
                 "nom" => "required|unique:espais,nom",
                 "descripcio" => 'required',
@@ -89,9 +83,11 @@ class EspaiController extends Controller
                 'email' => 'required|email',
                 'municipi' => 'required|integer|min:0',
                 'tipusEspai' => 'required|integer|min:0',
+                'modalitats.*' => 'exists:modalitats,id',
+                'arquitectes.*' => 'exists:arquitectes,id',
             ];
 
-        $validacio = Validator::make($request->except(["modalitats", "arquitectes"]),$regles);
+        $validacio = Validator::make($request->all(),$regles);
         If (!$validacio->fails()) {
 
             $key = explode(' ', $request->header('Authorization'));
@@ -144,36 +140,76 @@ class EspaiController extends Controller
     public function update(Request $request, string $id): JsonResponse
     {
         $regles = [
-            "nom" => "required|unique:espais.nom",
-            "descripció" => 'required',
+            "nom" => "required|unique:espais,nom",
+            "descripcio" => 'required',
             'direccio' => 'required',
-            'any_construccio' => 'required|date',
+            'any_construccio' => 'required|integer',
             'grau_accessibilitat' => 'required|in:baix,mitj,alt',
             'web' => 'url',
-            'email' => 'email',
-            'fk_arquitecte' => 'integer|min:0',
-            'fk_municipi' => 'required|integer|min:0',
-            'fk_tipusEspai' => 'required|integer|min:0'
+            'email' => 'required|email',
+            'municipi' => 'required|integer|min:0',
+            'tipusEspai' => 'required|integer|min:0',
+            'modalitats.*' => 'exists:modalitats,id',
+            'arquitectes.*' => 'exists:arquitectes,id',
         ];
 
         $espai = Espai::where("id", $id)->first();
-        $usuari = $request->user();
 
-        if(!$usuari->esAdministrador() || $usuari->id !== $espai->gestor()->id()){
+        $key = explode(' ', $request->header('Authorization'));
+        $token = $key[1]; // key[0]->Bearer key[1]→token
+        $user = User::where('api_token', $token)->first();
+
+        if(!$user->esAdministrador() || $user->id !== $espai->gestor()->id()){
             return response()->json([
                 "error" => "Unauthorized"
             ], 401);
         }
 
-        return $this->dbActionBasic($id, Espai::class, $request, "updateOrFail", $regles);
+        $validacio = Validator::make($request->all(),$regles);
+        If (!$validacio->fails()) {
+
+            $espai->nom = $request->nom;
+            $espai->web = $request->web;
+            $espai->telefon = $request->telefon;
+            $espai->direccio = $request->direccio;
+            $espai->descripcio = $request->descripcio;
+            $espai->fk_tipusEspai = $request->tipusEspai;
+            $espai->fk_municipi = $request->municipi;
+            $espai->email = $request->email;
+            $espai->grau_accessibilitat = $request->grau_accessibilitat;
+            $espai->any_construccio = $request->any_construccio;
+            $espai->fk_gestor = $user->id;
+
+            $espai->arquitectes()->sync($request->arquitectes);
+            $espai->modalitats()->sync($request->modalitats);
+
+            $espai->save();
+
+            return response()->json(['status' => 'success', 'data' => $espai], 200);
+        }else{
+            return response()->json([ 'status' => 'error','data'=>$validacio->errors() ], 400);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(Request $request, string $id): JsonResponse
     {
-        return $this->dbActionBasic($id, Espai::class, null, "deleteOrFail", null);
+        $key = explode(' ', $request->header('Authorization'));
+        $token = $key[1]; // key[0]->Bearer key[1]→token
+        $user = User::where('api_token', $token)->first();
+
+        $espai = Espai::where("id", $id)->first();
+
+        if ($user->esAdministrador() || $user->id === $espai->fk_gestor) {
+            return $this->dbActionBasic($id, Espai::class, null, "deleteOrFail", null);
+        } else {
+            return response()->json([
+                "status" => "error",
+                "missatge" => "No autoritzat"
+            ],401);
+        }
     }
 
     public function activar_desactivar(Request $request, string $id): JsonResponse

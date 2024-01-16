@@ -175,8 +175,7 @@ export default function index({auth}) {
 
     function handleEdit($id) {
 
-        //ruta al formulari
-
+        route("editarEspai/", $id)
     }
 
     function handleChange(e) {

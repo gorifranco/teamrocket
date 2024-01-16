@@ -15,6 +15,7 @@ export default function TableGori({
                                       className = '',
                                       children,
                                       handleSwitch,
+                                      editUrl,
                                       ...props
                                   }) {
 
@@ -24,6 +25,10 @@ export default function TableGori({
 
     function handleEdit(evt, index, rowData) {
         evt.preventDefault();
+
+        if(editUrl){
+            route(editurl)
+        }
         setEditing(true);
         setRowEditing(index);
         setEditedValues(rowData);
@@ -94,7 +99,7 @@ export default function TableGori({
                                     </td>
 
                                     {Object.entries(cols).map(([colName, colType], colIndex) => (
-                                        <td className="text-sm text-gray-900 font-light px-9 py-3 whitespace-nowrap"
+                                        <td className="text-sm text-gray-900 font-light px-6 py-3 whitespace-nowrap"
                                             key={"td2" + colName + colType + colIndex}
                                         >
                                             {colType === "boolean" && (

@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import EspaiDisplay from "@/Components/EspaiDisplay.jsx";
 
-export default function Welcome({auth, laravelVersion, phpVersion}) {
+export default function Welcome({auth}) {
 
     const [posts, setPosts] = useState({})
     const [currentPage, setCurrentPage] = useState(1)

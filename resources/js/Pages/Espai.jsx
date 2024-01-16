@@ -1,8 +1,26 @@
 import {Head, Link} from "@inertiajs/react";
+import axios from "axios";
+import {useEffect, useState} from "react";
 
 export default function Espai({auth}) {
 
+    const [data, setData] = useState()
+    const urlActual = window.location.href.split("/");
+    const id = urlActual[urlActual.length - 1];
 
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    async function fetchData () {
+        try {
+            const response = await axios.get(`/api/espais/`+ id)
+            setData(response.data.data);
+        } catch (error) {
+            console.error('Error al obtener los datos:', error);
+        }
+    }
 
 
     return (
@@ -34,9 +52,25 @@ export default function Espai({auth}) {
                     </>
                 )}
             </div>
-            <div className={"absolute top"}></div>
-            console.log()
-            <h1>SOM UN ESPAI PUTA</h1>
+
+                {data !== undefined && (
+                    <div className={"w-1/2 mx-auto mt-5"}>
+                    <a href={"/"} className={"bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"}
+                    >
+                        Tornar
+                    </a>
+                    <h1 className={"text-3xl text-center mb-4"}>{data.nom}</h1>
+                    <p className={"text-center"}>{data.descripcio}</p>
+
+                        <div className={"mt-6 flex justify-center"}><div className={"bg-amber-100"} style={{ height: '450px', width: '450px' }}>IMATGE</div></div>
+
+                        <div style={{height:"1000px"}}></div>
+                    </div>
+
+                )}
+            {data !== undefined && (
+            <aside className={"sticky bottom-[25%] h-3/4 w-1/4 float-right bg-amber-300"}>Uep com va</aside>
+                )}
         </>
     )
 }

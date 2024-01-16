@@ -13,7 +13,7 @@ class EspaisSeeder extends Seeder
     public function run(): void
     {
         DB::table('espais')->insert([
-            "nom" => "L'almudaina",
+            "nom" => "L'Almudaina",
             "descripcio" => "El Castell o Palau Reial de l'Almudaina, dit també simplement l'Almudaina, està situat a
              la ciutat de Palma, al costat de la Seu, i fou la residència històrica dels reis de Mallorca. La seva
               titularitat i administració corresponen a l'ens públic Patrimoni Nacional, que gestiona els béns de l'estat
