@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Municipi extends Model
@@ -13,9 +12,9 @@ class Municipi extends Model
 
     protected $table = "municipis";
 
-    public function espais(): BelongsTo
+    public function espais(): HasOne
     {
-        return $this->belongsTo(Espai::class, "fk_municipi");
+        return $this->hasOne(Espai::class, "fk_municipi");
     }
 
     public function illa(): HasOne

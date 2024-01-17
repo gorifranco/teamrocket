@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TipusEspai extends Model
 {
@@ -13,8 +13,8 @@ class TipusEspai extends Model
     protected $table = "tipusEspais";
     protected $fillable = ["nom"];
 
-    public function espais(): BelongsTo
+    public function espais(): HasMany
     {
-        return $this->belongsTo(Espai::class, "fk_tipusEspai");
+        return $this->hasMany(Espai::class, "fk_tipusEspai");
     }
 }

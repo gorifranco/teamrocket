@@ -123,7 +123,9 @@ class EspaiController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        return $this->dbActionBasic($id, Espai::class, null, "findOrFail", null);
+        $espai = Espai::with(['modalitats', 'arquitectes', 'municipi', 'tipusEspai'])->find($id);
+
+        return response()->json(['data' => $espai]);
     }
 
     /**

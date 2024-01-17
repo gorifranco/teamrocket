@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 
-export default function ArquitectesSelect({id, className, key, name, onChange}) {
+export default function ArquitectesSelect({id, className, key, name, onChange, selected = -1}) {
 
     const [valors, setValors] = useState([])
 
@@ -28,7 +28,7 @@ export default function ArquitectesSelect({id, className, key, name, onChange}) 
                     onChange={onChange}>
                 <option key={key + " " + -1} value={""}>Selecciona un arquitecte</option>
                 {valors.map((arquitecte) => (
-                    <option key={key + "op" + arquitecte.id} value={arquitecte.id}>
+                    <option key={key + "op" + arquitecte.id} value={arquitecte.id} selected={selected === arquitecte.id}>
                         {arquitecte.nom}
                     </option>
                 ))}

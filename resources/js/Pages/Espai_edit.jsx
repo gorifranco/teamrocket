@@ -18,23 +18,8 @@ export default function Espai_edit({auth}){
     const id = urlActual[urlActual.length - 1];
 
     const [data, setData] = useState({})
-    const [numeroArquitectes, setNumeroArquitectes] = useState(1)
-    const [numeroModalitats, setNumeroModalitats] = useState(1)
-    const [formData, setFormData] =
-        useState({
-            nom: '',
-            email: '',
-            descripcio: '',
-            direccio: '',
-            web: '',
-            telefon: '',
-            any_construccio: '',
-            grau_accessibilitat: '',
-            tipusEspai: '',
-            municipi: '',
-            modalitats: [],
-            arquitectes: [],
-        });
+    const [numeroArquitectes, setNumeroArquitectes] = useState(0)
+    const [numeroModalitats, setNumeroModalitats] = useState(0)
 
     const [errors, setErrors] = useState({
         nom: '',
@@ -51,24 +36,24 @@ export default function Espai_edit({auth}){
         arquitectes: [],
     });
 
-    function handleChange(){
+    function handleChange(e){
         const {name, value} = e.target;
 
         if (!name.includes(" ")) {
-            setFormData({
-                ...formData,
+            setData({
+                ...data,
                 [name]: value,
             });
         } else {
             let [fieldName, index] = name.split(" ");
             index = parseInt(index, 10);
 
-            setFormData((prevFormData) => {
-                const newArrayField = [...prevFormData[fieldName]];
+            setData((prevData) => {
+                const newArrayField = [...prevData[fieldName]];
                 newArrayField[index] = value;
 
                 return {
-                    ...prevFormData,
+                    ...prevData,
                     [fieldName]: newArrayField,
                 };
             });
@@ -79,7 +64,7 @@ export default function Espai_edit({auth}){
         let arq = [];
 
         for (let i = 0; i < numeroArquitectes; i++) {
-            arq.push(<ArquitectesSelect key={"arq" + i} className={"mt-2"} name={"arquitectes " + i}
+            arq.push(<ArquitectesSelect key={"arq" + i} selected={(data.arquitectes[i])?data.arquitectes[i].id:-1} className={"mt-2"} name={"arquitectes " + i}
                                         onChange={handleChange}></ArquitectesSelect>)
         }
         return arq;
@@ -89,7 +74,7 @@ export default function Espai_edit({auth}){
         let mod = [];
 
         for (let i = 0; i < numeroModalitats; i++) {
-            mod.push(<ModalitatsSelect name={"modalitats " + i} key={"mod" + i} className={"mt-2"}
+            mod.push(<ModalitatsSelect name={"modalitats " + i} selected={(data.modalitats[i])?data.modalitats[i].id:-1} key={"mod" + i} className={"mt-2"}
                                        onChange={handleChange}></ModalitatsSelect>)
         }
         return mod;
@@ -112,23 +97,25 @@ export default function Espai_edit({auth}){
         setNumeroModalitats(numeroModalitats - 1)
     }
 
+    const fetchData = async () => {
+        try {
+            const response = await axios.get(`/api/espais/` + id);
+            setData(response.data.data);
+            setNumeroModalitats(response.data.data.modalitats.length)
+            setNumeroArquitectes(response.data.data.arquitectes.length)
+            console.log(response.data)
+
+            if (response.data.data.fk_gestor && response.data.data.fk_gestor !== auth.user.id) {
+                window.location.href = route("espais_per_gestor");
+            }
+        } catch (error) {
+            console.error('Error al obtener los datos:', error);
+        }
+    };
+
     useEffect(() => {
         fetchData();
     }, []);
-
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(`/api/espais/`+ id)
-                setData(response.data.data);
-
-                if(data.fk_gestor && data.fk_gestor !== auth.user.id){
-                    window.location.href = route("espais_per_gestor")
-                }
-
-            } catch (error) {
-                console.error('Error al obtener los datos:', error);
-            }
-        };
 
         function fetchArquitectes() {
 
@@ -184,7 +171,7 @@ export default function Espai_edit({auth}){
                 >Torna</a>
             </div>
 
-            <Form handleSubmit={handleSubmit} titol={"Crear un espai"} className={"mt-5"}>
+            <Form handleSubmit={handleSubmit} titol={"Crear un espai"} className={"mt-5"} tag={"Editar"}>
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nom">
                         Nom
@@ -277,7 +264,7 @@ export default function Espai_edit({auth}){
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={"municipi"}>
                         Municipi
                     </label>
-                    <MunicipisSelect onChange={handleChange}/>
+                    <MunicipisSelect selected={(data)?data.fk_municipi:-1} onChange={handleChange}/>
                     <InputError message={(errors !== undefined) ? errors.municipi : ""}/>
                 </div>
 
@@ -321,7 +308,7 @@ export default function Espai_edit({auth}){
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={"tipus"}>
                         Tipus d'espai
                     </label>
-                    <TipusEspaiSelect onChange={handleChange}/>
+                    <TipusEspaiSelect selected={(data)?data.fk_tipusEspai:-1} onChange={handleChange}/>
                     <InputError message={(errors !== undefined) ? errors.tipusEspai : ""}/>
                 </div>
 
@@ -329,7 +316,7 @@ export default function Espai_edit({auth}){
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={"grau_acces"}>
                         Grau d'accessibilitat
                     </label>
-                    <GrauAccesSelect onChange={handleChange}/>
+                    <GrauAccesSelect selected={(data)?data.grau_accessibilitat:""} onChange={handleChange}/>
                     <InputError message={(errors !== undefined) ? errors.grau_accessibilitat : ""}/>
                 </div>
 
@@ -340,7 +327,7 @@ export default function Espai_edit({auth}){
                     <div
                         className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 font-medium"
                         role="alert">
-                        Arquitecte creat!
+                        Espai editat!
                     </div>
                 )}
             </Form>

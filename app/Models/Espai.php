@@ -17,6 +17,7 @@ class Espai extends Model
     protected $fillable = ["nom", "descripcio", "direccio", "any_construccio", "grau_accessibbilitat", "web",
         "email", "telefon", "fk_arquitecte", "fk_municipi", "fk_tipusEspai"];
 
+
     public function modalitats(): BelongsToMany
     {
         return $this->belongsToMany(Modalitat::class, 'espai_modalitat',
@@ -48,14 +49,14 @@ class Espai extends Model
         return $this->hasMany(PuntInteres::class, "fk_espai");
     }
 
-    public function municipi(): HasOne
+    public function municipi(): BelongsTo
     {
-        return $this->hasOne(Municipi::class, 'fk_municipi');
+        return $this->belongsTo(Municipi::class, 'fk_municipi');
     }
 
-    public function tipusEspai(): HasOne
+    public function tipusEspai(): BelongsTo
     {
-        return $this->hasOne(TipusEspai::class, "fk_tipusEspai");
+        return $this->belongsTo(TipusEspai::class, "fk_tipusEspai");
     }
 
     public function comentaris(): BelongsTo
