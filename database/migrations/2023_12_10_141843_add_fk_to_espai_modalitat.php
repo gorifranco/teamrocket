@@ -11,8 +11,9 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('espai_modalitat', function (Blueprint $table) {
-            $table->foreignId('fk_espai')->nullable()->constrained('espais')->onUpdate('SET NULL')->onDelete('CASCADE');
-            $table->foreignId('fk_modalitat')->nullable()->constrained('modalitats')->onUpdate('SET NULL')->onDelete('CASCADE');
+            $table->foreignId('fk_espai')->constrained('espais')->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->foreignId('fk_modalitat')->constrained('modalitats')->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->primary(['fk_espai', 'fk_modalitat']);
         });
     }
 

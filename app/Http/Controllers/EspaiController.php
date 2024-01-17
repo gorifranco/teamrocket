@@ -107,10 +107,10 @@ class EspaiController extends Controller
             $espai->any_construccio = $request->any_construccio;
             $espai->fk_gestor = $user->id;
 
-            $espai->arquitectes()->insert($request->arquitectes);
-            $espai->modalitats()->insert($request->modalitats);
-
             $espai->save();
+
+            $espai->arquitectes()->sync($request->arquitectes);
+            $espai->modalitats()->sync($request->modalitats);
 
             return response()->json(['status' => 'success','data' => $espai],200);
         } else {
@@ -182,10 +182,10 @@ class EspaiController extends Controller
             $espai->any_construccio = $request->any_construccio;
             $espai->fk_gestor = $user->id;
 
+            $espai->save();
+
             $espai->arquitectes()->sync($request->arquitectes);
             $espai->modalitats()->sync($request->modalitats);
-
-            $espai->save();
 
             return response()->json(['status' => 'success', 'data' => $espai], 200);
         }else{
