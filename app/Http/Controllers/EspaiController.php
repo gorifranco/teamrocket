@@ -36,6 +36,21 @@ class EspaiController extends Controller
         ]);
     }
 
+    public function espais_per_gestor_tots(Request $request): JsonResponse
+    {
+        $key = explode(' ', $request->header('Authorization'));
+        $token = $key[1];
+        $user = User::where('api_token', $token)->first();
+
+        $id_gestor = $user->id;
+
+        $data = Espai::where("fk_gestor", $id_gestor)->get(["id", "nom"]);
+
+        return response()->json([
+            "data" => $data
+        ]);
+    }
+
 
     public function espais_per_gestor_find(request $request, string $str): JsonResponse
     {
@@ -123,7 +138,7 @@ class EspaiController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        $espai = Espai::with(['modalitats', 'arquitectes', 'municipi', 'tipusEspai'])->find($id);
+        $espai = Espai::with(['modalitats', 'arquitectes', 'municipi', 'tipusEspai', "puntsInteres"])->find($id);
 
         return response()->json(['data' => $espai]);
     }

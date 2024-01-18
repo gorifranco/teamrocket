@@ -18,6 +18,10 @@ class PuntInteresController extends Controller
         ]);
     }
 
+    public function punts_per_espai (string $id) {
+
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -34,7 +38,6 @@ class PuntInteresController extends Controller
         $regles = [
             'nom' => 'required',
             'descripcio' => 'required',
-            'fk_espai' => 'required|integer|min:0'
         ];
         return $this->dbActionBasic(null, PuntInteres::class, $request, "createOrFail", $regles);
 
@@ -43,17 +46,17 @@ class PuntInteresController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(PuntInteres $puntInteres): JsonResponse
+    public function show(string $id): JsonResponse
     {
         return response()->json([
-            'punt_interes' => PuntInteres::find($puntInteres)
+            'punt_interes' => PuntInteres::find($id)
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(PuntInteres $puntInteres)
+    public function edit(string $id)
     {
         //
     }

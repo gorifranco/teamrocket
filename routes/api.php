@@ -73,6 +73,7 @@ Route::middleware(['apiMiddleware'])->group(function () {
             ->only("store", "destroy", "update");
         Route::put("espais/{id}/activar_desactivar", [EspaiController::class, "activar_desactivar"]);
         Route::get("/espais_per_gestor", [EspaiController::class, "espais_per_gestor"]);
+        Route::get("/espais_per_gestor_tots", [EspaiController::class, "espais_per_gestor_tots"]);
         Route::get("/espais_per_gestor/find/{cerca}", [EspaiController::class, "espais_per_gestor_find"]);
         Route::apiResource("punts_interes", PuntInteresController::class)
             ->only("store", "destroy", "update");
