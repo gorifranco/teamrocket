@@ -35,6 +35,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::inertia("/tipus_espais", "Tipus_espais")->name('tipus_espais');
     Route::inertia("/espais", "Espais")->name('espais_per_gestor');
     Route::inertia("/editarEspai/{id}", "Espai_edit")->name("editarEspai");
+    Route::inertia("/punts", "Punts")->name('punts-interes');
 });
 
 Route::middleware('auth')->group(function () {

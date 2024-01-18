@@ -30,8 +30,8 @@ export default function index({auth}) {
             telefon: '',
             any_construccio: '',
             grau_accessibilitat: '',
-            tipusEspai: '',
-            municipi: '',
+            fk_tipusEspai: '',
+            fk_municipi: '',
             modalitats: [],
             arquitectes: [],
         });
@@ -53,8 +53,8 @@ export default function index({auth}) {
         telefon: '',
         any_construccio: '',
         grau_accessibilitat: '',
-        tipusEspai: '',
-        municipi: '',
+        fk_tipusEspai: '',
+        fk_municipi: '',
         modalitats: [],
         arquitectes: [],
     });
@@ -79,6 +79,12 @@ export default function index({auth}) {
 
     function llevarArquitecte() {
         setNumeroArquitectes(numeroArquitectes - 1)
+        const newArquitectes = [...formData.arquitectes];
+        newArquitectes.pop();
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            arquitectes: newArquitectes,
+        }));
     }
 
     function afegirModalitat() {
@@ -87,6 +93,12 @@ export default function index({auth}) {
 
     function llevarModalitat() {
         setNumeroModalitats(numeroModalitats - 1)
+        const newModalitats = [...formData.modalitats];
+        newModalitats.pop();
+        setFormData(prevData => ({
+            ...prevData,
+            modalitats: newModalitats,
+        }));
     }
 
     async function handleSwitch($id) {
@@ -128,23 +140,6 @@ export default function index({auth}) {
             },
         })
             .then(() => {
-                setNumeroArquitectes(1)
-                setNumeroModalitats(1)
-                setFormData({
-                    nom: '',
-                    email: '',
-                    descripcio: '',
-                    direccio: '',
-                    web: '',
-                    telefon: '',
-                    any_construccio: '',
-                    grau_accessibilitat: '',
-                    tipusEspai: '',
-                    municipi: '',
-                    modalitats: [],
-                    arquitectes: [],
-                });
-
                 setErrors({
                     nom: '',
                     email: '',
@@ -153,9 +148,9 @@ export default function index({auth}) {
                     web: '',
                     telefon: '',
                     any_construccio: '',
-                    grau_acces: '',
-                    tipusEspai: '',
-                    municipi: '',
+                    grau_accessibilitat: '',
+                    fk_tipusEspai: '',
+                    fk_municipi: '',
                     modalitats: [],
                     arquitectes: [],
                 })

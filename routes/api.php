@@ -60,38 +60,34 @@ Route::get("modalitats_tots", [ModalitatController::class, "tots"]);
 
 
 Route::middleware(['apiMiddleware'])->group(function () {
-    Route::apiResource("arquitectes", ArquitecteController::class)
-        ->only("store", "destroy", "update")
-        ->middleware("tipusUsuari:administrador,gestor");
-    Route::apiResource("tipus_espais", TipusEspaiController::class)
-        ->only("store", "destroy", "update")
-        ->middleware("tipusUsuari:administrador,gestor");
-    Route::apiResource("serveis", ServeiController::class)
-        ->only("store", "destroy", "update")
-        ->middleware("tipusUsuari:administrador,gestor");
-    Route::apiResource("modalitats", ModalitatController::class)
-        ->only("store", "destroy", "update")
-        ->middleware("tipusUsuari:administrador,gestor");
-    Route::apiResource("espais", EspaiController::class)
-        ->only("store", "destroy", "update")
-        ->middleware("tipusUsuari:administrador,gestor");
-    Route::put("espais/{id}/activar_desactivar", [EspaiController::class, "activar_desactivar"])
-        ->middleware("tipusUsuari:administrador,gestor");
-    Route::get("/espais_per_gestor", [EspaiController::class, "espais_per_gestor"])
-        ->middleware("tipusUsuari:gestor");
-    Route::get("/espais_per_gestor/find/{cerca}", [EspaiController::class, "espais_per_gestor_find"])
-        ->middleware("tipusUsuari:gestor");
+    Route::middleware(["tipusUsuari:administrador,gestor"])->group(function () {
+        Route::apiResource("arquitectes", ArquitecteController::class)
+            ->only("store", "destroy", "update");
+        Route::apiResource("tipus_espais", TipusEspaiController::class)
+            ->only("store", "destroy", "update");
+        Route::apiResource("serveis", ServeiController::class)
+            ->only("store", "destroy", "update");
+        Route::apiResource("modalitats", ModalitatController::class)
+            ->only("store", "destroy", "update");
+        Route::apiResource("espais", EspaiController::class)
+            ->only("store", "destroy", "update");
+        Route::put("espais/{id}/activar_desactivar", [EspaiController::class, "activar_desactivar"]);
+        Route::get("/espais_per_gestor", [EspaiController::class, "espais_per_gestor"]);
+        Route::get("/espais_per_gestor/find/{cerca}", [EspaiController::class, "espais_per_gestor_find"]);
+        Route::apiResource("punts_interes", PuntInteresController::class)
+            ->only("store", "destroy", "update");
 
-    Route::apiResources([
-        'audios' => AudioController::class,
-        'comentaris' => ComentariController::class,
-        'dates-reformes' => DataReformaController::class,
-        'hores-actives' => HoraActivaController::class,
-        'imatges' => ImatgeController::class,
-        'punts-interes' => PuntInteresController::class,
-        'visites' => VisitaController::class,
-    ]);
+        Route::apiResources([
+            'audios' => AudioController::class,
+            'comentaris' => ComentariController::class,
+            'dates-reformes' => DataReformaController::class,
+            'hores-actives' => HoraActivaController::class,
+            'imatges' => ImatgeController::class,
+            'visites' => VisitaController::class,
+        ]);
+    });
 });
+
 
 Route::get('/arquitectes/find/{cerca}', [ArquitecteController::class, 'find']);
 Route::get('/modalitats/find/{cerca}', [ModalitatController::class, 'find']);

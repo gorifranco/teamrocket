@@ -142,7 +142,7 @@ class EspaiController extends Controller
     public function update(Request $request, string $id): JsonResponse
     {
         $regles = [
-            "nom" => "required|unique:espais,nom",
+            "nom" => "required|unique:espais,nom,$id",
             "descripcio" => 'required',
             'direccio' => 'required',
             'any_construccio' => 'required|integer',
@@ -151,8 +151,8 @@ class EspaiController extends Controller
             'email' => 'required|email',
             'municipi' => 'required|integer|min:0',
             'tipusEspai' => 'required|integer|min:0',
-            'modalitats.*' => 'exists:modalitats,id',
-            'arquitectes.*' => 'exists:arquitectes,id',
+//            'modalitats.*' => 'exists:modalitats,id',
+//            'arquitectes.*' => 'exists:arquitectes,id',
         ];
 
         $espai = Espai::where("id", $id)->first();
@@ -161,9 +161,11 @@ class EspaiController extends Controller
         $token = $key[1]; // key[0]->Bearer key[1]→token
         $user = User::where('api_token', $token)->first();
 
-        if(!$user->esAdministrador() || $user->id !== $espai->gestor()->id()){
+        if(!$user->esAdministrador() && $user->id !== $espai->fk_gestor){
             return response()->json([
-                "error" => "Unauthorized"
+                "user" => $user,
+                "espai" => $espai,
+                "error" => "Unauthorized",
             ], 401);
         }
 

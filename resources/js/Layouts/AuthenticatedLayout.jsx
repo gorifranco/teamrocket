@@ -28,14 +28,18 @@ export default function Authenticated({user, header, plusButton = false, onclick
                                     Dashboard
                                 </NavLink>
                                 {user.tipusUsuari === "gestor" && (
+                                    <>
                                     <NavLink href={route('espais_per_gestor')}
                                              active={route().current('espais_per_gestor')}>
                                         Els meus espais
-                                    </NavLink>)
+                                    </NavLink>
+                                        <NavLink href={route('punts-interes')}
+                                                 active={route().current('punts-interes')}>
+                                        Punts d'interés
+                                    </NavLink>
+                                    </>
+                                )
                                 }
-                                <NavLink href={route('arquitectes')} active={route().current('arquitectes')}>
-                                    Arquitectes
-                                </NavLink>
                                 <div
                                     className={'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 transition duration-150 ' +
                                         ' ease-in-out focus:outline-none cursor-pointer' +
@@ -48,6 +52,7 @@ export default function Authenticated({user, header, plusButton = false, onclick
                                             <Dropdown.Link href={route('modalitats')}>Modalitats</Dropdown.Link>
                                             <Dropdown.Link href={route('tipus_espais')}>Tipus d'espais</Dropdown.Link>
                                             <Dropdown.Link href={route('serveis')}>Serveis</Dropdown.Link>
+                                            <Dropdown.Link href={route('arquitectes')}>Arquitectes</Dropdown.Link>
                                         </Dropdown.Content>
                                     </Dropdown>
                                 </div>

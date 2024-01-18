@@ -30,8 +30,8 @@ export default function Espai_edit({auth}){
         telefon: '',
         any_construccio: '',
         grau_accessibilitat: '',
-        tipusEspai: '',
-        municipi: '',
+        fk_tipusEspai: '',
+        fk_municipi: '',
         modalitats: [],
         arquitectes: [],
     });
@@ -64,7 +64,7 @@ export default function Espai_edit({auth}){
         let arq = [];
 
         for (let i = 0; i < numeroArquitectes; i++) {
-            arq.push(<ArquitectesSelect key={"arq" + i} selected={(data.arquitectes[i])?data.arquitectes[i].id:-1} className={"mt-2"} name={"arquitectes " + i}
+            arq.push(<ArquitectesSelect key={"arq" + i} selected={(data.arquitectes[i])?data.arquitectes[i]:-1} className={"mt-2"} name={"arquitectes " + i}
                                         onChange={handleChange}></ArquitectesSelect>)
         }
         return arq;
@@ -74,7 +74,7 @@ export default function Espai_edit({auth}){
         let mod = [];
 
         for (let i = 0; i < numeroModalitats; i++) {
-            mod.push(<ModalitatsSelect name={"modalitats " + i} selected={(data.modalitats[i])?data.modalitats[i].id:-1} key={"mod" + i} className={"mt-2"}
+            mod.push(<ModalitatsSelect name={"modalitats " + i} selected={(data.modalitats[i])?data.modalitats[i]:-1} key={"mod" + i} className={"mt-2"}
                                        onChange={handleChange}></ModalitatsSelect>)
         }
         return mod;
@@ -87,6 +87,12 @@ export default function Espai_edit({auth}){
 
     function llevarArquitecte() {
         setNumeroArquitectes(numeroArquitectes - 1)
+        const newArquitectes = [...data.arquitectes];
+        newArquitectes.pop();
+        setData(prevData => ({
+            ...prevData,
+            arquitectes: newArquitectes,
+        }));
     }
 
     function afegirModalitat() {
@@ -95,15 +101,37 @@ export default function Espai_edit({auth}){
 
     function llevarModalitat() {
         setNumeroModalitats(numeroModalitats - 1)
+        const newModalitats = [...data.modalitats];
+        newModalitats.pop();
+        setData(prevData => ({
+            ...prevData,
+            modalitats: newModalitats,
+        }));
     }
 
     const fetchData = async () => {
         try {
             const response = await axios.get(`/api/espais/` + id);
-            setData(response.data.data);
+    console.log(response.data.data)
+            const modalitatsIds = response.data.data.modalitats.map(modalitat => modalitat.id);
+            const arquitectesIds = response.data.data.arquitectes.map(arquitecte => arquitecte.id);
+
+            setData({
+                nom: response.data.data.nom,
+                email: response.data.data.email,
+                descripcio: response.data.data.descripcio,
+                direccio: response.data.data.direccio,
+                web: response.data.data.web,
+                telefon: response.data.data.telefon,
+                any_construccio: response.data.data.any_construccio,
+                grau_accessibilitat: response.data.data.grau_accessibilitat,
+                fk_tipusEspai: response.data.data.fk_tipusEspai,
+                fk_municipi: response.data.data.municipi.id,
+                modalitats: modalitatsIds,
+                arquitectes: arquitectesIds,
+            });
             setNumeroModalitats(response.data.data.modalitats.length)
             setNumeroArquitectes(response.data.data.arquitectes.length)
-            console.log(response.data)
 
             if (response.data.data.fk_gestor && response.data.data.fk_gestor !== auth.user.id) {
                 window.location.href = route("espais_per_gestor");
@@ -117,15 +145,11 @@ export default function Espai_edit({auth}){
         fetchData();
     }, []);
 
-        function fetchArquitectes() {
-
-        }
-
 
     function handleSubmit(event) {
         event.preventDefault()
 
-        axios.put('/api/espais/' + data.id, formData, {
+        axios.put('/api/espais/' + id, data, {
             headers: {
                 'Authorization': `Bearer ${auth.user.api_token}`,
             },
@@ -139,9 +163,9 @@ export default function Espai_edit({auth}){
                     web: '',
                     telefon: '',
                     any_construccio: '',
-                    grau_acces: '',
-                    tipusEspai: '',
-                    municipi: '',
+                    grau_accessibilitat: '',
+                    fk_tipusEspai: '',
+                    fk_municipi: '',
                     modalitats: [],
                     arquitectes: [],
                 })
@@ -265,7 +289,7 @@ export default function Espai_edit({auth}){
                         Municipi
                     </label>
                     <MunicipisSelect selected={(data)?data.fk_municipi:-1} onChange={handleChange}/>
-                    <InputError message={(errors !== undefined) ? errors.municipi : ""}/>
+                    <InputError message={(errors !== undefined) ? errors.fk_municipi : ""}/>
                 </div>
 
                 <div className={"mt-4"} key={"divx"}>
@@ -309,7 +333,7 @@ export default function Espai_edit({auth}){
                         Tipus d'espai
                     </label>
                     <TipusEspaiSelect selected={(data)?data.fk_tipusEspai:-1} onChange={handleChange}/>
-                    <InputError message={(errors !== undefined) ? errors.tipusEspai : ""}/>
+                    <InputError message={(errors !== undefined) ? errors.fk_tipusEspai : ""}/>
                 </div>
 
                 <div className={"mt-4 mb-6"}>
