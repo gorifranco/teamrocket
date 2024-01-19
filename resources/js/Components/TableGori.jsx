@@ -90,14 +90,13 @@ export default function TableGori({
                             </thead>
                             <tbody>
 
-                            {data && Object.entries(data.data).map(([key, value], index) => (
+                            {data && data.data && data.data.length>0 && Object.entries(data.data).map(([key, value], index) => (
                                 <tr
                                     className={`border-b ${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}
                                     key={"tr" + index}>
                                     <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900 text-center"
                                         key={"td1" + key + value + index}>
                                         {value["id"]}
-
                                     </td>
 
                                     {Object.entries(cols).map(([colName, colType], colIndex) => (

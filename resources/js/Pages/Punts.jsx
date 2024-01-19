@@ -9,12 +9,12 @@ import InputError from "@/Components/InputError.jsx";
 export default function Punts({auth}){
     const [formCrearVisible, setFormHidden] = useState(false)
     const [successMessage, setSuccessMessage] = useState(false);
-    const [data, setData] = useState();
+    const [data, setData] = useState({});
     const [espais, setEspais] = useState({});
     const [formData, setFormData] = useState({})
+    const [currentEspai, setCurrentEspai] = useState(0)
     const cols = {
         nom: 'text',
-        espai: 'text',
         descripcio: 'textArea'
     }
 
@@ -30,14 +30,18 @@ export default function Punts({auth}){
     }
 
     useEffect(() => {
-        fetchEspais();
-        // fetchData();
+        fetchEspais()
     }, []);
+
+    useEffect(() => {
+        fetchData()
+    }, [currentEspai]);
+
 
     async function fetchData () {
         try {
-            const response = await axios.get(`/api/punts/`);
-            setData(response.data.data);
+            const response = await axios.get(`/api/punts_per_espai/` + currentEspai);
+            setData(response.data);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
         }
@@ -98,14 +102,19 @@ export default function Punts({auth}){
     }
 
     function changeEspai(espai) {
-        setFormData({
-            ...formData,
-            fk_espai: espai.id,
-        });
+        if(espai){
+            setCurrentEspai(espai.id)
+            setFormData({
+                ...formData,
+                fk_espai: espai.id
+            })
+        }else{
+            setCurrentEspai(0)
+        }
     }
 
+
     function handleDelete(punt) {
-        console.log(punt)
         if (confirm("Segur que vols borrar el punt d'interés " + punt + "?")) {
             axios.delete("api/punts_interes/" + punt, {
                 headers: {
@@ -143,7 +152,7 @@ export default function Punts({auth}){
         <AuthenticatedLayout
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Punts d'interés</h2>}
-            plusButton={true}
+            plusButton={currentEspai>0}
             onclickPlusButton={obrirFormCrear}
         >
 
@@ -152,7 +161,7 @@ export default function Punts({auth}){
                 <SelectGori options={espais} className={"min-w-60"} onChange={changeEspai}></SelectGori>
             </div>
 
-            {formCrearVisible &&
+            {formCrearVisible && currentEspai > 0 &&
                 (<Form handleSubmit={handleSubmit} titol={"Crear un punt d'interés"} className={"mt-5"}>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nom">

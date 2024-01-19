@@ -14,13 +14,14 @@ class PuntInteresController extends Controller
     public function index(): JsonResponse
     {
         return response()->json([
-            'puntsInteres' => PuntInteres::all()
+            'data' => PuntInteres::all()
         ]);
     }
 
     public function punts_per_espai (string $id): JsonResponse
     {
-        $punts = PuntInteres::where("fk_espai", $id)->with(["espai" => function ($query) {
+        $punts = PuntInteres::where("fk_espai", $id)
+            ->with(["espai" => function ($query) {
             $query->select("id",'nom');
         }])->get();
 
@@ -56,7 +57,7 @@ class PuntInteresController extends Controller
     public function show(string $id): JsonResponse
     {
         return response()->json([
-            'punt_interes' => PuntInteres::find($id)
+            'data' => PuntInteres::find($id)
         ]);
     }
 

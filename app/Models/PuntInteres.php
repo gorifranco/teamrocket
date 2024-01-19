@@ -16,9 +16,9 @@ class PuntInteres extends Model
     protected $table = "puntsInteres";
     protected $fillable = ["nom", "descripcio", "fk_espai"];
 
-    public function espai(): HasOne
+    public function espai(): BelongsTo
     {
-        return $this->hasOne(Espai::class, "fk_espai");
+        return $this->belongsTo(Espai::class, "fk_espai");
     }
 
     public function imatge(): BelongsTo
