@@ -56,6 +56,8 @@ Route::apiResource('zones', ZonaController::class)->only(['index', 'show']);
 Route::get("arquitectes_tots", [ArquitecteController::class, "tots"]);
 Route::get("tipus_espais_tots", [TipusEspaiController::class, "tots"]);
 Route::get("modalitats_tots", [ModalitatController::class, "tots"]);
+Route::get("punts_per_espai/{id}", [PuntInteresController::class, "punts_per_espai"])
+    ->name("punts_per_espai");
 
 
 

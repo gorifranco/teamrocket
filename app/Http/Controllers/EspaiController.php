@@ -166,8 +166,8 @@ class EspaiController extends Controller
             'email' => 'required|email',
             'municipi' => 'required|integer|min:0',
             'tipusEspai' => 'required|integer|min:0',
-//            'modalitats.*' => 'exists:modalitats,id',
-//            'arquitectes.*' => 'exists:arquitectes,id',
+            'modalitats.*' => 'exists:modalitats,id',
+            'arquitectes.*' => 'exists:arquitectes,id',
         ];
 
         $espai = Espai::where("id", $id)->first();
@@ -233,7 +233,6 @@ class EspaiController extends Controller
 
     public function activar_desactivar(Request $request, string $id): JsonResponse
     {
-
         $key = explode(' ', $request->header('Authorization'));
         $token = $key[1]; // key[0]->Bearer key[1]→token
         $user = User::where('api_token', $token)->first();
@@ -251,11 +250,9 @@ class EspaiController extends Controller
             ],200);
 
         }else{
-
             return response()->json([
                 "state" => "error",
             ],400);
         }
     }
-
 }

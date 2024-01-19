@@ -90,7 +90,7 @@ export default function TableGori({
                             </thead>
                             <tbody>
 
-                            {Object.entries(data.data).map(([key, value], index) => (
+                            {data && Object.entries(data.data).map(([key, value], index) => (
                                 <tr
                                     className={`border-b ${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}
                                     key={"tr" + index}>
@@ -110,7 +110,17 @@ export default function TableGori({
                                                     onChange={(newCheckedState) => handleSwitch(value["id"], newCheckedState)}
                                                 />
                                             )}
-                                            {colType !== "boolean" && (
+                                            {colType === "textArea" && (
+                                                <textarea
+                                                    value={rowEditing === index ? editedValues[colName] : value[colName]}
+                                                    disabled={rowEditing !== index}
+                                                    key={"td3_input" + colName + colType + colIndex}
+                                                    onChange={(evt) => handleChange(evt, colName)}
+                                                >
+                                                </textarea>
+
+                                            )}
+                                            {colType !== "boolean" && colType !== "textArea" && (
 
                                                 <InputTable
                                                     type={colType}

@@ -18,7 +18,7 @@ export default function index({auth}) {
     const cols = {
         nom: 'text',
         data_naix: 'date',
-        descripcio: 'text'
+        descripcio: 'textArea'
     }
 
     const [errors, setErrors] = useState({
