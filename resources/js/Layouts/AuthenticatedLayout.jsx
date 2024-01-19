@@ -37,6 +37,10 @@ export default function Authenticated({user, header, plusButton = false, onclick
                                                  active={route().current('punts-interes')}>
                                         Punts d'interés
                                     </NavLink>
+                                    <NavLink href={route('visites')}
+                                active={route().current('visites')}>
+                                Visites
+                            </NavLink>
                                     </>
                                 )
                                 }

@@ -58,6 +58,8 @@ Route::get("tipus_espais_tots", [TipusEspaiController::class, "tots"]);
 Route::get("modalitats_tots", [ModalitatController::class, "tots"]);
 Route::get("punts_per_espai/{id}", [PuntInteresController::class, "punts_per_espai"])
     ->name("punts_per_espai");
+Route::get("visites_per_espai/{id}", [VisitaController::class, "visites_per_espai"])
+    ->name("visites_per_espai");
 
 
 

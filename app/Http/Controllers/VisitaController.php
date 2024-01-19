@@ -51,6 +51,15 @@ class VisitaController extends Controller
         return $this->dbActionBasic($id, VisitaController::class, null, "findOrFail", null);
     }
 
+    public function visites_per_espai(string $id): JsonResponse
+    {
+        $visites = Visita::where("fk_espai", $id)->get();
+
+        return response()->json([
+            "data" => $visites,
+        ]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
