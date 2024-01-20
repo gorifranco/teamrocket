@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PuntInteres;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -47,6 +48,7 @@ class PuntInteresController extends Controller
             'nom' => 'required',
             'descripcio' => 'required',
         ];
+
         return $this->dbActionBasic(null, PuntInteres::class, $request, "createOrFail", $regles);
 
     }
@@ -79,14 +81,39 @@ class PuntInteresController extends Controller
             'descripcio' => 'required',
             'fk_espai' => 'required|integer|min:0'
         ];
+
+        $key = explode(' ', $request->header('Authorization'));
+        $token = $key[1];
+        $user = User::where('api_token', $token)->first();
+
+        $id_gestor = $user->id;
+
+        if($id_gestor !== $request->input("fk_gestor")){
+            return response()->json([
+                "error" => "Unauthorized"
+            ]);
+        }
+
         return $this->dbActionBasic($id, PuntInteres::class, $request, "updateOrFail", $regles);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(Request $request, string $id): JsonResponse
     {
+        $key = explode(' ', $request->header('Authorization'));
+        $token = $key[1];
+        $user = User::where('api_token', $token)->first();
+
+        $id_gestor = $user->id;
+
+        if($id_gestor !== $request->input("fk_gestor")){
+            return response()->json([
+                "error" => "Unauthorized"
+            ]);
+        }
+
         return $this->dbActionBasic($id, PuntInteres::class, null, "deleteOrFail", null);
     }
 }

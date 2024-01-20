@@ -59,13 +59,18 @@ class Espai extends Model
         return $this->belongsTo(TipusEspai::class, "fk_tipusEspai");
     }
 
-    public function comentaris(): BelongsTo
+    public function comentaris(): HasMany
     {
-        return $this->belongsTo(Comentari::class, "fk_espai");
+        return $this->hasMany(Comentari::class, "fk_espai");
     }
 
     public function gestor(): HasOne
     {
         return $this->hasOne(User::class, "fk_gestor");
+    }
+
+    public function visites(): HasMany
+    {
+        return $this->hasMany(Visita::class, "fk_espai");
     }
 }

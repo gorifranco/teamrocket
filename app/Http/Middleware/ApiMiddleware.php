@@ -31,5 +31,5 @@ class ApiMiddleware
         } else {
             return response()->json(['error' => 'Token no rebut'], 401);
         }
-    }
+    } 
 }

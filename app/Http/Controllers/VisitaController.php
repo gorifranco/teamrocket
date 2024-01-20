@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Visita;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -37,8 +38,27 @@ class VisitaController extends Controller
             "dataInici" => 'date|required',
             'dataFi' => 'date',
             'reqInscripcio' => 'required|booelan',
-            'places' => 'integer'
+            'places' => 'integer',
         ];
+
+        if(!$request->input("fk_espai"))
+        {
+            return response()->json([
+                "error" => "fk_espai required",
+            ]);
+        }
+
+        $key = explode(' ', $request->header('Authorization'));
+        $token = $key[1];
+        $user = User::where('api_token', $token)->first();
+
+        $espais = $user->espais()->where('id', $request->input("fk_espai"))->first();
+
+        if($espais->isEmpty()){
+            return response()->json([
+                "error" => "Unauthorized"
+            ]);
+        }
 
         return $this->dbActionBasic(null, Visita::class, $request,"createOrFail", $regles);
     }
@@ -79,8 +99,22 @@ class VisitaController extends Controller
             "dataInici" => 'date|required',
             'dataFi' => 'date',
             'reqInscripcio' => 'required|booelan',
-            'places' => 'integer'
+            'places' => 'integer',
+            "fk_espai" => "exclude_field" // regla afegida a AppServiceProvider, torna false si existeix
         ];
+
+        $key = explode(' ', $request->header('Authorization'));
+        $token = $key[1];
+        $user = User::where('api_token', $token)->first();
+
+        $espai = $user->espais()->where('id', $id)->first();
+
+        if($espai->isEmpty()){
+            return response()->json([
+                "error" => "Unauthorized"
+            ]);
+        }
+
         return $this->dbActionBasic($id, Visita::class, $request, "updateOrFail", $regles);
     }
 
