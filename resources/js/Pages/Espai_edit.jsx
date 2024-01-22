@@ -195,7 +195,7 @@ export default function Espai_edit({auth}){
                 >Torna</a>
             </div>
 
-            <Form handleSubmit={handleSubmit} titol={"Crear un espai"} className={"mt-5"} tag={"Editar"}>
+            <Form handleSubmit={handleSubmit} titol={"Editar un espai"} className={"mt-5"} tag={"Editar"}>
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nom">
                         Nom

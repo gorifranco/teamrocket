@@ -7,7 +7,6 @@ import Form from "@/Components/Form.jsx";
 import InputError from "@/Components/InputError.jsx";
 import PlusButton from "@/Components/PlusButton.jsx";
 import MenosButton from "@/Components/MenosButton.jsx";
-import ModalitatsSelect from "@/Components/selects/SelectModalitats.jsx";
 import SelectPuntsInteres from "@/Components/selects/SelectPuntsInteres.jsx";
 
 export default function Visites({auth}){
@@ -24,17 +23,10 @@ export default function Visites({auth}){
         dataFi: '',
         reqInscripcio: '',
         preu: 0,
-        places: '',
+        places: 0,
         puntsInteres: [],
 
     })
-    const [currentEspai, setCurrentEspai] = useState(0)
-    const cols = {
-        nom: 'text',
-        descripcio: 'textArea',
-        dataInici: "date",
-        dataFi: "date",
-    }
 
     const [errors, setErrors] = useState({
         nom: '',
@@ -216,7 +208,7 @@ export default function Visites({auth}){
 
         for (let i = 0; i < numeroPunts; i++) {
             p.push(<div key={"d"+i} className={"flex items-center align-middle w-full" }> <p key={"p"+i} className={"mr-2 text-xl"}>{i+1}</p> <SelectPuntsInteres espai={currentEspai} options={punts} name={"puntsInteres " + i} key={"punt" + i} className={"mt-2 w-full"}
-                                       onChange={handleChange}></SelectPuntsInteres> </div>)
+                                                                                                                                                                  onChange={handleChange}></SelectPuntsInteres> </div>)
         }
         return p;
     }
@@ -306,12 +298,12 @@ export default function Visites({auth}){
                             Requereix inscripció
                         </label>
                         <div className={"flex"}>
-                        <input
-                            className="shadow appearance-none border border-red-500 rounded py-2 px-2 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                            name={"descripcio"} id="descripcio" type={"checkbox"}
-                            value={formData.reqInscripcio}
-                            onChange={handleChangeCheckbox}/>
-                        <p className={"ml-2"}>{(formData.reqInscripcio)?"SI":"NO"}</p>
+                            <input
+                                className="shadow appearance-none border border-red-500 rounded py-2 px-2 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                                name={"descripcio"} id="descripcio" type={"checkbox"}
+                                value={formData.reqInscripcio}
+                                onChange={handleChangeCheckbox}/>
+                            <p className={"ml-2"}>{(formData.reqInscripcio)?"SI":"NO"}</p>
                         </div>
                         <InputError message={(errors !== undefined) ? errors.reqInscripcio : ""}/>
                     </div>
@@ -336,12 +328,12 @@ export default function Visites({auth}){
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="preu">
                             Places
                         </label>
-                            <input
-                                className="shadow appearance-none border border-red-500 mb-2 w-full rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                name={"places"} id="preu" placeholder="Places" required={true}
-                                type={"number"}
-                                value={formData.places}
-                                onChange={handleChange}/>
+                        <input
+                            className="shadow appearance-none border border-red-500 mb-2 w-full rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            name={"places"} id="preu" placeholder="Places" required={true}
+                            type={"number"}
+                            value={formData.places}
+                            onChange={handleChange}/>
                         <InputError message={(errors !== undefined) ? errors.places : ""}/>
                     </div>
 
