@@ -113,7 +113,6 @@ export default function Punts({auth}){
         }
     }
 
-
     function handleDelete(punt) {
         if (confirm("Segur que vols borrar el punt d'interés " + punt + "?")) {
             axios.delete("api/punts_interes/" + punt, {
@@ -146,7 +145,6 @@ export default function Punts({auth}){
                 e)
         })
     }
-
 
     return(
         <AuthenticatedLayout
@@ -192,7 +190,7 @@ export default function Punts({auth}){
                         <div
                             className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 font-medium"
                             role="alert">
-                            Arquitecte creat!
+                            Punt creat!
                         </div>
                     )}
                 </Form>)

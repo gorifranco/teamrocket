@@ -5,20 +5,28 @@ import SelectGori from "@/Components/selects/SelectGori.jsx";
 import TableGori from "@/Components/TableGori.jsx";
 import Form from "@/Components/Form.jsx";
 import InputError from "@/Components/InputError.jsx";
+import PlusButton from "@/Components/PlusButton.jsx";
+import MenosButton from "@/Components/MenosButton.jsx";
+import ModalitatsSelect from "@/Components/selects/SelectModalitats.jsx";
+import SelectPuntsInteres from "@/Components/selects/SelectPuntsInteres.jsx";
 
 export default function Visites({auth}){
     const [formCrearVisible, setFormHidden] = useState(false)
     const [successMessage, setSuccessMessage] = useState(false);
     const [data, setData] = useState({});
     const [espais, setEspais] = useState({});
+    const [numeroPunts, setNumeroPunts] = useState(1)
+    const [punts, setPunts] = useState({})
     const [formData, setFormData] = useState({
         nom: '',
         descripcio: '',
         dataInici: '',
         dataFi: '',
         reqInscripcio: '',
-        preu: '',
+        preu: 0,
         places: '',
+        puntsInteres: [],
+
     })
     const [currentEspai, setCurrentEspai] = useState(0)
     const cols = {
@@ -36,6 +44,7 @@ export default function Visites({auth}){
         reqInscripcio: '',
         preu: '',
         places: '',
+        puntsInteres: ""
     });
 
 
@@ -50,6 +59,7 @@ export default function Visites({auth}){
 
     useEffect(() => {
         fetchData()
+        fetchPunts()
     }, [currentEspai]);
 
 
@@ -74,12 +84,48 @@ export default function Visites({auth}){
         }
     }
 
+    async function fetchPunts(){
+        try {
+            const response = await axios.get(`/api/punts_per_espai/` + currentEspai, {
+                headers: {
+                    'Authorization': `Bearer ${auth.user.api_token}`,
+                },
+            });
+            setPunts(response.data.data);
+            console.log(response)
+        } catch (error) {
+            console.error('Error al obtener los datos:', error);
+        }
+    }
+
     function handleChange(e) {
         const {name, value} = e.target;
-        setFormData({
+
+        if (!name.includes(" ")) {
+            setFormData({
+                ...formData,
+                [name]: value,
+            });
+        } else {
+            let [fieldName, index] = name.split(" ");
+            index = parseInt(index, 10);
+
+            setFormData((prevFormData) => {
+                const newArrayField = [...prevFormData[fieldName]];
+                newArrayField[index] = value;
+
+                return {
+                    ...prevFormData,
+                    [fieldName]: newArrayField,
+                };
+            });
+        }
+    }
+    function handleChangeCheckbox(e){
+        setFormData(({
             ...formData,
-            [name]: value,
-        });
+            reqInscripcio: e.target.checked
+        }))
     }
 
     function handleSubmit(e){
@@ -162,6 +208,30 @@ export default function Visites({auth}){
         })
     }
 
+    function afegirPunt() {
+        setNumeroPunts(numeroPunts + 1)
+    }
+
+    function llevarPunt() {
+        setNumeroPunts(numeroPunts - 1)
+        const newPuntsInteres = [...formData.puntsInteres];
+        newPuntsInteres.pop();
+        setFormData(prevData => ({
+            ...prevData,
+            puntsInteres: newPuntsInteres,
+        }));
+    }
+
+    function pintaPunts() {
+        let p = [];
+
+        for (let i = 0; i < numeroPunts; i++) {
+            p.push(<div key={"d"+i} className={"flex items-center align-middle w-full" }> <p key={"p"+i} className={"mr-2 text-xl"}>{i+1}</p> <SelectPuntsInteres espai={currentEspai} options={punts} name={"puntsInteres " + i} key={"punt" + i} className={"mt-2 w-full"}
+                                       onChange={handleChange}></SelectPuntsInteres> </div>)
+        }
+        return p;
+    }
+
 
     return(
         <AuthenticatedLayout
@@ -189,6 +259,7 @@ export default function Visites({auth}){
                             onChange={handleChange}/>
                         <InputError message={(errors !== undefined) ? errors.nom : ""}/>
                     </div>
+
                     <div className="mb-2 mt-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
                             Descripció
@@ -200,6 +271,7 @@ export default function Visites({auth}){
                             onChange={handleChange}/>
                         <InputError message={(errors !== undefined) ? errors.descripcio : ""}/>
                     </div>
+
                     <div className="flex items-center justify-center">
                     </div>
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="dataInici">
@@ -249,12 +321,60 @@ export default function Visites({auth}){
                             className="shadow appearance-none border border-red-500 rounded py-2 px-2 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                             name={"descripcio"} id="descripcio" type={"checkbox"}
                             value={formData.reqInscripcio}
-                            onChange={handleChange}/>
-                        <p className={"ml-2"}>Si</p>
+                            onChange={handleChangeCheckbox}/>
+                        <p className={"ml-2"}>{(formData.reqInscripcio)?"SI":"NO"}</p>
                         </div>
                         <InputError message={(errors !== undefined) ? errors.reqInscripcio : ""}/>
                     </div>
 
+                    <div className="mb-2 mt-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="preu">
+                            Preu
+                        </label>
+                        <div className={"flex items-center align-middle w-full mb-3"}>
+                            <input
+                                className="shadow appearance-none border border-red-500 w-full rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                name={"preu"} id="preu" placeholder="Preu" required={true}
+                                type={"number"}
+                                value={formData.preu}
+                                onChange={handleChange}/>
+                            <p className={"ml-2 text-xl"}>€</p>
+                        </div>
+                        <InputError message={(errors !== undefined) ? errors.preu : ""}/>
+                    </div>
+
+                    <div className="mb-2 mt-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="preu">
+                            Places
+                        </label>
+                            <input
+                                className="shadow appearance-none border border-red-500 mb-2 w-full rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                name={"places"} id="preu" placeholder="Places" required={true}
+                                type={"number"}
+                                value={formData.places}
+                                onChange={handleChange}/>
+                        <InputError message={(errors !== undefined) ? errors.places : ""}/>
+                    </div>
+
+                    <div className="mb-2 mt-4">
+                        <div className={"mt-4"}>
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={"punts"}>
+                                Punts d'interes per ordre
+                            </label>
+                            <>
+                                {pintaPunts()}
+                            </>
+                            <div className={"flex"}>
+                                <PlusButton className={"mt-2 bg-gray-400 hover:bg-gray-500"} color={"#222222"}
+                                            onClick={afegirPunt}></PlusButton>
+                                {numeroPunts > 1 && (
+                                    <MenosButton className={"mt-2 bg-gray-400 hover:bg-gray-500"} color={"#222222"}
+                                                 onClick={llevarPunt}></MenosButton>
+                                )}
+                                <InputError message={(errors !== undefined) ? errors.puntsInteres : ""}/>
+                            </div>
+                        </div>
+                    </div>
 
                     {successMessage && (
                         <div

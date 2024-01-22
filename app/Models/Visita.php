@@ -12,7 +12,7 @@ class Visita extends Model
 
     protected $table = "visites";
     protected $fillable = ["nom", "descripcio", "dataInici", "dataFi",
-        "reqInscripcio", "places"];
+        "reqInscripcio", "places", "fk_espai"];
 
     public function puntsInteres(): BelongsToMany
     {

@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Visita;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class VisitaController extends Controller
 {
@@ -37,7 +38,7 @@ class VisitaController extends Controller
             "descripcio" => "required",
             "dataInici" => 'date|required',
             'dataFi' => 'date',
-            'reqInscripcio' => 'required|booelan',
+            'reqInscripcio' => 'required',
             'places' => 'integer',
         ];
 
@@ -45,22 +46,41 @@ class VisitaController extends Controller
         {
             return response()->json([
                 "error" => "fk_espai required",
-            ]);
+            ],401);
         }
 
         $key = explode(' ', $request->header('Authorization'));
         $token = $key[1];
         $user = User::where('api_token', $token)->first();
 
-        $espais = $user->espais()->where('id', $request->input("fk_espai"))->first();
+        $espai = $user->espais()->where('id', $request->input("fk_espai"))->first();
 
-        if($espais->isEmpty()){
+        if(!$espai){
             return response()->json([
                 "error" => "Unauthorized"
             ]);
         }
 
-        return $this->dbActionBasic(null, Visita::class, $request,"createOrFail", $regles);
+        $validacio = Validator::make($request->all(), $regles);
+
+        if (!$validacio->fails()) {
+            $obj = Visita::create($request->all());
+
+            $punts = $request->input("puntsInteres");
+
+            foreach ($punts as $i => $puntInteresId) {
+                $obj->puntsInteres()->attach([$puntInteresId => ['ordre' => $i+1]]);
+            }
+
+            return response()->json([
+                'data' => $obj
+            ], 200);
+        }else{
+            return response()->json([
+                'errors'=> $validacio->errors()->toArray(),
+                'missatge' => "action fail",
+            ], 400);
+        }
     }
 
     /**
@@ -73,7 +93,7 @@ class VisitaController extends Controller
 
     public function visites_per_espai(string $id): JsonResponse
     {
-        $visites = Visita::where("fk_espai", $id)->get();
+        $visites = Visita::where("fk_espai", $id)->with("puntsInteres")->get();
 
         return response()->json([
             "data" => $visites,
@@ -98,24 +118,51 @@ class VisitaController extends Controller
             "descripcio" => "required",
             "dataInici" => 'date|required',
             'dataFi' => 'date',
-            'reqInscripcio' => 'required|booelan',
+            'reqInscripcio' => 'required',
             'places' => 'integer',
-            "fk_espai" => "exclude_field" // regla afegida a AppServiceProvider, torna false si existeix
         ];
+
+        if(!$request->input("fk_espai"))
+        {
+            return response()->json([
+                "error" => "fk_espai required",
+            ]);
+        }
 
         $key = explode(' ', $request->header('Authorization'));
         $token = $key[1];
         $user = User::where('api_token', $token)->first();
 
-        $espai = $user->espais()->where('id', $id)->first();
+        $visita = Visita::find($id);
 
-        if($espai->isEmpty()){
+        if($visita->espai()->fk_gestor !== $user->id){
             return response()->json([
                 "error" => "Unauthorized"
-            ]);
+            ],401);
         }
 
-        return $this->dbActionBasic($id, Visita::class, $request, "updateOrFail", $regles);
+        $validacio = Validator::make($request->all(), $regles);
+
+        if (!$validacio->fails()) {
+            $obj = Visita::create($request->all());
+
+            $punts = $request->input("puntsInteres");
+
+            $obj->puntsInteres()->dettach();
+
+            foreach ($punts as $i => $puntInteresId) {
+                $obj->puntsInteres()->syncWithoutDetaching([$puntInteresId => ['ordre' => $i+1]]);
+            }
+
+            return response()->json([
+                'data' => $obj
+            ], 200);
+        }else{
+            return response()->json([
+                'errors'=> $validacio->errors()->toArray(),
+                'missatge' => "action fail",
+            ], 400);
+        }
     }
 
     /**

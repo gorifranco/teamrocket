@@ -195,7 +195,6 @@ export default function index({auth}) {
                 };
             });
         }
-        console.log(formData)
     }
 
 
@@ -434,7 +433,7 @@ export default function index({auth}) {
                         <div
                             className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 font-medium"
                             role="alert">
-                            Arquitecte creat!
+                            Espai creat!
                         </div>
                     )}
                 </Form>)

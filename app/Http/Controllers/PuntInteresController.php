@@ -21,10 +21,10 @@ class PuntInteresController extends Controller
 
     public function punts_per_espai (string $id): JsonResponse
     {
-        $punts = PuntInteres::where("fk_espai", $id)
-            ->with(["espai" => function ($query) {
-            $query->select("id",'nom');
-        }])->get();
+        $punts = PuntInteres::where("fk_espai", $id)->get();
+//            ->with(["espai" => function ($query) {
+//            $query->select("id",'nom');
+//        }])->get();
 
         return response()->json([
             "data" => $punts
