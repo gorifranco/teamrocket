@@ -81,6 +81,8 @@ Route::middleware(['apiMiddleware'])->group(function () {
         Route::get("/espais_per_gestor/find/{cerca}", [EspaiController::class, "espais_per_gestor_find"]);
         Route::apiResource("punts_interes", PuntInteresController::class)
             ->only("store", "destroy", "update");
+        Route::apiResource("visites", VisitaController::class)
+            ->only("store", "destroy", "update");
 
         Route::apiResources([
             'audios' => AudioController::class,
@@ -88,7 +90,6 @@ Route::middleware(['apiMiddleware'])->group(function () {
             'dates-reformes' => DataReformaController::class,
             'hores-actives' => HoraActivaController::class,
             'imatges' => ImatgeController::class,
-            'visites' => VisitaController::class,
         ]);
     });
 });

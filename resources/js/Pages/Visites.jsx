@@ -92,7 +92,6 @@ export default function Visites({auth}){
                 },
             });
             setPunts(response.data.data);
-            console.log(response)
         } catch (error) {
             console.error('Error al obtener los datos:', error);
         }
@@ -137,15 +136,15 @@ export default function Visites({auth}){
             },
         })
             .then(() => {
-                setFormData({
-                    ...formData,
-                    nom: '',
-                    descripcio: ''
-                });
-
                 setErrors({
                     nom: '',
-                    descripcio: ''
+                    descripcio: '',
+                    dataInici: '',
+                    dataFi: '',
+                    reqInscripcio: '',
+                    preu: '',
+                    places: '',
+                    puntsInteres: ""
                 })
                 setSuccessMessage(true);
                 fetchData()
@@ -193,7 +192,6 @@ export default function Visites({auth}){
     }
 
     function handleEdit($id) {
-
         route("editarVisita/", $id)
     }
 
@@ -374,7 +372,7 @@ export default function Visites({auth}){
                     )}
                 </Form>)
             }
-            <TableGori data={data} cols={cols} onClickDelete={handleDelete} onEdit={handleEdit}>
+            <TableGori data={data} cols={cols} onClickDelete={handleDelete}  editUrl={"editarVisita"} onClickEdit={handleEdit}>
             </TableGori>
 
         </AuthenticatedLayout>

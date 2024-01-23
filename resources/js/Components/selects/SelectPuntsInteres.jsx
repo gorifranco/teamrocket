@@ -7,7 +7,7 @@ export default function SelectPuntsInteres({id, className, espai = 0, key, name,
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [espai]);
 
     const fetchData = async () => {
         try {

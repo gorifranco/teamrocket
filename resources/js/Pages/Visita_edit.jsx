@@ -1,8 +1,6 @@
 import {useEffect, useState} from "react";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import axios from "axios";
-import SelectGori from "@/Components/selects/SelectGori.jsx";
-import TableGori from "@/Components/TableGori.jsx";
 import Form from "@/Components/Form.jsx";
 import InputError from "@/Components/InputError.jsx";
 import PlusButton from "@/Components/PlusButton.jsx";
@@ -10,12 +8,10 @@ import MenosButton from "@/Components/MenosButton.jsx";
 import SelectPuntsInteres from "@/Components/selects/SelectPuntsInteres.jsx";
 
 export default function Visites({auth}){
-    const [formCrearVisible, setFormHidden] = useState(false)
     const [successMessage, setSuccessMessage] = useState(false);
-    const [data, setData] = useState({});
-    const [espais, setEspais] = useState({});
+    const urlActual = window.location.href.split("/");
+    const id = urlActual[urlActual.length - 1];
     const [numeroPunts, setNumeroPunts] = useState(1)
-    const [punts, setPunts] = useState({})
     const [formData, setFormData] = useState({
         nom: '',
         descripcio: '',
@@ -25,7 +21,6 @@ export default function Visites({auth}){
         preu: 0,
         places: 0,
         puntsInteres: [],
-
     })
 
     const [errors, setErrors] = useState({
@@ -39,56 +34,38 @@ export default function Visites({auth}){
         puntsInteres: ""
     });
 
-
-    function obrirFormCrear() {
-        if (formCrearVisible) setSuccessMessage(false)
-        setFormHidden(!formCrearVisible)
-    }
-
     useEffect(() => {
-        fetchEspais()
+        fetchData();
     }, []);
 
-    useEffect(() => {
-        fetchData()
-        fetchPunts()
-    }, [currentEspai]);
-
-
-    async function fetchData () {
+    async function fetchData() {
         try {
-            const response = await axios.get(`/api/visites_per_espai/` + currentEspai);
-            setData(response.data);
-        } catch (error) {
-            console.error('Error al obtener los datos:', error);
-        }
-    }
-    async function fetchEspais(){
-        try {
-            const response = await axios.get(`/api/espais_per_gestor_tots`, {
-                headers: {
-                    'Authorization': `Bearer ${auth.user.api_token}`,
-                },
+            const response = await axios.get(`/api/visites/` + id);
+            console.log(response.data.data)
+            const puntsIds = response.data.data.punts_interes.map(punt => punt.id);
+
+            setFormData({
+                nom: response.data.data.nom,
+                descripcio: response.data.data.descripcio,
+                dataInici: response.data.data.dataInici,
+                dataFi: response.data.data.dataFi,
+                reqInscripcio: response.data.data.reqInscripcio,
+                preu: response.data.data.preu,
+                places: response.data.data.places,
+                fk_espai: response.data.data.fk_espai,
+                puntsInteres: puntsIds,
             });
-            setEspais(response.data.data);
+            setNumeroPunts(response.data.data.punts_interes.length)
+
+            if (response.data.data.fk_gestor && response.data.data.fk_gestor !== auth.user.id) {
+                window.location.href = route("dashboard");
+            }
         } catch (error) {
             console.error('Error al obtener los datos:', error);
+            throw error; // Lanzamos el error para que pueda ser capturado por el bloque catch en fetchDataAndPunts
         }
     }
 
-    async function fetchPunts(){
-        try {
-            const response = await axios.get(`/api/punts_per_espai/` + currentEspai, {
-                headers: {
-                    'Authorization': `Bearer ${auth.user.api_token}`,
-                },
-            });
-            setPunts(response.data.data);
-            console.log(response)
-        } catch (error) {
-            console.error('Error al obtener los datos:', error);
-        }
-    }
 
     function handleChange(e) {
         const {name, value} = e.target;
@@ -122,25 +99,25 @@ export default function Visites({auth}){
 
     function handleSubmit(e){
         e.preventDefault()
+        console.log(formData)
 
-        axios.post('/api/visites', formData, {
+        axios.put('/api/visites/' + id, formData, {
             headers: {
                 'Authorization': `Bearer ${auth.user.api_token}`,
             },
         })
             .then(() => {
-                setFormData({
-                    ...formData,
-                    nom: '',
-                    descripcio: ''
-                });
-
                 setErrors({
                     nom: '',
-                    descripcio: ''
+                    descripcio: '',
+                    dataInici: '',
+                    dataFi: '',
+                    reqInscripcio: '',
+                    preu: '',
+                    places: '',
+                    puntsInteres: ""
                 })
                 setSuccessMessage(true);
-                fetchData()
             })
             .catch(function (error) {
                 if (error.response) {
@@ -148,45 +125,9 @@ export default function Visites({auth}){
                     console.log(error); // Acceder a los errores de validación
                     alert(error.request.statusText)
                 } else {
-
                     console.log('Error:', error.message);
                 }
             });
-    }
-
-    function changeEspai(espai) {
-        if(espai){
-            setCurrentEspai(espai.id)
-            setFormData({
-                ...formData,
-                fk_espai: espai.id
-            })
-        }else{
-            setCurrentEspai(0)
-        }
-    }
-
-
-    function handleDelete(visita) {
-        if (confirm("Segur que vols borrar la visita " + visita + "?")) {
-            axios.delete("api/visites/" + visita, {
-                headers: {
-                    'Authorization': `Bearer ${auth.user.api_token}`,
-                },
-            })
-                .then(() => {
-                    alert("Visita borrada amb èxit")
-                    fetchData()
-                })
-                .catch(() => {
-                    alert("La visita no s'ha pogut borrar")
-                })
-        }
-    }
-
-    function handleEdit($id) {
-
-        route("editarVisita/", $id)
     }
 
     function afegirPunt() {
@@ -207,8 +148,10 @@ export default function Visites({auth}){
         let p = [];
 
         for (let i = 0; i < numeroPunts; i++) {
-            p.push(<div key={"d"+i} className={"flex items-center align-middle w-full" }> <p key={"p"+i} className={"mr-2 text-xl"}>{i+1}</p> <SelectPuntsInteres espai={currentEspai} options={punts} name={"puntsInteres " + i} key={"punt" + i} className={"mt-2 w-full"}
-                                                                                                                                                                  onChange={handleChange}></SelectPuntsInteres> </div>)
+            p.push(<div key={"d"+i} className={"flex items-center align-middle w-full" }>
+                <p key={"p"+i} className={"mr-2 text-xl"}>{i+1}</p>
+                <SelectPuntsInteres espai={formData.fk_espai} selected={(formData.puntsInteres[i])?formData.puntsInteres[i]:-1} name={"puntsInteres " + i} key={"punt" + i} className={"mt-2 w-full"}
+                onChange={handleChange}></SelectPuntsInteres> </div>)
         }
         return p;
     }
@@ -217,18 +160,11 @@ export default function Visites({auth}){
     return(
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Visites</h2>}
-            plusButton={currentEspai>0}
-            onclickPlusButton={obrirFormCrear}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Editar visita</h2>}
+            plusButton={false}
         >
 
-            <div className="flex justify-center items-center my-5">
-                <span className="mr-6 font-medium">Visita:</span>
-                <SelectGori options={espais} className={"min-w-60"} onChange={changeEspai}></SelectGori>
-            </div>
-
-            {formCrearVisible && currentEspai > 0 &&
-                (<Form handleSubmit={handleSubmit} titol={"Crear una visita"} className={"mt-5"}>
+                <Form tag={"Editar"} handleSubmit={handleSubmit} titol={"Edita una visita"} className={"mt-5"}>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nom">
                             Nom
@@ -301,7 +237,7 @@ export default function Visites({auth}){
                             <input
                                 className="shadow appearance-none border border-red-500 rounded py-2 px-2 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                                 name={"descripcio"} id="descripcio" type={"checkbox"}
-                                value={formData.reqInscripcio}
+                                checked={formData.reqInscripcio}
                                 onChange={handleChangeCheckbox}/>
                             <p className={"ml-2"}>{(formData.reqInscripcio)?"SI":"NO"}</p>
                         </div>
@@ -361,14 +297,10 @@ export default function Visites({auth}){
                         <div
                             className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 font-medium"
                             role="alert">
-                            Visita creada
+                            Visita editada!
                         </div>
                     )}
-                </Form>)
-            }
-            <TableGori data={data} cols={cols} onClickDelete={handleDelete} onEdit={handleEdit}>
-            </TableGori>
-
+                </Form>
         </AuthenticatedLayout>
     )
 }

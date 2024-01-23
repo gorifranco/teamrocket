@@ -28,7 +28,7 @@ export default function TableGori({
         evt.preventDefault();
 
         if(editUrl){
-            window.location.href = route("editarEspai", {id: rowData.id})
+            window.location.href = route(editUrl, {id: rowData.id})
         }else{
             setEditing(true);
             setRowEditing(index);

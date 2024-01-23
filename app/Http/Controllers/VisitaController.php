@@ -88,7 +88,7 @@ class VisitaController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        return $this->dbActionBasic($id, VisitaController::class, null, "findOrFail", null);
+        return $this->dbActionBasic($id, Visita::class, null, "findOrFail", null);
     }
 
     public function visites_per_espai(string $id): JsonResponse
@@ -135,7 +135,7 @@ class VisitaController extends Controller
 
         $visita = Visita::find($id);
 
-        if($visita->espai()->fk_gestor !== $user->id){
+        if($visita->espai->fk_gestor !== $user->id){
             return response()->json([
                 "error" => "Unauthorized"
             ],401);
@@ -144,18 +144,26 @@ class VisitaController extends Controller
         $validacio = Validator::make($request->all(), $regles);
 
         if (!$validacio->fails()) {
-            $obj = Visita::create($request->all());
+            $visita->nom = $request->input("nom");
+            $visita->descripcio = $request->input("descripcio");
+            $visita->dataInici = $request->input("dataInici");
+            $visita->dataFi = $request->input("dataFi");
+            $visita->reqInscripcio = $request->input("reqInscripcio");
+            $visita->preu = $request->input("preu");
+            $visita->places = $request->input("places");
 
             $punts = $request->input("puntsInteres");
 
-            $obj->puntsInteres()->dettach();
+            $visita->puntsInteres()->detach();
 
             foreach ($punts as $i => $puntInteresId) {
-                $obj->puntsInteres()->syncWithoutDetaching([$puntInteresId => ['ordre' => $i+1]]);
+                $visita->puntsInteres()->syncWithoutDetaching([$puntInteresId => ['ordre' => $i+1]]);
             }
 
+            $visita->save();
+
             return response()->json([
-                'data' => $obj
+                'data' => $visita
             ], 200);
         }else{
             return response()->json([
