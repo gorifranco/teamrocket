@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comentari;
+use App\Models\User;
 use Exception;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -33,9 +33,9 @@ class ComentariController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+
         $regles = [
             'valoracio' => ["required", "integer", "min:0", "max:5"],
-            'fk_usuari' => ["required", "integer", "min:0"],
             'fk_espai' => ["required", "integer", "min:0"]
         ];
 
@@ -47,7 +47,14 @@ class ComentariController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        return $this->dbActionBasic($id, Comentari::class, null, "findOrFail", null);
+        $c = Comentari::find($id);
+        if($c !== null && $c->validat !== false){
+            return $this->dbActionBasic($id, Comentari::class, null, "findOrFail", null);
+        }else{
+            return response()->json([
+               "error" => "no autoritzat"
+            ]);
+        }
     }
 
     /**
@@ -65,7 +72,6 @@ class ComentariController extends Controller
     {
         $regles = [
             'valoracio' => "required|integer|min:0|max:5",
-            'fk_usuari' => "required|integer|min:0",
             'fk_espai' => "required|integer|min:0"
         ];
 
@@ -76,20 +82,44 @@ class ComentariController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(Request $request, string $id): JsonResponse
     {
+        $c = Comentari::find($id);
+        $key = explode(' ', $request->header('Authorization'));
+        $token = $key[1]; // key[0]->Bearer key[1]→token
+        $user = User::where('api_token', $token)->first();
+
+        if($c === null || !$user->esAdministrador || ($user->esUsuari() && $c->fk_usuari !== $user->id) ||
+        $user->esGestor && ($c->espai()->fk_gestor !== $user->id && $c->fk_usuari !== $user->id)){
+            return response()->json([
+               "error" => "Unauthorized"
+            ]);
+        }
+
         return $this->dbActionBasic($id, Comentari::class, null, "deleteOrFail", null);
     }
 
-    public function validar(string $id): JsonResponse
+    public function validar_invalidar(Request $request, string $id): JsonResponse
     {
+        $key = explode(' ', $request->header('Authorization'));
+        $token = $key[1]; // key[0]->Bearer key[1]→token
+        $user = User::where('api_token', $token)->first();
+
         try {
             $comentari = Comentari::findOrFail($id);
-            $comentari->validat = true;
+            $espai = $comentari->espai();
+            if(!$user->esAdministrador() || ($espai->fk_gestor !== $user->id)){
+                return response()->json([
+                   "error" => "Unauthorized"
+                ]);
+            }
+
+            $comentari->validat = !$comentari->validat;
             $comentari->save();
             return response()->json([
                 'data' => $comentari
             ]);
+
         } catch (Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()

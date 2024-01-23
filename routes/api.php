@@ -40,7 +40,6 @@ Route::post('/login', [LoginController::class, 'login']);
 //Guest routes
 Route::apiResource("arquitectes", ArquitecteController::class)->only("index", "show");
 Route::apiResource('audios', AudioController::class)->only(['index', 'show']);
-Route::apiResource('comentaris', ComentariController::class)->only(['index', 'show']);
 Route::apiResource('dates-reformes', DataReformaController::class)->only(['index', 'show']);
 Route::apiResource('espais', EspaiController::class)->only(['index', 'show']);
 Route::apiResource('hores-actives', HoraActivaController::class)->only(['index', 'show']);
@@ -53,6 +52,7 @@ Route::apiResource('serveis', ServeiController::class)->only(['index', 'show']);
 Route::apiResource('tipus_espais', TipusEspaiController::class)->only(['index', 'show']);
 Route::apiResource('visites', VisitaController::class)->only(['index', 'show']);
 Route::apiResource('zones', ZonaController::class)->only(['index', 'show']);
+
 Route::get("arquitectes_tots", [ArquitecteController::class, "tots"]);
 Route::get("tipus_espais_tots", [TipusEspaiController::class, "tots"]);
 Route::get("modalitats_tots", [ModalitatController::class, "tots"]);
@@ -60,10 +60,13 @@ Route::get("punts_per_espai/{id}", [PuntInteresController::class, "punts_per_esp
     ->name("punts_per_espai");
 Route::get("visites_per_espai/{id}", [VisitaController::class, "visites_per_espai"])
     ->name("visites_per_espai");
-
+Route::get("comentaris_per_espai/{id}", [ComentariController::class, 'comentaris_per_espai'])
+    ->name("comentaris_per_espai");
 
 
 Route::middleware(['apiMiddleware'])->group(function () {
+    Route::apiResource("comentaris", ComentariController::class)->only("store", 'destroy', 'edit');
+
     Route::middleware(["tipusUsuari:administrador,gestor"])->group(function () {
         Route::apiResource("arquitectes", ArquitecteController::class)
             ->only("store", "destroy", "update");
@@ -83,15 +86,20 @@ Route::middleware(['apiMiddleware'])->group(function () {
             ->only("store", "destroy", "update");
         Route::apiResource("visites", VisitaController::class)
             ->only("store", "destroy", "update");
+        Route::get("/comentaris/validar_invalidar/{id}", [ComentariController::class, "validar_invalidar"]);
+        Route::get("comentaris_per_espai_tots/{id}", [ComentariController::class, 'comentaris_per_espai_tots'])
+            ->name("comentaris_per_espai_tots");
 
         Route::apiResources([
             'audios' => AudioController::class,
-            'comentaris' => ComentariController::class,
             'dates-reformes' => DataReformaController::class,
             'hores-actives' => HoraActivaController::class,
             'imatges' => ImatgeController::class,
         ]);
     });
+    Route::apiResource("comentaris", ComentariController::class)
+        ->only("index")
+        ->middleware("tipusUsuari:administrador");
 });
 
 

@@ -163,7 +163,10 @@ export default function Visites({auth}){
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Editar visita</h2>}
             plusButton={false}
         >
-
+            <div>
+                <a href={route("visites")} className="absolute top-[22%] left-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
+                >Torna</a>
+            </div>
                 <Form tag={"Editar"} handleSubmit={handleSubmit} titol={"Edita una visita"} className={"mt-5"}>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nom">
