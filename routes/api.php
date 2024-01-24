@@ -102,6 +102,7 @@ Route::middleware(['apiMiddleware'])->group(function () {
 //            'hores-actives' => HoraActivaController::class,
 //            'imatges' => ImatgeController::class,
 //        ]);
+
     });
 //Domes admins
     Route::apiResource("comentaris", ComentariController::class)

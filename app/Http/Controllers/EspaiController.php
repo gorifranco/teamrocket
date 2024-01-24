@@ -10,8 +10,24 @@ use Illuminate\Support\Facades\Validator;
 
 class EspaiController extends Controller
 {
+
     /**
      * Display a listing of the resource.
+     *
+     * @return JsonResponse
+     * @OA\Get(
+     *     path="/api/espais",
+     *     tags={"Espais"},
+     *     summary="Mostrar els espais actius",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Mostrar els espais activats.",
+     *              @OA\JsonContent(
+     *          @OA\Property(property="data",type="object")
+     *           ),
+     *     ),
+     * )
      */
     public function index(): JsonResponse
     {
@@ -21,6 +37,25 @@ class EspaiController extends Controller
         ], 200);
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @OA\Get(
+     *     path="/api/espais_per_gestor",
+     *     tags={"Espais"},
+     *     summary="Mostrar tots els espais d'un gestor paginats",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Mostrar els espais d'un gestor paginats.",
+     *              @OA\JsonContent(
+     *          @OA\Property(property="data",type="object")
+     *           ),
+     *     ),
+     * )
+     */
     public function espais_per_gestor(Request $request): JsonResponse
     {
         $key = explode(' ', $request->header('Authorization'));
@@ -36,6 +71,26 @@ class EspaiController extends Controller
         ]);
     }
 
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @OA\Get(
+     *     path="/api/espais_per_gestor_tots",
+     *     tags={"Espais"},
+     *     summary="Mostrar tots els espais d'un gestor",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Mostrar els espais d'un gestor.",
+     *              @OA\JsonContent(
+     *          @OA\Property(property="data",type="object")
+     *           ),
+     *     ),
+     * )
+     */
     public function espais_per_gestor_tots(Request $request): JsonResponse
     {
         $key = explode(' ', $request->header('Authorization'));
@@ -52,6 +107,26 @@ class EspaiController extends Controller
     }
 
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @param string $str
+     * @return JsonResponse
+     * @OA\Get(
+     *     path="/api/espais_per_gestor/find/{cerca}",
+     *     tags={"Espais"},
+     *     summary="Mostrar tots els espais d'un gestor que compleixin amb un filtre de forma paginada",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Mostrar els espais d'un gestor que compleixin amb un filtre de forma paginada.",
+     *              @OA\JsonContent(
+     *          @OA\Property(property="data",type="object")
+     *           ),
+     *     ),
+     * )
+     */
     public function espais_per_gestor_find(request $request, string $str): JsonResponse
     {
         $key = explode(' ', $request->header('Authorization'));
@@ -76,6 +151,56 @@ class EspaiController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @OA\Post(
+     *    path="/api/espais",
+     *    tags={"Espais"},
+     *    summary="Crea un espai",
+     *    description="Crea un espai. Sols per administradors o gestors",
+     *    security={{"bearerAuth":{}}},
+     *          @OA\RequestBody(
+     *         @OA\JsonContent(
+     *            @OA\Property(property="nom", type="string", format="string", example="L'almudaina"),
+     *            @OA\Property(property="descripcio", type="string", format="string", example="Descripció de l'almudaina"),
+     *            @OA\Property(property="direccio", type="string", format="string", example="Direcció de l'almudaina"),
+     *            @OA\Property(property="any_construccio", type="integer", format="integer", example="1343"),
+     *            @OA\Property(property="grau_accessibilitat", type="string", enum={"alt", "mitj", "baix"}, example="mitj"),
+     *            @OA\Property(property="web", type="string", format="web", example="https://www.patrimonionacional.es/visita/palacio-real-de-la-almudaina"),
+     *            @OA\Property(property="email", type="string", format="mail", example="info@patrimonionacional.es"),
+     *            @OA\Property(property="telefon", type="string", format="string", example="info@patrimonionacional.es"),
+     *            @OA\Property(property="fk_municipi", type="integer", format="integer", example="1"),
+     *            @OA\Property(property="fk_gestor", type="integer", format="integer", example="1"),
+     *            @OA\Property(property="fk_tipusEspai", type="integer", format="integer", example="1"),
+     *            @OA\Property(property="serveis", type="array", @OA\Items(type="integer"), example="[1,2]"),
+     *            @OA\Property(property="modalitats", type="array", @OA\Items(type="integer"), example="[1,2]"),
+     *            @OA\Property(property="arquitectes", type="array", @OA\Items(type="integer"), example="[1,2]"),
+     *      ),
+     *      ),
+     *       @OA\Response(
+     *          response=200,
+     *          description="Success",
+     *          @OA\JsonContent(
+     *          @OA\Property(property="data",type="object")
+     *           ),
+     *        ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request",
+     *          @OA\JsonContent(
+     *          @OA\Property(property="missatge", type="string", example="Bad Request"),
+     *          @OA\Property(property="errors", type="object"),
+     *           )
+     *        ),
+     *           @OA\Response(
+     *           response=401,
+     *           description="Unauthorized",
+     *           @OA\JsonContent(
+     *           @OA\Property(property="missatge", type="string", example="Unauthorized"),
+     *            )
+     *         )
+     * )
      */
     public function store(Request $request): JsonResponse
     {
@@ -92,6 +217,7 @@ class EspaiController extends Controller
                 'tipusEspai' => 'required|integer|min:0',
                 'modalitats.*' => 'exists:modalitats,id',
                 'arquitectes.*' => 'exists:arquitectes,id',
+                'serveis.*' => 'exists:serveis,id',
             ];
 
         $validacio = Validator::make($request->all(),$regles);
@@ -118,6 +244,7 @@ class EspaiController extends Controller
 
             $espai->arquitectes()->sync($request->arquitectes);
             $espai->modalitats()->sync($request->modalitats);
+            $espai->serveis()->sync($request->serveis);
 
             return response()->json(['status' => 'success','data' => $espai],200);
         } else {
@@ -127,16 +254,94 @@ class EspaiController extends Controller
 
     /**
      * Display the specified resource.
+     *
+     * @param string $id
+     * @return JsonResponse
+     * @OA\get(
+     *    path="/api/espais/{id}",
+     *    tags={"Espais"},
+     *    summary="Mostrar un espai",
+     *    security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *        required=true,
+     *        @OA\Parameter(
+     *     in="path",
+     *     name="id",
+     *     required="true"
+     *        ),
+     *     ),
+     *    @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *         @OA\Property(property="data",type="object")
+     *          ),
+     *       ),
+     *  )
      */
     public function show(string $id): JsonResponse
     {
-        $espai = Espai::with(['modalitats', 'arquitectes', 'municipi', 'tipusEspai', "puntsInteres"])->find($id);
+        $espai = Espai::with(['modalitats', 'arquitectes', 'serveis', 'municipi', 'tipusEspai', "puntsInteres"])->find($id);
 
         return response()->json(['data' => $espai]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource from storage.
+     *
+     * @param Request $request
+     * @param  string  $id
+     * @return JsonResponse
+     * @OA\Put(
+     *    path="/api/espais/{id}",
+     *    tags={"Espais"},
+     *    summary="Modifica un espai",
+     *    description="Modifica un espai. Sols per administradors o gestors",
+     *    security={{"bearerAuth":{}}},
+     *    @OA\Parameter(name="id", in="path", description="Id Arquitecte", required=true,
+     *        @OA\Schema(type="string")
+     *    ),
+     *          @OA\RequestBody(
+     *         @OA\JsonContent(
+     *            @OA\Property(property="nom", type="string", format="string", example="L'almudaina"),
+     *            @OA\Property(property="descripcio", type="string", format="string", example="Descripció de l'almudaina"),
+     *            @OA\Property(property="direccio", type="string", format="string", example="Direcció de l'almudaina"),
+     *            @OA\Property(property="any_construccio", type="integer", format="integer", example="1343"),
+     *            @OA\Property(property="grau_accessibilitat", type="string", enum={"alt", "mitj", "baix"}, example="mitj"),
+     *            @OA\Property(property="web", type="string", format="web", example="https://www.patrimonionacional.es/visita/palacio-real-de-la-almudaina"),
+     *            @OA\Property(property="email", type="string", format="mail", example="info@patrimonionacional.es"),
+     *            @OA\Property(property="telefon", type="string", format="string", example="info@patrimonionacional.es"),
+     *            @OA\Property(property="fk_municipi", type="integer", format="integer", example="1"),
+     *            @OA\Property(property="fk_gestor", type="integer", format="integer", example="1"),
+     *            @OA\Property(property="fk_tipusEspai", type="integer", format="integer", example="1"),
+     *            @OA\Property(property="serveis", type="array", @OA\Items(type="integer"), example="[1,2]"),
+     *            @OA\Property(property="modalitats", type="array", @OA\Items(type="integer"), example="[1,2]"),
+     *            @OA\Property(property="arquitectes", type="array", @OA\Items(type="integer"), example="[1,2]"),
+     *      ),
+     *      ),
+     *       @OA\Response(
+     *          response=200,
+     *          description="Success",
+     *          @OA\JsonContent(
+     *          @OA\Property(property="data",type="object")
+     *           ),
+     *        ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request",
+     *          @OA\JsonContent(
+     *          @OA\Property(property="missatge", type="string", example="Bad Request"),
+     *          @OA\Property(property="errors", type="object"),
+     *           )
+     *        ),
+     *           @OA\Response(
+     *           response=401,
+     *           description="Unauthorized",
+     *           @OA\JsonContent(
+     *           @OA\Property(property="missatge", type="string", example="Unauthorized"),
+     *            )
+     *         )
+     * )
      */
     public function update(Request $request, string $id): JsonResponse
     {
@@ -152,6 +357,7 @@ class EspaiController extends Controller
             'tipusEspai' => 'required|integer|min:0',
             'modalitats.*' => 'exists:modalitats,id',
             'arquitectes.*' => 'exists:arquitectes,id',
+            'serveis.*' => 'exists:serveis,id',
         ];
 
         $espai = Espai::where("id", $id)->first();
@@ -162,8 +368,6 @@ class EspaiController extends Controller
 
         if(!$user->esAdministrador() && $user->id !== $espai->fk_gestor){
             return response()->json([
-                "user" => $user,
-                "espai" => $espai,
                 "error" => "Unauthorized",
             ], 401);
         }
@@ -187,15 +391,68 @@ class EspaiController extends Controller
 
             $espai->arquitectes()->sync($request->arquitectes);
             $espai->modalitats()->sync($request->modalitats);
+            $espai->serveis()->sync($request->serveis);
 
-            return response()->json(['status' => 'success', 'data' => $espai], 200);
+            return response()->json(['data' => $espai], 200);
         }else{
-            return response()->json([ 'status' => 'error','data'=>$validacio->errors() ], 400);
+            return response()->json([ 'missatge' => 'Bad Request','errors'=>$validacio->errors()], 400);
         }
     }
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param Request $request
+     * @param string $id
+     * @return JsonResponse
+     * @OA\Delete(
+     *    path="/api/espais/{id}",
+     *    tags={"Espais"},
+     *    summary="Esborra un espai",
+     *    description="Esborra un espapi. Sols per administradors o gestors",
+     *    security={{"bearerAuth":{}}},
+     *    @OA\Parameter(name="id", in="path", description="Id Espai", required=true,
+     *        @OA\Schema(type="string")
+     *    ),
+     *       @OA\Response(
+     *          response=200,
+     *          description="Success",
+     *          @OA\JsonContent(
+     *          @OA\Property(property="data",type="object")
+     *           ),
+     *        ),
+     * @OA\Response(
+     *          response=400,
+     *          description="Bad Request",
+     *          @OA\JsonContent(
+     *          @OA\Property(property="missatge", type="string", example="Bad Request"),
+     *           )
+     *        ),
+     * @OA\Response(
+     *           response=422,
+     *           description="Unprocessable Entity",
+     *           @OA\JsonContent(
+     *           @OA\Property(property="errors", type="object"),
+     *           @OA\Property(property="missatge",type="string", example="Unprocessable Entity")
+     *            )
+     *         ),
+     * @OA\Response(
+     *            response=500,
+     *            description="Internal Server Error",
+     *            @OA\JsonContent(
+     *            @OA\Property(property="missatge", type="string"),
+     *            @OA\Property(property="codi",type="integer", example="500")
+     *             ),
+     *          ),
+     *      @OA\Response(
+     *           response=401,
+     *           description="Unauthorized",
+     *           @OA\JsonContent(
+     *           @OA\Property(property="status", type="error", example="error"),
+     *           @OA\Property(property="missatge", type="string", example="Unauthorized"),
+     *            )
+     *         ),
+     * )
      */
     public function destroy(Request $request, string $id): JsonResponse
     {
@@ -210,11 +467,37 @@ class EspaiController extends Controller
         } else {
             return response()->json([
                 "status" => "error",
-                "missatge" => "No autoritzat"
+                "missatge" => "Unauthorized"
             ],401);
         }
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @param string $id
+     * @return JsonResponse
+     * @OA\Get(
+     *     path="/api/espais/{id}/activar_desactivar",
+     *     tags={"Espais"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Mostrar els espais d'un gestor que compleixin amb un filtre de forma paginada.",
+     *              @OA\JsonContent(
+     *          @OA\Property(property="data",type="object")
+     *           ),
+     *     ),
+     *      @OA\Response(
+     *           response=401,
+     *           description="Unauthorized",
+     *           @OA\JsonContent(
+     *           @OA\Property(property="missatge", type="string", example="Bad Request"),
+     *            )
+     *         ),
+     * )
+     */
     public function activar_desactivar(Request $request, string $id): JsonResponse
     {
         $key = explode(' ', $request->header('Authorization'));
@@ -235,8 +518,8 @@ class EspaiController extends Controller
 
         }else{
             return response()->json([
-                "state" => "error",
-            ],400);
+                "missatge" => "Unauthorized",
+            ],401);
         }
     }
 }

@@ -11,6 +11,21 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @OA\Info(
+ * title="Projecte ETV", version="1.0",
+ * description="REST API. Projecte ETV. DAW Client i servidor.",
+ * @OA\Contact( name="Webmaster.",email="info@webmaster.cat")
+ * )
+ *
+ * @OA\Server(url="http://www.dawpaucasesnoves.com/etvServidor/public")
+ *
+ * @OAS\SecurityScheme(
+ * securityScheme="bearerAuth",
+ * type="http",
+ * scheme="bearer"
+ * )
+ */
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
