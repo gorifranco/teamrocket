@@ -12,6 +12,18 @@ class ComentariController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
+     * @return JsonResponse
+     * @OA\Get(
+     *     path="/api/comentaris",
+     *     tags={"Comentaris"},
+     *     summary="Mostrar tots els comentaris",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Mostrar tots els comentaris."
+     *     ),
+     * )
      */
     public function index(): JsonResponse
     {
@@ -20,16 +32,42 @@ class ComentariController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @OA\Post(
+     *    path="/api/comentaris",
+     *    tags={"Comentaris"},
+     *    summary="Crea un comentari",
+     *    description="Crea un nou comentari. El comentari es crearà amb el codi d'usuari validat",
+     *    security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *        required=true,
+     *        @OA\JsonContent(
+     *          @OA\Property(property="valoracio", type="integer", format="integer", example="2"),
+     *          @OA\Property(property="fk_espai", type="integer", format="integer", example="1"),
+     *        ),
+     *     ),
+     *    @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *         @OA\Property(property="status", type="integer", example="success"),
+     *         @OA\Property(property="data",type="object")
+     *          ),
+     *       ),
+     *    @OA\Response(
+     *         response=400,
+     *         description="Error",
+     *         @OA\JsonContent(
+     *         @OA\Property(property="status", type="integer", example="error"),
+     *         @OA\Property(property="data",type="string", example="Atribut msg requerit")
+     *          ),
+     *       )
+     *  )
      */
     public function store(Request $request): JsonResponse
     {

@@ -61,19 +61,19 @@ class Controller extends BaseController
                 default:
                 {
                     return response()->json([
-                        'missatge' => "action fail"
+                        'missatge' => "Bad Request"
                     ], 400);
                 }
             }
             return response()->json([
                 'errors'=> $validacio->errors()->toArray(),
-                'missatge' => "action fail",
-            ], 400);
+                'missatge' => "Unprocessable Entity",
+            ], 422);
         } catch (Exception $e) {
             return response()->json([
                 'missatge' => $e->getMessage(),
                 'codi' => $e->getCode()
-            ], 400);
+            ], 500);
         }
     }
 }

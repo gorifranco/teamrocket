@@ -53,6 +53,7 @@ Route::apiResource('tipus_espais', TipusEspaiController::class)->only(['index', 
 Route::apiResource('visites', VisitaController::class)->only(['index', 'show']);
 Route::apiResource('zones', ZonaController::class)->only(['index', 'show']);
 
+
 Route::get("arquitectes_tots", [ArquitecteController::class, "tots"]);
 Route::get("tipus_espais_tots", [TipusEspaiController::class, "tots"]);
 Route::get("modalitats_tots", [ModalitatController::class, "tots"]);
@@ -86,20 +87,30 @@ Route::middleware(['apiMiddleware'])->group(function () {
             ->only("store", "destroy", "update");
         Route::apiResource("visites", VisitaController::class)
             ->only("store", "destroy", "update");
+    //Comentaris
         Route::get("/comentaris/validar_invalidar/{id}", [ComentariController::class, "validar_invalidar"]);
         Route::get("comentaris_per_espai_tots/{id}", [ComentariController::class, 'comentaris_per_espai_tots'])
             ->name("comentaris_per_espai_tots");
 
+    //Audios
+        Route::apiResource("audios", AudioController::class)
+            ->only("update", "destroy");
+        Route::post("/audios", [AudioController::class, "uploadAudio"]);
+
+
+
         Route::apiResources([
-            'audios' => AudioController::class,
             'dates-reformes' => DataReformaController::class,
             'hores-actives' => HoraActivaController::class,
             'imatges' => ImatgeController::class,
         ]);
     });
+//Domes admins
     Route::apiResource("comentaris", ComentariController::class)
         ->only("index")
         ->middleware("tipusUsuari:administrador");
+    Route::apiResource("audios", AudioController::class)
+        ->only("show", "index");
 });
 
 
