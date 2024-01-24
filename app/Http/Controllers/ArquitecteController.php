@@ -20,7 +20,10 @@ class ArquitecteController extends Controller
      *     security={{"bearerAuth":{}}},
      *     @OA\Response(
      *         response=200,
-     *         description="Mostrar tots els arquitectes de forma paginada."
+     *         description="Mostrar tots els arquitectes de forma paginada.",
+     *              @OA\JsonContent(
+     *          @OA\Property(property="data",type="object")
+     *           ),
      *     ),
      * )
      */
@@ -42,7 +45,10 @@ class ArquitecteController extends Controller
      *     security={{"bearerAuth":{}}},
      *     @OA\Response(
      *         response=200,
-     *         description="Mostrar tots els arquitectes."
+     *         description="Mostrar tots els arquitectes.",
+     *              @OA\JsonContent(
+     *          @OA\Property(property="data",type="object")
+     *           ),
      *     ),
      * )
      */

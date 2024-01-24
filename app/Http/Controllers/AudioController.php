@@ -14,6 +14,22 @@ use Illuminate\Support\Facades\File;
 class AudioController extends Controller
 {
 
+    /**
+     * @return JsonResponse
+     * @OA\Get(
+     *     path="/api/arquitectes_tots",
+     *     tags={"Arquitectes"},
+     *     summary="Mostrar els arquitectes",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Mostrar tots els arquitectes.",
+     *              @OA\JsonContent(
+     *          @OA\Property(property="data",type="object")
+     *           ),
+     *     ),
+     * )
+     */
     public function index(): JsonResponse
     {
         return response()->json([
@@ -23,7 +39,52 @@ class AudioController extends Controller
 
 
     /**
-     * Display the specified resource.
+     * @param string $id
+     * @return JsonResponse
+     * @OA\get(
+     *    path="/api/audios/{id}",
+     *    tags={"Audios"},
+     *    summary="Mostrar un audio",
+     *    security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *        required=true,
+     *        @OA\Parameter(
+     *     in="path",
+     *     name="id",
+     *     required="true"
+     *        ),
+     *     ),
+     *    @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *         @OA\Property(property="data",type="object")
+     *          ),
+     *       ),
+     *    @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(
+     *         @OA\Property(property="missatge", type="string", example="Bad Request"),
+     *          ),
+     *       ),
+     *         @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Entity",
+     *          @OA\JsonContent(
+     *          @OA\Property(property="errors", type="object"),
+     *          @OA\Property(property="missatge",type="string", example="Unprocessable Entity")
+     *           ),
+     *        ),
+     *              @OA\Response(
+     *           response=500,
+     *           description="Unprocessable Entity",
+     *           @OA\JsonContent(
+     *           @OA\Property(property="missatge", type="string"),
+     *           @OA\Property(property="codi",type="integer", example="500")
+     *            ),
+     *         )
+     *  )
      */
     public function show(string $id): JsonResponse
     {
@@ -32,7 +93,55 @@ class AudioController extends Controller
 
 
     /**
-     * Update the specified resource in storage.
+     * @param Request $request
+     * @param  string  $id
+     * @return JsonResponse
+     * @OA\Put(
+     *    path="/api/audios/{id}",
+     *    tags={"Audios"},
+     *    summary="Modifica un audio",
+     *    description="Modifica un audio. Sols per administradors o el gestor del punt d'interes",
+     *    security={{"bearerAuth":{}}},
+     *    @OA\Parameter(name="id", in="path", description="Id Àudio", required=true,
+     *        @OA\Schema(type="string")
+     *    ),
+     *          @OA\RequestBody(
+     *         @OA\JsonContent(
+     *            @OA\Property(property="ordre", type="integer", format="integer", example="1"),
+     *            @OA\Property(property="transcripcio", type="string", format="string", example="Transcripció d'un àudio"),
+     *               ),
+     *      ),
+     *       @OA\Response(
+     *          response=200,
+     *          description="Success",
+     *          @OA\JsonContent(
+     *          @OA\Property(property="data",type="object")
+     *           ),
+     *        ),
+     * @OA\Response(
+     *          response=400,
+     *          description="Bad Request",
+     *          @OA\JsonContent(
+     *          @OA\Property(property="missatge", type="string", example="Bad Request"),
+     *           )
+     *        ),
+     * @OA\Response(
+     *           response=422,
+     *           description="Unprocessable Entity",
+     *           @OA\JsonContent(
+     *           @OA\Property(property="errors", type="object"),
+     *           @OA\Property(property="missatge",type="string", example="Unprocessable Entity")
+     *            )
+     *         ),
+     * @OA\Response(
+     *            response=500,
+     *            description="Internal Server Error",
+     *            @OA\JsonContent(
+     *            @OA\Property(property="missatge", type="string"),
+     *            @OA\Property(property="codi",type="integer", example="500")
+     *             ),
+     *          )
+     * )
      */
     public function update(Request $request, string $id): JsonResponse
     {
@@ -57,6 +166,50 @@ class AudioController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param  string  $id
+     * @return JsonResponse
+     * @OA\Delete(
+     *    path="/api/audios/{id}",
+     *    tags={"Àudios"},
+     *    summary="Esborra un àudio",
+     *    description="Esborra un àudio. Sols per administradors o gestors autors de l'audio",
+     *    security={{"bearerAuth":{}}},
+     *    @OA\Parameter(name="id", in="path", description="Id Àudio", required=true,
+     *        @OA\Schema(type="string")
+     *    ),
+     *       @OA\Response(
+     *          response=200,
+     *          description="Success",
+     *          @OA\JsonContent(
+     *          @OA\Property(property="status",type="string"),
+     *          @OA\Property(property="missatge",type="string"),
+     *           ),
+     *        ),
+     * @OA\Response(
+     *          response=400,
+     *          description="Bad Request",
+     *          @OA\JsonContent(
+     *          @OA\Property(property="missatge", type="string", example="Bad Request"),
+     *           )
+     *        ),
+     * @OA\Response(
+     *           response=422,
+     *           description="Unprocessable Entity",
+     *           @OA\JsonContent(
+     *           @OA\Property(property="errors", type="object"),
+     *           @OA\Property(property="missatge",type="string", example="Unprocessable Entity")
+     *            )
+     *         ),
+     * @OA\Response(
+     *            response=500,
+     *            description="Internal Server Error",
+     *            @OA\JsonContent(
+     *            @OA\Property(property="missatge", type="string"),
+     *            @OA\Property(property="codi",type="integer", example="500")
+     *             ),
+     *          )
+     * )
      */
     public function destroy(string $id): JsonResponse
     {
@@ -72,13 +225,66 @@ class AudioController extends Controller
             // Eliminar el registro de la base de datos
             $audio->delete();
 
-            return response()->json(['status' => 'success', 'message' => 'Audio eliminado correctamente'], 200);
+            return response()->json(['status' => 'success', 'missatge' => 'Audio eliminat amb èxit'], 200);
         } catch (Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
 
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @OA\Post(
+     *    path="/api/audios",
+     *    tags={"Àudios"},
+     *    summary="Crea un àudio",
+     *    description="Crea un nou audio a la base de dades i el puja al servidor.",
+     *    security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *        required=true,
+     *        @OA\JsonContent(
+     *           @OA\Property(property="ordre", type="integer", format="integer", example="1"),
+     *           @OA\Property(property="transcripcio", type="string", format="string", example="Transcripció d'un àudio"),
+     *           @OA\Property(property="fk_puntInteres", type="integer", format="integer", example="1"),
+     *        ),
+     *     ),
+     *    @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *         @OA\Property(property="status",type="string")
+     *         @OA\Property(property="data",type="object")
+     *          ),
+     *       ),
+     *    @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(
+     *         @OA\Property(property="status", type="string", example="error"),
+     *         @OA\Property(property="data", type="string", example="Bad Request"),
+     *          ),
+     *       ),
+     *         @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Entity",
+     *          @OA\JsonContent(
+     *          @OA\Property(property="data", type="object"),
+     *          @OA\Property(property="status",type="string", example="error")
+     *           ),
+     *        ),
+     *              @OA\Response(
+     *           response=500,
+     *           description="Unprocessable Entity",
+     *           @OA\JsonContent(
+     *           @OA\Property(property="data", type="string"),
+     *           @OA\Property(property="status",type="string")
+     *            ),
+     *         )
+     *  )
+     */
     public function uploadAudio(Request $request): JsonResponse
     {
 
@@ -116,7 +322,7 @@ class AudioController extends Controller
                     return response()->json(['status' => 'error','data'=>'error guardant'],500);
                 }
             } else {
-                return response()->json(['status' => 'error','data'=>'fitxer no trobat'],400);
+                return response()->json(['status' => 'error','data'=>'Bad Request'],400);
             }
         } else {
             return response()->json(['status' => 'error', 'data' => $validacio->errors()], 422);
