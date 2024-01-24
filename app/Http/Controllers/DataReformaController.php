@@ -14,7 +14,7 @@ class DataReformaController extends Controller
     public function index(): JsonResponse
     {
         return response()->json([
-            'dates' => DataReforma::all()
+            'data' => DataReforma::all()
         ]);
     }
 

@@ -10,21 +10,29 @@ class ZonaController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
+     * @return JsonResponse
+     * @OA\Get(
+     *     path="/api/arquitectes",
+     *     tags={"Arquitectes"},
+     *     summary="Mostrar els arquitectes paginats",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Mostrar tots els arquitectes de forma paginada.",
+     *              @OA\JsonContent(
+     *          @OA\Property(property="data",type="object")
+     *           ),
+     *     ),
+     * )
      */
     public function index(): JsonResponse
     {
         return response()->json([
-            'zones' => Zona::all()
+            'data' => Zona::all()
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -35,7 +43,54 @@ class ZonaController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Store a newly created resource in storage.
+     *
+     * @param string $id
+     * @return JsonResponse
+     * @OA\get(
+     *    path="/api/arquitectes/{id}",
+     *    tags={"Arquitectes"},
+     *    summary="Mostrar un arquitecte",
+     *    security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *        required=true,
+     *        @OA\Parameter(
+     *     in="path",
+     *     name="id",
+     *     required="true"
+     *        ),
+     *     ),
+     *    @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *         @OA\Property(property="data",type="object")
+     *          ),
+     *       ),
+     *    @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(
+     *         @OA\Property(property="missatge", type="string", example="Bad Request"),
+     *          ),
+     *       ),
+     *         @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Entity",
+     *          @OA\JsonContent(
+     *          @OA\Property(property="errors", type="object"),
+     *          @OA\Property(property="missatge",type="string", example="Unprocessable Entity")
+     *           ),
+     *        ),
+     *              @OA\Response(
+     *           response=500,
+     *           description="Internal Server Error",
+     *           @OA\JsonContent(
+     *           @OA\Property(property="missatge", type="string"),
+     *           @OA\Property(property="codi",type="integer", example="500")
+     *            ),
+     *         )
+     *  )
      */
     public function show(string $id): JsonResponse
     {

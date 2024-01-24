@@ -105,7 +105,7 @@ class ArquitecteController extends Controller
      *        ),
      *              @OA\Response(
      *           response=500,
-     *           description="Unprocessable Entity",
+     *           description="Internal Server error",
      *           @OA\JsonContent(
      *           @OA\Property(property="missatge", type="string"),
      *           @OA\Property(property="codi",type="integer", example="500")
@@ -125,7 +125,7 @@ class ArquitecteController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Display the specified resource.
      *
      * @param string $id
      * @return JsonResponse
@@ -166,7 +166,7 @@ class ArquitecteController extends Controller
      *        ),
      *              @OA\Response(
      *           response=500,
-     *           description="Unprocessable Entity",
+     *           description="Internal Server Error",
      *           @OA\JsonContent(
      *           @OA\Property(property="missatge", type="string"),
      *           @OA\Property(property="codi",type="integer", example="500")
@@ -217,7 +217,7 @@ class ArquitecteController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Update the specified resource from storage.
      *
      * @param Request $request
      * @param  string  $id
@@ -226,7 +226,7 @@ class ArquitecteController extends Controller
      *    path="/api/arquitectes/{id}",
      *    tags={"Arquitectes"},
      *    summary="Modifica un arquitecte",
-     *    description="Modifica un missatge. Sols per administradors o gestors",
+     *    description="Modifica un arquitecte. Sols per administradors o gestors",
      *    security={{"bearerAuth":{}}},
      *    @OA\Parameter(name="id", in="path", description="Id Arquitecte", required=true,
      *        @OA\Schema(type="string")
@@ -291,7 +291,7 @@ class ArquitecteController extends Controller
      *    path="/api/arquitectes/{id}",
      *    tags={"Arquitectes"},
      *    summary="Esborra un arquitecte",
-     *    description="Esborra un missatge. Sols per administradors o gestors",
+     *    description="Esborra un arquitecte. Sols per administradors o gestors",
      *    security={{"bearerAuth":{}}},
      *    @OA\Parameter(name="id", in="path", description="Id Arquitecte", required=true,
      *        @OA\Schema(type="string")

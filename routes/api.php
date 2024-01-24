@@ -97,13 +97,11 @@ Route::middleware(['apiMiddleware'])->group(function () {
             ->only("update", "destroy");
         Route::post("/audios", [AudioController::class, "uploadAudio"]);
 
-
-
-        Route::apiResources([
-            'dates-reformes' => DataReformaController::class,
-            'hores-actives' => HoraActivaController::class,
-            'imatges' => ImatgeController::class,
-        ]);
+//        Route::apiResources([
+//            'dates-reformes' => DataReformaController::class,
+//            'hores-actives' => HoraActivaController::class,
+//            'imatges' => ImatgeController::class,
+//        ]);
     });
 //Domes admins
     Route::apiResource("comentaris", ComentariController::class)

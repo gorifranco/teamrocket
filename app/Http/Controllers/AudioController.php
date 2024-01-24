@@ -277,7 +277,7 @@ class AudioController extends Controller
      *        ),
      *              @OA\Response(
      *           response=500,
-     *           description="Unprocessable Entity",
+     *           description="Server error",
      *           @OA\JsonContent(
      *           @OA\Property(property="data", type="string"),
      *           @OA\Property(property="status",type="string")

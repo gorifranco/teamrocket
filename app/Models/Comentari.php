@@ -4,22 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Comentari extends Model
 {
     use HasFactory;
 
     protected $table = "comentaris";
-    protected $fillable = ["valoracio", "fk_usuari", "fk_espai"];
+    protected $fillable = ["valoracio", "fk_usuari", "fk_espai", "comentari"];
 
-    public function espai(): HasOne
+    public function espai(): BelongsTo
     {
-        return $this->hasOne(Espai::class, "fk_espai");
+        return $this->belongsTo(Espai::class, "fk_espai");
     }
 
-    public function usuari(): HasOne
+    public function usuari(): BelongsTo
     {
-        return $this->hasOne(User::class, "fk_usuari");
+        return $this->belongsTo(User::class, "fk_usuari");
     }
 }
