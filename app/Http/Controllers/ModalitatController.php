@@ -294,7 +294,7 @@ class ModalitatController extends Controller
      *        @OA\Parameter(
      *     in="path",
      *     name="cerca",
-     *     required="false"
+     *     required=false
      *        ),
      *    @OA\Response(
      *         response=200,

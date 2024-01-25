@@ -181,27 +181,28 @@ class ArquitecteController extends Controller
 
 
     /**
-     *
      * @param string $str
      * @return JsonResponse
+     *
      * @OA\get(
      *    path="/api/arquitectes/find/{cerca}",
      *    tags={"Arquitectes"},
      *    summary="Mostrar els arquitectes que contenguin el filtre de manera paginada",
      *    security={{"bearerAuth":{}}},
-     *        @OA\Parameter(
-     *     in="path",
-     *     name="cerca",
-     *     required="false"
-     *        ),
+     *    @OA\Parameter(
+     *        name="cerca",
+     *        in="path",
+     *        required=false,
+     *        @OA\Schema(type="string")
+     *    ),
      *    @OA\Response(
      *         response=200,
      *         description="Success",
      *         @OA\JsonContent(
-     *         @OA\Property(property="data",type="object")
-     *          ),
-     *       ),
-     *  )
+     *             @OA\Property(property="data", type="object")
+     *         ),
+     *    ),
+     * )
      */
     public function find(string $str): JsonResponse
     {

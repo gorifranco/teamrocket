@@ -13,13 +13,13 @@ class ZonaController extends Controller
      *
      * @return JsonResponse
      * @OA\Get(
-     *     path="/api/arquitectes",
-     *     tags={"Arquitectes"},
-     *     summary="Mostrar els arquitectes paginats",
+     *     path="/api/zones",
+     *     tags={"Zones"},
+     *     summary="Mostrar totes les zones",
      *     security={{"bearerAuth":{}}},
      *     @OA\Response(
      *         response=200,
-     *         description="Mostrar tots els arquitectes de forma paginada.",
+     *         description="Mostrar totes les zones.",
      *              @OA\JsonContent(
      *          @OA\Property(property="data",type="object")
      *           ),
@@ -48,9 +48,9 @@ class ZonaController extends Controller
      * @param string $id
      * @return JsonResponse
      * @OA\get(
-     *    path="/api/arquitectes/{id}",
-     *    tags={"Arquitectes"},
-     *    summary="Mostrar un arquitecte",
+     *    path="/api/zones/{id}",
+     *    tags={"Zones"},
+     *    summary="Mostrar una zona",
      *    security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
      *        required=true,

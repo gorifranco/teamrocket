@@ -17,13 +17,13 @@ class AudioController extends Controller
     /**
      * @return JsonResponse
      * @OA\Get(
-     *     path="/api/arquitectes_tots",
-     *     tags={"Arquitectes"},
-     *     summary="Mostrar els arquitectes",
+     *     path="/api/audios",
+     *     tags={"Audios"},
+     *     summary="Mostrar els audios",
      *     security={{"bearerAuth":{}}},
      *     @OA\Response(
      *         response=200,
-     *         description="Mostrar tots els arquitectes.",
+     *         description="Mostrar tots els audios.",
      *              @OA\JsonContent(
      *          @OA\Property(property="data",type="object")
      *           ),
@@ -255,7 +255,7 @@ class AudioController extends Controller
      *         response=200,
      *         description="Success",
      *         @OA\JsonContent(
-     *         @OA\Property(property="status",type="string")
+     *         @OA\Property(property="status",type="string"),
      *         @OA\Property(property="data",type="object")
      *          ),
      *       ),
