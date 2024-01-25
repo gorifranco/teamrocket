@@ -218,6 +218,7 @@ class EspaiController extends Controller
                 'modalitats.*' => 'exists:modalitats,id',
                 'arquitectes.*' => 'exists:arquitectes,id',
                 'serveis.*' => 'exists:serveis,id',
+
             ];
 
         $validacio = Validator::make($request->all(),$regles);

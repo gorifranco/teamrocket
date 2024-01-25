@@ -34,6 +34,7 @@ export default function index({auth}) {
             fk_municipi: '',
             modalitats: [],
             arquitectes: [],
+            imatge: ''
         });
 
     const [cercadorValue, setCercadorValue] = useState("")
@@ -57,6 +58,7 @@ export default function index({auth}) {
         fk_municipi: '',
         modalitats: [],
         arquitectes: [],
+        imatge: ''
     });
 
     const [tableData, setTableData] = useState({
@@ -290,6 +292,7 @@ export default function index({auth}) {
                             onChange={handleChange}/>
                         <InputError message={(errors !== undefined) ? errors.nom : ""}/>
                     </div>
+
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="desc">
                             Descripció
@@ -371,7 +374,7 @@ export default function index({auth}) {
                             Municipi
                         </label>
                         <MunicipisSelect onChange={handleChange}/>
-                        <InputError message={(errors !== undefined) ? errors.municipi : ""}/>
+                        <InputError message={(errors !== undefined) ? errors.fk_municipi : ""}/>
                     </div>
 
                     <div className={"mt-4"} key={"divx"}>
@@ -415,7 +418,7 @@ export default function index({auth}) {
                             Tipus d'espai
                         </label>
                         <TipusEspaiSelect onChange={handleChange}/>
-                        <InputError message={(errors !== undefined) ? errors.tipusEspai : ""}/>
+                        <InputError message={(errors !== undefined) ? errors.fk_tipusEspai : ""}/>
                     </div>
 
                     <div className={"mt-4 mb-6"}>
@@ -426,7 +429,16 @@ export default function index({auth}) {
                         <InputError message={(errors !== undefined) ? errors.grau_accessibilitat : ""}/>
                     </div>
 
-                    <div className="flex items-center justify-center">
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nom">
+                            Imatge
+                        </label>
+                        <input
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="imatge" type="file" accept={"image/*"} placeholder="Imatge" name={"imatge"} required={true}
+                            value={formData.imatge}
+                            onChange={handleChange}/>
+                        <InputError message={(errors !== undefined) ? errors.imatge : ""}/>
                     </div>
 
                     {successMessage && (
