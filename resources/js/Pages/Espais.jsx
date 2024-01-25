@@ -149,9 +149,8 @@ export default function index({auth}) {
         fd.append('telefon', formData.telefon);
         fd.append('any_construccio', formData.any_construccio);
         fd.append('grau_accessibilitat', formData.grau_accessibilitat);
-        fd.append('fk_tipusEspai', formData.fk_tipusEspai);
-        fd.append('fk_municipi', formData.fk_municipi);
-        fd.append('fk_tipusEspai', formData.fk_tipusEspai);
+        fd.append('tipusEspai', formData.fk_tipusEspai);
+        fd.append('municipi', formData.fk_municipi);
         fd.append('modalitats', formData.modalitats);
         fd.append('arquitectes', formData.arquitectes);
 

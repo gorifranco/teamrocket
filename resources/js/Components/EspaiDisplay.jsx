@@ -16,7 +16,7 @@ export default function EspaiDisplay({data}) {
                         </a>
                     </div>
                 </div>
-                <div className={"bg-amber-100 text-center"}> FOTO</div>
+                <div><img src={data.imatge.url}/></div>
             </div>
         </div>
     )

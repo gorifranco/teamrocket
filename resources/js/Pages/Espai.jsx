@@ -62,9 +62,10 @@ export default function Espai({auth}) {
                     <h1 className={"text-3xl text-center mb-4"}>{data.nom}</h1>
                     <p className={"text-center"}>{data.descripcio}</p>
 
-                        <div className={"mt-6 flex justify-center"}><div className={"bg-amber-100"} style={{ height: '450px', width: '450px' }}>IMATGE</div></div>
+                        <div className={"mt-6 flex justify-center"}>
+                                <img src={data.imatge.url} alt={"imatge principal"}/>
+                        </div>
 
-                        <div style={{height:"1000px"}}></div>
                     </div>
 
                 )}

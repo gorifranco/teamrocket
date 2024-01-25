@@ -17,7 +17,22 @@ export default function Espai_edit({auth}){
     const urlActual = window.location.href.split("/");
     const id = urlActual[urlActual.length - 1];
 
-    const [data, setData] = useState({})
+    const [data, setData] =   useState({
+        nom: '',
+        email: '',
+        descripcio: '',
+        direccio: '',
+        web: '',
+        telefon: '',
+        any_construccio: '',
+        grau_accessibilitat: '',
+        fk_tipusEspai: '',
+        fk_municipi: '',
+        modalitats: [],
+        arquitectes: [],
+        imatge: File
+    })
+
     const [numeroArquitectes, setNumeroArquitectes] = useState(0)
     const [numeroModalitats, setNumeroModalitats] = useState(0)
 
@@ -34,6 +49,7 @@ export default function Espai_edit({auth}){
         fk_municipi: '',
         modalitats: [],
         arquitectes: [],
+        imatge: File,
     });
 
     function handleChange(e){
@@ -143,15 +159,34 @@ export default function Espai_edit({auth}){
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [id]);
 
 
     function handleSubmit(event) {
         event.preventDefault()
+console.log(data)
 
-        axios.put('/api/espais/' + id, data, {
+        const fdc = new FormData();
+
+        fdc.append('imatge', data.imatge);
+        fdc.append('nom', data.nom);
+        fdc.append('descripcio', data.descripcio);
+        fdc.append('direccio', data.direccio);
+        fdc.append('web', data.web);
+        fdc.append('email', data.email);
+        fdc.append('telefon', data.telefon);
+        fdc.append('any_construccio', data.any_construccio);
+        fdc.append('grau_accessibilitat', data.grau_accessibilitat);
+        fdc.append('tipusEspai', data.fk_tipusEspai);
+        fdc.append('municipi', data.fk_municipi);
+        fdc.append('modalitats', data.modalitats);
+        fdc.append('arquitectes', data.arquitectes);
+
+
+        axios.post('/api/espais/' + id, fdc, {
             headers: {
                 'Authorization': `Bearer ${auth.user.api_token}`,
+                'Content-Type': 'multipart/form-data',
             },
         })
             .then(() => {
@@ -175,12 +210,19 @@ export default function Espai_edit({auth}){
             .catch(function (error) {
                 if (error.response) {
                     setErrors(error.response.data.data);
-                    console.log(error.data); // Acceder a los errores de validación
+                    console.log(error); // Acceder a los errores de validación
                     alert(error.request.statusText)
                 } else {
                     console.log('Error:', error.message);
                 }
             });
+    }
+
+    function handleChangeImatge(e){
+        setData({
+            ...data,
+            imatge: e.target.files[0],  // Tomamos el primer archivo seleccionado
+        });
     }
 
 
@@ -344,7 +386,15 @@ export default function Espai_edit({auth}){
                     <InputError message={(errors !== undefined) ? errors.grau_accessibilitat : ""}/>
                 </div>
 
-                <div className="flex items-center justify-center">
+                <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nom">
+                        Imatge
+                    </label>
+                    <input
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="imatge" type="file" accept={"image/*"} placeholder="Imatge" name={"imatge"} required={true}
+                        onChange={handleChangeImatge}/>
+                    <InputError message={(errors !== undefined) ? errors.imatge : ""}/>
                 </div>
 
                 {successMessage && (
