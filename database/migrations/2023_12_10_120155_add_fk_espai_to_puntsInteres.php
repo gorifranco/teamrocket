@@ -17,6 +17,13 @@ return new class extends Migration {
                 ->on('espais')
                 ->onDelete('CASCADE')
                 ->onUpdate('SET NULL');
+
+            $table->unsignedBigInteger('fk_imatge')->nullable();
+            $table->foreign('fk_imatge')
+                ->references('id')
+                ->on('imatges')
+                ->onDelete('CASCADE')
+                ->onUpdate('SET NULL');
         });
     }
 
@@ -27,6 +34,7 @@ return new class extends Migration {
     {
         Schema::table('puntsInteres', function (Blueprint $table) {
             $table->dropForeign("puntsInteres_fk_espai_foreign");
+            $table->dropForeign("puntsInteres_fk_imatge_foreign");
         });
     }
 };

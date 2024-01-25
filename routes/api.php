@@ -112,8 +112,6 @@ Route::middleware(['apiMiddleware'])->group(function () {
         ->only("show", "index");
 });
 
-
-
 Route::get('/arquitectes/find/{cerca}', [ArquitecteController::class, 'find']);
 Route::get('/modalitats/find/{cerca}', [ModalitatController::class, 'find']);
 Route::get('/tipus_espais/find/{cerca}', [TipusEspaiController::class, 'find']);

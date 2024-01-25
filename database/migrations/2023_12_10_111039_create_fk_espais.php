@@ -32,6 +32,14 @@ return new class extends Migration {
                 ->on("tipusEspais")
                 ->onDelete("CASCADE")
                 ->onUpdate("SET NULL");
+
+            $table->unsignedBigInteger("fk_imatge")->nullable();
+            $table->foreign("fk_imatge")
+                ->references("id")
+                ->on("imatges")
+                ->onDelete("CASCADE")
+                ->onUpdate("SET NULL");
+
         });
     }
 
@@ -44,6 +52,7 @@ return new class extends Migration {
             $table->dropForeign("espais_fk_municipi_foreign");
             $table->dropForeign("espais_fk_tipusEspai_foreign");
             $table->dropForeign("espais_fk_gestor_foreign");
+            $table->dropForeign("espais_fk_imatge_foreign");
         });
     }
 };
