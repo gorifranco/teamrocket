@@ -9,24 +9,8 @@ use Illuminate\Http\Request;
 
 class TipusEspaiController extends Controller
 {
-    /**
-     * Display a paginated listing of the resource.
-     *
-     * @return JsonResponse
-     * @OA\Get(
-     *     path="/api/tipus_espais",
-     *     tags={"Tipus d'espais"},
-     *     summary="Mostrar els tipus d'espais paginats",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Mostrar tots els tipus d'espai de forma paginada.",
-     *              @OA\JsonContent(
-     *          @OA\Property(property="data",type="object")
-     *           ),
-     *     ),
-     * )
-     */
+
+
     public function index(): JsonResponse
     {
         return response()->json([

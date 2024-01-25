@@ -37,7 +37,7 @@ return new class extends Migration {
             $table->foreign("fk_imatge")
                 ->references("id")
                 ->on("imatges")
-                ->onDelete("CASCADE")
+                ->onDelete("SET NULL")
                 ->onUpdate("SET NULL");
 
         });

@@ -34,7 +34,7 @@ export default function index({auth}) {
             fk_municipi: '',
             modalitats: [],
             arquitectes: [],
-            imatge: ''
+            imatge: File
         });
 
     const [cercadorValue, setCercadorValue] = useState("")
@@ -136,9 +136,29 @@ export default function index({auth}) {
     async function handleSubmit(event) {
         event.preventDefault()
 
-        axios.post('/api/espais', formData, {
+        console.log(formData)
+
+        const fd = new FormData();
+
+        fd.append('imatge', formData.imatge);
+        fd.append('nom', formData.nom);
+        fd.append('descripcio', formData.descripcio);
+        fd.append('direccio', formData.direccio);
+        fd.append('web', formData.web);
+        fd.append('email', formData.email);
+        fd.append('telefon', formData.telefon);
+        fd.append('any_construccio', formData.any_construccio);
+        fd.append('grau_accessibilitat', formData.grau_accessibilitat);
+        fd.append('fk_tipusEspai', formData.fk_tipusEspai);
+        fd.append('fk_municipi', formData.fk_municipi);
+        fd.append('fk_tipusEspai', formData.fk_tipusEspai);
+        fd.append('modalitats', formData.modalitats);
+        fd.append('arquitectes', formData.arquitectes);
+
+        axios.post('/api/espais', fd, {
             headers: {
                 'Authorization': `Bearer ${auth.user.api_token}`,
+                'Content-Type': 'multipart/form-data',
             },
         })
             .then(() => {
@@ -197,6 +217,13 @@ export default function index({auth}) {
                 };
             });
         }
+    }
+
+    function handleChangeImatge(e){
+        setFormData({
+            ...formData,
+            imatge: e.target.files[0],  // Tomamos el primer archivo seleccionado
+        });
     }
 
 
@@ -262,12 +289,12 @@ export default function index({auth}) {
                 },
             })
                 .then(() => {
-                    alert("Espai borrat amb èxit")
-                    fetchData(currentPage)
+                    alert("Espai borrat amb èxit");
+                    fetchData(currentPage);  // Mover la llamada aquí
                 })
                 .catch(() => {
-                    alert("L'espai no s'ha pogut borrar")
-                })
+                    alert("L'espai no s'ha pogut borrar");
+                });
         }
     }
 
@@ -436,8 +463,7 @@ export default function index({auth}) {
                         <input
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             id="imatge" type="file" accept={"image/*"} placeholder="Imatge" name={"imatge"} required={true}
-                            value={formData.imatge}
-                            onChange={handleChange}/>
+                            onChange={handleChangeImatge}/>
                         <InputError message={(errors !== undefined) ? errors.imatge : ""}/>
                     </div>
 

@@ -73,4 +73,9 @@ class Espai extends Model
     {
         return $this->hasMany(Visita::class, "fk_espai");
     }
+
+    public function imatge():BelongsTo
+    {
+        return $this->belongsTo(Imatge::class, "fk_imatge");
+    }
 }

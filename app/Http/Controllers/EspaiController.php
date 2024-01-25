@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Espai;
+use App\Models\Imatge;
 use App\Models\User;
+use http\Env\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 
 class EspaiController extends Controller
@@ -213,11 +216,12 @@ class EspaiController extends Controller
                 'grau_accessibilitat' => 'required|in:baix,mitj,alt',
                 'web' => 'url',
                 'email' => 'required|email',
-                'municipi' => 'required|integer|min:0',
-                'tipusEspai' => 'required|integer|min:0',
+                'fk_municipi' => 'required|integer|min:0',
+                'fk_tipusEspai' => 'required|integer|min:0',
                 'modalitats.*' => 'exists:modalitats,id',
                 'arquitectes.*' => 'exists:arquitectes,id',
                 'serveis.*' => 'exists:serveis,id',
+                'imatge' => 'required|mimes:jpg,jpeg,bmp,png,jfif|max:10240',
 
             ];
 
@@ -242,6 +246,21 @@ class EspaiController extends Controller
             $espai->fk_gestor = $user->id;
 
             $espai->save();
+
+            if ($request->hasFile('imatge')) {
+                $original_filename = $request->file('imatge')->getClientOriginalName();
+                $original_filename_arr = explode('.', $original_filename);
+                $file_ext = end($original_filename_arr);
+                $destination_path = public_path('./upload/img/');
+                $image = 'etv' . $espai->id . '_' . time() . '.' . $file_ext;
+                if ($request->file('imatge')->move($destination_path, $image)) {
+                    $foto = new Imatge;
+                    $foto->url = \url('/public/upload/img/' . $image);
+                    $foto->save();
+                    $espai->fk_imatge = $foto->id;
+                    $espai->save();
+                }
+            }
 
             $espai->arquitectes()->sync($request->arquitectes);
             $espai->modalitats()->sync($request->modalitats);
@@ -359,6 +378,7 @@ class EspaiController extends Controller
             'modalitats.*' => 'exists:modalitats,id',
             'arquitectes.*' => 'exists:arquitectes,id',
             'serveis.*' => 'exists:serveis,id',
+            'imatge' => 'mimes:jpg,jpeg,bmp,png,jfif|max:10240',
         ];
 
         $espai = Espai::where("id", $id)->first();
@@ -389,6 +409,27 @@ class EspaiController extends Controller
             $espai->fk_gestor = $user->id;
 
             $espai->save();
+
+            if ($request->hasFile('imatge')) {
+
+                $original_filename = $request->file('imatge')->getClientOriginalName();
+                $original_filename_arr = explode('.', $original_filename);
+                $file_ext = end($original_filename_arr);
+                $destination_path = base_path('./upload/img/');
+                $image = 'etv' . $espai->id . '_' . time() . '.' . $file_ext;
+                if ($request->file('imatge')->move($destination_path, $image)) {
+                    $old_img = $espai->imatge();
+                    $old_image_path = public_path().$old_img->url;
+                    unlink($old_image_path);
+                    $old_img->delete();
+
+                    $foto = new Imatge;
+                    $foto->url = URL::to('../') . '/upload/img/' . $image;
+                    $foto->save();
+                    $espai->fk_imatge = $foto->id;
+                    $espai->save();
+                }
+            }
 
             $espai->arquitectes()->sync($request->arquitectes);
             $espai->modalitats()->sync($request->modalitats);
@@ -464,6 +505,16 @@ class EspaiController extends Controller
         $espai = Espai::where("id", $id)->first();
 
         if ($user->esAdministrador() || $user->id === $espai->fk_gestor) {
+
+            $old_img = $espai->imatge;
+            $url_img = parse_url($old_img->url);
+            $file_path = public_path('upload/img/' . basename($url_img['path']));
+
+            if(file_exists($file_path)) {
+                unlink($file_path);
+                $old_img->delete();
+            }
+
             return $this->dbActionBasic($id, Espai::class, null, "deleteOrFail", null);
         } else {
             return response()->json([
