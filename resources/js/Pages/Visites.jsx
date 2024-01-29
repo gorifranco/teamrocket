@@ -7,7 +7,6 @@ import Form from "@/Components/Form.jsx";
 import InputError from "@/Components/InputError.jsx";
 import PlusButton from "@/Components/PlusButton.jsx";
 import MenosButton from "@/Components/MenosButton.jsx";
-import ModalitatsSelect from "@/Components/selects/SelectModalitats.jsx";
 import SelectPuntsInteres from "@/Components/selects/SelectPuntsInteres.jsx";
 
 export default function Visites({auth}){
