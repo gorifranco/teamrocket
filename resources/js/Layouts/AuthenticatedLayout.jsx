@@ -41,6 +41,10 @@ export default function Authenticated({user, header, plusButton = false, onclick
                                 active={route().current('visites')}>
                                 Visites
                             </NavLink>
+                                        <NavLink href={route('comentaris')}
+                                                 active={route().current('comentaris')}>
+                                            Comentaris
+                                        </NavLink>
                                     </>
                                 )
                                 }

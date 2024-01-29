@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Espai;
 use App\Models\Imatge;
 use App\Models\User;
-use http\Env\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 
 class EspaiController extends Controller
@@ -301,7 +299,7 @@ class EspaiController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        $espai = Espai::with(['modalitats', 'arquitectes', 'serveis', 'municipi', 'tipusEspai', "puntsInteres", "imatge"])->find($id);
+        $espai = Espai::with(['modalitats', 'arquitectes', 'serveis', 'municipi', 'tipusEspai', "puntsInteres", "imatge", "comentaris"])->find($id);
 
         return response()->json(['data' => $espai]);
     }

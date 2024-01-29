@@ -7,6 +7,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ComentariController extends Controller
 {
@@ -60,24 +61,44 @@ class ComentariController extends Controller
      *          ),
      *       ),
      *    @OA\Response(
-     *         response=400,
+     *         response=422,
      *         description="Error",
      *         @OA\JsonContent(
      *         @OA\Property(property="status", type="integer", example="error"),
-     *         @OA\Property(property="data",type="string", example="Atribut msg requerit")
+     *         @OA\Property(property="missatge",type="string", example="Unprocessable Entity")
      *          ),
      *       )
      *  )
      */
     public function store(Request $request): JsonResponse
     {
-
         $regles = [
             'valoracio' => ["required", "integer", "min:0", "max:5"],
             'fk_espai' => ["required", "integer", "min:0"]
         ];
 
-        return $this->dbActionBasic(null, Comentari::class, $request, "createOrFail", $regles);
+        $validacio = Validator::make($request->all(), $regles);
+        if (!$validacio->fails()) {
+
+            $key = explode(' ', $request->header('Authorization'));
+            $token = $key[1]; // key[0]->Bearer key[1]→token
+            $user = User::where('api_token', $token)->first();
+
+            $obj = Comentari::create($request->all());
+
+            $obj->fk_usuari = $user->id;
+            $obj->save();
+
+            return response()->json([
+                'data' => $obj
+            ], 200);
+        } else{
+
+            return response()->json([
+                'errors'=> $validacio->errors()->toArray(),
+                'missatge' => "Unprocessable Entity",
+            ], 422);
+        }
     }
 
     /**

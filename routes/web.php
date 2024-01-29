@@ -38,6 +38,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::inertia("/punts", "Punts")->name('punts-interes');
     Route::inertia("/visites", "Visites")->name('visites');
     Route::inertia("/editarVisita/{id}", "Visita_edit")->name("editarVisita");
+    Route::inertia("/comentaris", "Comentaris")->name('comentaris');
 });
 
 Route::middleware('auth')->group(function () {
