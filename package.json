@@ -25,6 +25,7 @@
         "@fontsource/roboto": "^5.0.8",
         "@mui/icons-material": "^5.15.6",
         "@mui/material": "^5.15.6",
+        "@mui/x-data-grid": "^6.19.2",
         "react-rating-stars-component": "^2.2.0",
         "react-switch": "^7.0.0"
     }

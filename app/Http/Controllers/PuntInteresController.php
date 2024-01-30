@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Imatge;
 use App\Models\PuntInteres;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PuntInteresController extends Controller
 {
@@ -61,7 +63,7 @@ class PuntInteresController extends Controller
      *     ),
      * )
      */
-    public function punts_per_espai (string $id): JsonResponse
+    public function punts_per_espai(string $id): JsonResponse
     {
         $punts = PuntInteres::where("fk_espai", $id)->get();
 //            ->with(["espai" => function ($query) {
@@ -70,7 +72,7 @@ class PuntInteresController extends Controller
 
         return response()->json([
             "data" => $punts
-        ],200);
+        ], 200);
     }
 
     /**
@@ -129,10 +131,46 @@ class PuntInteresController extends Controller
         $regles = [
             'nom' => 'required',
             'descripcio' => 'required',
+            'imatge' => 'required|mimes:jpg,jpeg,bmp,png,webp|max:10240',
+
         ];
 
-        return $this->dbActionBasic(null, PuntInteres::class, $request, "createOrFail", $regles);
+        $validacio = Validator::make($request->all(), $regles);
+        if (!$validacio->fails()) {
 
+            $key = explode(' ', $request->header('Authorization'));
+            $token = $key[1]; // key[0]->Bearer key[1]→token
+            $user = User::where('api_token', $token)->first();
+
+            $punt = new PuntInteres();
+            $punt->nom = $request->nom;
+            $punt->descripcio = $request->descripcio;
+            $punt->fk_espai = $request->fk_espai;
+            $punt->save();
+
+
+            if ($request->hasFile('imatge')) {
+                $original_filename = $request->file('imatge')->getClientOriginalName();
+                $original_filename_arr = explode('.', $original_filename);
+                $file_ext = end($original_filename_arr);
+                $destination_path = public_path('./upload/img/');
+                $image = 'etv' . $punt->id . '_' . time() . '.' . $file_ext;
+                if ($request->file('imatge')->move($destination_path, $image)) {
+                    $foto = new Imatge;
+                    $foto->url = \url('/upload/img/' . $image);
+                    $foto->save();
+                    $punt->fk_imatge = $foto->id;
+                    $punt->save();
+                }
+            }
+
+            $punt->save();
+            return response()->json([
+                "data" => $punt
+            ]);
+        } else {
+            return response()->json(['status' => 'error', 'data' => $validacio->errors()], 400);
+        }
     }
 
     /**
@@ -196,7 +234,7 @@ class PuntInteresController extends Controller
      * Update the specified resource from storage.
      *
      * @param Request $request
-     * @param  string  $id
+     * @param string $id
      * @return JsonResponse
      * @OA\Put(
      *    path="/api/punts_interes/{id}",
@@ -251,7 +289,9 @@ class PuntInteresController extends Controller
         $regles = [
             'nom' => 'required',
             'descripcio' => 'required',
-            'fk_espai' => 'required|integer|min:0'
+            'fk_espai' => 'required|integer|min:0',
+            'imatge' => 'mimes:jpg,jpeg,bmp,png,webp|max:10240',
+
         ];
 
         $key = explode(' ', $request->header('Authorization'));
@@ -260,13 +300,49 @@ class PuntInteresController extends Controller
 
         $id_gestor = $user->id;
 
-        if($id_gestor !== $request->input("fk_gestor")){
+        $punt = PuntInteres::find($id);
+
+        if ($id_gestor !== $punt->espai()->fk_gestor) {
             return response()->json([
                 "error" => "Unauthorized"
             ]);
         }
+        $validacio = Validator::make($request->all(), $regles);
+        if (!$validacio->fails()) {
 
-        return $this->dbActionBasic($id, PuntInteres::class, $request, "updateOrFail", $regles);
+            $punt->nom = $request->nom;
+            $punt->descripcio = $request->descripcio;
+            $punt->fk_espai = $request->fk_espai;
+            $punt->save();
+
+            if ($request->hasFile('imatge')) {
+
+                $old_img = $punt->imatge;
+                $url_img = parse_url($old_img->url);
+                $file_path = public_path('upload/img/' . basename($url_img['path']));
+
+                if (file_exists($file_path)) {
+                    unlink($file_path);
+                    $old_img->delete();
+                }
+
+                $original_filename = $request->file('imatge')->getClientOriginalName();
+                $original_filename_arr = explode('.', $original_filename);
+                $file_ext = end($original_filename_arr);
+                $destination_path = public_path('./upload/img/');
+                $image = 'etv' . $punt->id . '_' . time() . '.' . $file_ext;
+                if ($request->file('imatge')->move($destination_path, $image)) {
+                    $foto = new Imatge;
+                    $foto->url = \url('upload/img/' . $image);
+                    $foto->save();
+                    $punt->fk_imatge = $foto->id;
+                    $punt->save();
+                }
+            }
+            return response()->json(['data' => $punt], 200);
+        }
+        return response()->json(['status' => 'error', 'data' => $validacio->errors()], 400);
+
     }
 
     /**
@@ -330,11 +406,21 @@ class PuntInteresController extends Controller
         $user = User::where('api_token', $token)->first();
 
         $id_gestor = $user->id;
+        $punt = PuntInteres::find($id);
 
-        if($id_gestor !== $request->input("fk_gestor")){
+        if ($id_gestor !== $punt->espai()->gestor_id) {
             return response()->json([
                 "error" => "Unauthorized"
-            ],401);
+            ], 401);
+        }
+
+        $old_img = $punt->imatge;
+        $url_img = parse_url($old_img->url);
+        $file_path = public_path('upload/img/' . basename($url_img['path']));
+
+        if (file_exists($file_path)) {
+            unlink($file_path);
+            $old_img->delete();
         }
 
         return $this->dbActionBasic($id, PuntInteres::class, null, "deleteOrFail", null);
