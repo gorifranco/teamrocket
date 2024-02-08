@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comentari;
+use App\Models\Espai;
 use App\Models\User;
 use Exception;
+use http\Env\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -290,6 +292,23 @@ class ComentariController extends Controller
         }
 
         return $this->dbActionBasic($id, Comentari::class, null, "deleteOrFail", null);
+    }
+
+    public function comentaris_per_gestor(Request $request, string $id){
+
+        $key = explode(' ', $request->header('Authorization'));
+        $token = $key[1];
+        $user = User::where('api_token', $token)->first();
+
+
+        if(!$user->esAdministrador() || $user->id !== $id){
+            return response()->json([
+               "status" => "Unauthorized"
+            ]);
+        }
+        return response()->json([
+           "data" => $user->espais()->comentaris()
+        ]);
     }
 
 
